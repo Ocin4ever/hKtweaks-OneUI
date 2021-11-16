@@ -34,15 +34,6 @@ import java.util.List;
  */
 public class MSMThermal {
 
-    private static MSMThermal sInstance;
-
-    public static MSMThermal getInstance() {
-        if (sInstance == null) {
-            sInstance = new MSMThermal();
-        }
-        return sInstance;
-    }
-
     private static final String MSM_THERMAL = "/sys/module/msm_thermal";
     private static final String MSM_THERMAL_V2 = "/sys/module/msm_thermal_v2";
     private static final String PARAMETERS_ENABLED = "parameters/enabled";
@@ -62,14 +53,12 @@ public class MSMThermal {
     private static final String PARAMETERS_THERMAL_LIMIT_HIGH = "parameters/thermal_limit_high";
     private static final String PARAMETERS_TEMP_SAFETY = "parameters/temp_safety";
     private static final String MSM_THERMAL_TEMP_THROTTLE = MSM_THERMAL + "/" + PARAMETERS_ENABLED;
-
     private static final String MSM_THERMAL_THROTTLE_TEMP = MSM_THERMAL + "/parameters/throttle_temp";
     private static final String MSM_THERMAL_TEMP_MAX = MSM_THERMAL + "/parameters/temp_max";
     private static final String MSM_THERMAL_TEMP_THRESHOLD = MSM_THERMAL + "/parameters/temp_threshold";
     private static final String MSM_THERMAL_FREQ_LIMIT_DEBUG = MSM_THERMAL + "/parameters/freq_limit_debug";
     private static final String MSM_THERMAL_MIN_FREQ_INDEX = MSM_THERMAL + "/parameters/min_freq_index";
     private static final String TEMPCONTROL_TEMP_LIMIT = "/sys/class/misc/tempcontrol/templimit";
-
     private static final String MSM_THERMAL_CONF = "/sys/kernel/msm_thermal/conf";
     private static final String CONF_ALLOWED_LOW_LOW = MSM_THERMAL_CONF + "/allowed_low_low";
     private static final String CONF_ALLOWED_LOW_HIGH = MSM_THERMAL_CONF + "/allowed_low_high";
@@ -82,10 +71,13 @@ public class MSMThermal {
     private static final String CONF_ALLOWED_MAX_FREQ = MSM_THERMAL_CONF + "/allowed_max_freq";
     private static final String CONF_CHECK_INTERVAL_MS = MSM_THERMAL_CONF + "/check_interval_ms";
     private static final String CONF_SHUTDOWN_TEMP = MSM_THERMAL_CONF + "/shutdown_temp";
-
+    private static MSMThermal sInstance;
     private final HashMap<String, Integer> mTempLimitOffset = new HashMap<>();
     private final HashMap<String, Integer> mTempLimitMin = new HashMap<>();
     private final HashMap<String, Integer> mTempLimitMax = new HashMap<>();
+    private String PARENT;
+    private String CORE_CONTROL;
+    private String TEMP_LIMIT;
 
     {
         mTempLimitOffset.put(MSM_THERMAL_THROTTLE_TEMP, 1);
@@ -103,10 +95,6 @@ public class MSMThermal {
         mTempLimitMax.put(MSM_THERMAL_TEMP_THRESHOLD, 100);
         mTempLimitMax.put(TEMPCONTROL_TEMP_LIMIT, 80);
     }
-
-    private String PARENT;
-    private String CORE_CONTROL;
-    private String TEMP_LIMIT;
 
     private MSMThermal() {
         if (Utils.existFile(MSM_THERMAL)) {
@@ -128,6 +116,13 @@ public class MSMThermal {
                 break;
             }
         }
+    }
+
+    public static MSMThermal getInstance() {
+        if (sInstance == null) {
+            sInstance = new MSMThermal();
+        }
+        return sInstance;
     }
 
     public void setShutdownTemp(int value, Context context) {

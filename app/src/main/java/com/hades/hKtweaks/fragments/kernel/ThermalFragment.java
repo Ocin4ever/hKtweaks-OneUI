@@ -20,13 +20,14 @@
 package com.hades.hKtweaks.fragments.kernel;
 
 import com.hades.hKtweaks.R;
-import com.hades.hKtweaks.fragments.ApplyOnBootFragment;
-import com.hades.hKtweaks.fragments.DescriptionFragment;
+import com.hades.hKtweaks.activities.tools.profile.ProfileActivity;
 import com.hades.hKtweaks.fragments.recyclerview.RecyclerViewFragment;
 import com.hades.hKtweaks.utils.Utils;
 import com.hades.hKtweaks.utils.kernel.cpu.CPUFreq;
 import com.hades.hKtweaks.utils.kernel.thermal.MSMThermal;
 import com.hades.hKtweaks.utils.kernel.thermal.Thermald;
+import com.hades.hKtweaks.views.recyclerview.ApplyOnBootFView;
+import com.hades.hKtweaks.views.recyclerview.DescriptionFView;
 import com.hades.hKtweaks.views.recyclerview.RecyclerViewItem;
 import com.hades.hKtweaks.views.recyclerview.SeekBarView;
 import com.hades.hKtweaks.views.recyclerview.SelectView;
@@ -49,13 +50,14 @@ public class ThermalFragment extends RecyclerViewFragment {
 
         mCPUFreq = CPUFreq.getInstance(getActivity());
         mMSMThermal = MSMThermal.getInstance();
-        addViewPagerFragment(ApplyOnBootFragment.newInstance(this));
-        addViewPagerFragment(DescriptionFragment.newInstance(getString(R.string.warning),
-                getString(R.string.thermal_info)));
     }
 
     @Override
     protected void addItems(List<RecyclerViewItem> items) {
+        if (!(getActivity() instanceof ProfileActivity))
+            items.add(new ApplyOnBootFView(getActivity(), this));
+        items.add(new DescriptionFView(getActivity(), getString(R.string.warning), getString(R.string.thermal_info)));
+
         if (Thermald.supported()) {
             thermaldInit(items);
         }

@@ -31,12 +31,11 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1" />
 
-            <androidx.appcompat.widget.SwitchCompat
+            <de.dlyt.yanndroid.oneui.view.Switch
                 android:id="@+id/switcher"
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical|end"
-                android:background="@null"
                 android:clickable="false"
                 android:focusable="false" />
 

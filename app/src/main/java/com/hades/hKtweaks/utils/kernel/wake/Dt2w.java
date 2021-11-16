@@ -35,15 +35,6 @@ import java.util.List;
  */
 public class Dt2w {
 
-    private static Dt2w sInstance;
-
-    public static Dt2w getInstance() {
-        if (sInstance == null) {
-            sInstance = new Dt2w();
-        }
-        return sInstance;
-    }
-
     private static final String LGE_TOUCH_DT2W = "/sys/devices/virtual/input/lge_touch/dt_wake_enabled";
     private static final String LGE_TOUCH_CORE_DT2W = "/sys/module/lge_touch_core/parameters/doubletap_to_wake";
     private static final String LGE_TOUCH_GESTURE = "/sys/devices/virtual/input/lge_touch/touch_gesture";
@@ -57,12 +48,13 @@ public class Dt2w {
     private static final String DT2W_FT5X06 = "/sys/bus/i2c/drivers/ft5x06_i2c/5-0038/d2w_switch";
     private static final String LENOVO_DT2W = "/sys/lenovo_tp_gestures/tpd_suspend_status";
     private static final String DT2W_SMDK4412 = "/sys/devices/virtual/misc/touchwake/knockon";
-    private static final String V2_DT2W= "/sys/class/dt2w/enabled";
-
+    private static final String V2_DT2W = "/sys/class/dt2w/enabled";
+    private static Dt2w sInstance;
     private final HashMap<String, List<Integer>> mFiles = new HashMap<>();
     private final List<Integer> mLgeTouchCoreMenu = new ArrayList<>();
     private final List<Integer> mAndroidTouchMenu = new ArrayList<>();
     private final List<Integer> mGenericMenu = new ArrayList<>();
+    private String FILE;
 
     {
         mLgeTouchCoreMenu.add(R.string.disabled);
@@ -94,8 +86,6 @@ public class Dt2w {
         mFiles.put(V2_DT2W, mGenericMenu);
     }
 
-    private String FILE;
-
     private Dt2w() {
         for (String file : mFiles.keySet()) {
             if (Utils.existFile(file)) {
@@ -103,6 +93,13 @@ public class Dt2w {
                 break;
             }
         }
+    }
+
+    public static Dt2w getInstance() {
+        if (sInstance == null) {
+            sInstance = new Dt2w();
+        }
+        return sInstance;
     }
 
     public void set(int value, Context context) {

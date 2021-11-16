@@ -20,6 +20,7 @@
 package com.hades.hKtweaks.fragments.recyclerview;
 
 import android.os.AsyncTask;
+
 import androidx.annotation.NonNull;
 
 import java.lang.ref.WeakReference;
@@ -29,16 +30,6 @@ import java.lang.ref.WeakReference;
  */
 
 class LoadAsyncTask<T extends RecyclerViewFragment, RESULT> extends AsyncTask<Void, Void, RESULT> {
-
-    public abstract static class LoadHandler<T extends RecyclerViewFragment, RESULT> {
-        public void onPreExecute(T fragment) {
-        }
-
-        public abstract RESULT doInBackground(T fragment);
-
-        public void onPostExecute(T fragment, RESULT result) {
-        }
-    }
 
     private WeakReference<T> mRefFragment;
     private LoadHandler<T, RESULT> mListener;
@@ -73,6 +64,16 @@ class LoadAsyncTask<T extends RecyclerViewFragment, RESULT> extends AsyncTask<Vo
         T fragment = mRefFragment.get();
         if (fragment != null) {
             mListener.onPostExecute(fragment, result);
+        }
+    }
+
+    public abstract static class LoadHandler<T extends RecyclerViewFragment, RESULT> {
+        public void onPreExecute(T fragment) {
+        }
+
+        public abstract RESULT doInBackground(T fragment);
+
+        public void onPostExecute(T fragment, RESULT result) {
         }
     }
 }

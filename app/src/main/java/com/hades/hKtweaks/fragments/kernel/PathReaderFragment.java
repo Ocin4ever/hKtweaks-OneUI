@@ -20,7 +20,6 @@
 package com.hades.hKtweaks.fragments.kernel;
 
 import com.google.android.material.snackbar.Snackbar;
-
 import com.hades.hKtweaks.R;
 import com.hades.hKtweaks.fragments.ApplyOnBootFragment;
 import com.hades.hKtweaks.fragments.recyclerview.RecyclerViewFragment;
@@ -45,11 +44,6 @@ public class PathReaderFragment extends RecyclerViewFragment {
     private int mMax;
     private String mError;
     private String mCategory;
-
-    @Override
-    protected boolean showViewPager() {
-        return false;
-    }
 
     @Override
     protected boolean isForeground() {
@@ -81,17 +75,6 @@ public class PathReaderFragment extends RecyclerViewFragment {
             clearItems();
             reload(new ReloadHandler());
         }, 250);
-    }
-
-    private static class ReloadHandler extends RecyclerViewFragment.ReloadHandler<PathReaderFragment> {
-        @Override
-        public void onPostExecute(PathReaderFragment fragment, List<RecyclerViewItem> items) {
-            super.onPostExecute(fragment, items);
-            if (fragment.itemsSize() < 1 && fragment.mError != null) {
-                Snackbar.make(fragment.getRootView(),
-                        fragment.mError, Snackbar.LENGTH_SHORT).show();
-            }
-        }
     }
 
     @Override
@@ -161,6 +144,17 @@ public class PathReaderFragment extends RecyclerViewFragment {
             CPUFreq.getInstance(getActivity()).applyCpu(path, value, mMin, mMax, getActivity());
         } else {
             Control.runSetting(Control.write(value, path), mCategory, id, getActivity());
+        }
+    }
+
+    private static class ReloadHandler extends RecyclerViewFragment.ReloadHandler<PathReaderFragment> {
+        @Override
+        public void onPostExecute(PathReaderFragment fragment, List<RecyclerViewItem> items) {
+            super.onPostExecute(fragment, items);
+            if (fragment.itemsSize() < 1 && fragment.mError != null) {
+                Snackbar.make(fragment.getRootView(),
+                        fragment.mError, Snackbar.LENGTH_SHORT).show();
+            }
         }
     }
 

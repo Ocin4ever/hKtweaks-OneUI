@@ -19,36 +19,28 @@
  */
 package com.hades.hKtweaks.views.recyclerview;
 
-import androidx.appcompat.widget.AppCompatTextView;
 import android.view.View;
 
-import com.hades.hKtweaks.R;
-import com.hades.hKtweaks.utils.Log;
+import androidx.appcompat.widget.AppCompatTextView;
 
-import org.adw.library.widgets.discreteseekbar.DiscreteSeekBar;
+import com.hades.hKtweaks.R;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import de.dlyt.yanndroid.oneui.view.SeekBar;
 
 /**
  * Created by willi on 06.05.16.
  */
 public class SeekBarView extends RecyclerViewItem {
 
-    public interface OnSeekBarListener {
-        void onStop(SeekBarView seekBarView, int position, String value);
-
-        void onMove(SeekBarView seekBarView, int position, String value);
-    }
-
     private AppCompatTextView mTitle;
     private AppCompatTextView mSummary;
     private AppCompatTextView mValue;
-    private DiscreteSeekBar mSeekBar;
-
+    private SeekBar mSeekBar;
     private CharSequence mTitleText;
     private CharSequence mSummaryText;
-
     private int mMin;
     private int mMax = 100;
     private int mProgress;
@@ -57,7 +49,6 @@ public class SeekBarView extends RecyclerViewItem {
     private int mOffset = 1;
     private boolean mEnabled = true;
     private float mAlpha = 1f;
-
     private OnSeekBarListener mOnSeekBarListener;
 
     @Override
@@ -73,7 +64,7 @@ public class SeekBarView extends RecyclerViewItem {
         mSeekBar = view.findViewById(R.id.seekbar);
 
         view.findViewById(R.id.button_minus).setOnClickListener(v -> {
-            if(mEnabled) {
+            if (mEnabled) {
                 mSeekBar.setProgress(mSeekBar.getProgress() - 1);
                 if (mOnSeekBarListener != null && mProgress < mItems.size() && mProgress >= 0) {
                     mOnSeekBarListener.onStop(SeekBarView.this, mProgress, mItems.get(mProgress));
@@ -89,9 +80,11 @@ public class SeekBarView extends RecyclerViewItem {
             }
         });
 
-        mSeekBar.setOnProgressChangeListener(new DiscreteSeekBar.OnProgressChangeListener() {
+        refresh();
+
+        mSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
-            public void onProgressChanged(DiscreteSeekBar seekBar, int value, boolean fromUser) {
+            public void onProgressChanged(SeekBar seekBar, int value, boolean fromUser) {
                 if (value < mItems.size() && value >= 0) {
                     mProgress = value;
                     String text = mItems.get(value);
@@ -105,11 +98,11 @@ public class SeekBarView extends RecyclerViewItem {
             }
 
             @Override
-            public void onStartTrackingTouch(DiscreteSeekBar seekBar) {
+            public void onStartTrackingTouch(SeekBar seekBar) {
             }
 
             @Override
-            public void onStopTrackingTouch(DiscreteSeekBar seekBar) {
+            public void onStopTrackingTouch(SeekBar seekBar) {
                 try {
                     if (mOnSeekBarListener != null) {
                         mOnSeekBarListener.onStop(
@@ -131,11 +124,6 @@ public class SeekBarView extends RecyclerViewItem {
 
     public void setSummary(CharSequence summary) {
         mSummaryText = summary;
-        refresh();
-    }
-
-    public void setProgress(int progress) {
-        mProgress = progress;
         refresh();
     }
 
@@ -183,6 +171,11 @@ public class SeekBarView extends RecyclerViewItem {
         return mProgress;
     }
 
+    public void setProgress(int progress) {
+        mProgress = progress;
+        refresh();
+    }
+
     public void setOnSeekBarListener(OnSeekBarListener onSeekBarListener) {
         mOnSeekBarListener = onSeekBarListener;
     }
@@ -221,11 +214,17 @@ public class SeekBarView extends RecyclerViewItem {
                     mValue.setText(mValue.getResources().getString(R.string.not_in_range));
                 }
             }
-            if(mEnabled){
+            if (mEnabled) {
                 mSeekBar.setAlpha(1f);
             } else {
                 mSeekBar.setAlpha(0.4f);
             }
         }
+    }
+
+    public interface OnSeekBarListener {
+        void onStop(SeekBarView seekBarView, int position, String value);
+
+        void onMove(SeekBarView seekBarView, int position, String value);
     }
 }

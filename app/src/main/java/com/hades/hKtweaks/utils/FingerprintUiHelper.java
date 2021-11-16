@@ -18,45 +18,25 @@ package com.hades.hKtweaks.utils;
 import androidx.core.hardware.fingerprint.FingerprintManagerCompat;
 import androidx.core.os.CancellationSignal;
 
-import com.mattprecious.swirl.SwirlView;
 
 /**
  * Small helper class to manage text/icon around fingerprint authentication UI.
  */
 public class FingerprintUiHelper extends FingerprintManagerCompat.AuthenticationCallback {
 
-    private boolean mListening;
     private final FingerprintManagerCompat mFingerprintManagerCompat;
-    private final SwirlView mSwirlView;
     private final Callback mCallback;
+    private boolean mListening;
     private CancellationSignal mCancellationSignal;
 
     private boolean mSelfCancelled;
 
     /**
-     * Builder class for {@link FingerprintUiHelper} in which injected fields from Dagger
-     * holds its fields and takes other arguments in the {@link #build} method.
-     */
-    public static class FingerprintUiHelperBuilder {
-        private final FingerprintManagerCompat mFingerprintManagerCompat;
-
-        public FingerprintUiHelperBuilder(FingerprintManagerCompat fingerprintManagerCompat) {
-            mFingerprintManagerCompat = fingerprintManagerCompat;
-        }
-
-        public FingerprintUiHelper build(SwirlView swirlView, Callback callback) {
-            return new FingerprintUiHelper(mFingerprintManagerCompat, swirlView, callback);
-        }
-    }
-
-    /**
      * Constructor for {@link FingerprintUiHelper}. This method is expected to be called from
      * only the {@link FingerprintUiHelperBuilder} class.
      */
-    private FingerprintUiHelper(FingerprintManagerCompat fingerprintManagerCompat, SwirlView swirlView,
-                                Callback callback) {
+    private FingerprintUiHelper(FingerprintManagerCompat fingerprintManagerCompat, Callback callback) {
         mFingerprintManagerCompat = fingerprintManagerCompat;
-        mSwirlView = swirlView;
         mCallback = callback;
     }
 
@@ -65,9 +45,7 @@ public class FingerprintUiHelper extends FingerprintManagerCompat.Authentication
             mListening = true;
             mCancellationSignal = new CancellationSignal();
             mSelfCancelled = false;
-            mFingerprintManagerCompat
-                    .authenticate(cryptoObject, 0, mCancellationSignal, this, null);
-            mSwirlView.setState(SwirlView.State.ON);
+            mFingerprintManagerCompat.authenticate(cryptoObject, 0, mCancellationSignal, this, null);
         }
     }
 
@@ -83,34 +61,35 @@ public class FingerprintUiHelper extends FingerprintManagerCompat.Authentication
     @Override
     public void onAuthenticationError(int errMsgId, CharSequence errString) {
         if (!mSelfCancelled) {
-            showError();
             mCallback.onError();
         }
     }
 
     @Override
-    public void onAuthenticationHelp(int helpMsgId, CharSequence helpString) {
-        showError();
-    }
-
-    @Override
-    public void onAuthenticationFailed() {
-        showError();
-    }
-
-    @Override
     public void onAuthenticationSucceeded(FingerprintManagerCompat.AuthenticationResult result) {
-        mSwirlView.setState(SwirlView.State.OFF);
-        mSwirlView.postDelayed(mCallback::onAuthenticated, 100);
-    }
 
-    private void showError() {
-        mSwirlView.setState(SwirlView.State.ERROR);
+        mCallback.onAuthenticated();
     }
 
     public interface Callback {
         void onAuthenticated();
 
         void onError();
+    }
+
+    /**
+     * Builder class for {@link FingerprintUiHelper} in which injected fields from Dagger
+     * holds its fields and takes other arguments in the {@link #build} method.
+     */
+    public static class FingerprintUiHelperBuilder {
+        private final FingerprintManagerCompat mFingerprintManagerCompat;
+
+        public FingerprintUiHelperBuilder(FingerprintManagerCompat fingerprintManagerCompat) {
+            mFingerprintManagerCompat = fingerprintManagerCompat;
+        }
+
+        public FingerprintUiHelper build(Callback callback) {
+            return new FingerprintUiHelper(mFingerprintManagerCompat, callback);
+        }
     }
 }

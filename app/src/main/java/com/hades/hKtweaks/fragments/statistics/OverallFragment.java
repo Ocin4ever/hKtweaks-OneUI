@@ -25,13 +25,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.BatteryManager;
-import android.os.Build;
-import android.os.Bundle;
 import android.os.Handler;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -40,11 +34,7 @@ import android.widget.TextView;
 import com.bvalosek.cpuspy.CpuSpyApp;
 import com.bvalosek.cpuspy.CpuStateMonitor;
 import com.hades.hKtweaks.R;
-import com.hades.hKtweaks.fragments.BaseFragment;
-
 import com.hades.hKtweaks.fragments.recyclerview.RecyclerViewFragment;
-import com.hades.hKtweaks.utils.AppSettings;
-import com.hades.hKtweaks.utils.AppUpdaterTask;
 import com.hades.hKtweaks.utils.Log;
 import com.hades.hKtweaks.utils.Utils;
 import com.hades.hKtweaks.utils.kernel.cpu.CPUFreq;
@@ -83,6 +73,13 @@ public class OverallFragment extends RecyclerViewFragment {
     private double mBatteryRaw;
 
     private FrequencyTask mFrequencyTask;
+    private Integer mGPUCurFreq;
+    private BroadcastReceiver mBatteryReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            mBatteryRaw = intent.getIntExtra(BatteryManager.EXTRA_TEMPERATURE, 0) / 10D;
+        }
+    };
 
     @Override
     protected void init() {
@@ -90,20 +87,11 @@ public class OverallFragment extends RecyclerViewFragment {
 
         mCPUFreq = CPUFreq.getInstance();
         mGPUFreq = GPUFreq.getInstance();
-
-        addViewPagerFragment(new CPUUsageFragment());
-        //setViewPagerBackgroundColor(0);
     }
 
     @Override
     protected void addItems(List<RecyclerViewItem> items) {
-
-        if (Build.VERSION.SDK_INT >= 23) {
-            requestPermissions(new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
-        }
-
-        //Initialize AppUpdate check
-        AppUpdaterTask.appCheckDialog(getActivity());
+        items.add(new CPUUsageFView());
 
         statsInit(items);
         frequenciesInit(items);
@@ -132,7 +120,7 @@ public class OverallFragment extends RecyclerViewFragment {
             CpuStateMonitor cpuStateMonitorMid = null;
             if (mCpuSpyLITTLE != null) {
                 cpuStateMonitorLITTLE = mCpuSpyLITTLE.getCpuStateMonitor();
-                if (mCpuSpyMid != null){
+                if (mCpuSpyMid != null) {
                     cpuStateMonitorMid = mCpuSpyMid.getCpuStateMonitor();
                 }
             }
@@ -140,7 +128,7 @@ public class OverallFragment extends RecyclerViewFragment {
                 cpuStateMonitor.setOffsets();
                 if (cpuStateMonitorLITTLE != null) {
                     cpuStateMonitorLITTLE.setOffsets();
-                    if (cpuStateMonitorMid != null){
+                    if (cpuStateMonitorMid != null) {
                         cpuStateMonitorMid.setOffsets();
                     }
                 }
@@ -160,7 +148,6 @@ public class OverallFragment extends RecyclerViewFragment {
                     updateView(cpuStateMonitorMid, mFreqMid);
                 }
             }
-            adjustScrollPosition();
         });
         frequencyButtonView.setRestoreListener(v -> {
             CpuStateMonitor cpuStateMonitor = mCpuSpyBig.getCpuStateMonitor();
@@ -193,7 +180,6 @@ public class OverallFragment extends RecyclerViewFragment {
                     updateView(cpuStateMonitorMid, mFreqMid);
                 }
             }
-            adjustScrollPosition();
         });
         items.add(frequencyButtonView);
 
@@ -232,55 +218,6 @@ public class OverallFragment extends RecyclerViewFragment {
         if (mFrequencyTask == null) {
             mFrequencyTask = new FrequencyTask();
             mFrequencyTask.execute(this);
-        }
-    }
-
-    private static class FrequencyTask extends AsyncTask<OverallFragment, Void, OverallFragment> {
-
-        private CpuStateMonitor mBigMonitor;
-        private CpuStateMonitor mMidMonitor;
-        private CpuStateMonitor mLITTLEMonitor;
-
-        @Override
-        protected OverallFragment doInBackground(OverallFragment... overallFragments) {
-            OverallFragment fragment = overallFragments[0];
-            mBigMonitor = fragment.mCpuSpyBig.getCpuStateMonitor();
-            if (fragment.mCPUFreq.isBigLITTLE()) {
-                mLITTLEMonitor = fragment.mCpuSpyLITTLE.getCpuStateMonitor();
-                if (fragment.mCPUFreq.hasMidCpu()) {
-                    mMidMonitor = fragment.mCpuSpyMid.getCpuStateMonitor();
-                }
-            }
-            try {
-                mBigMonitor.updateStates();
-            } catch (CpuStateMonitor.CpuStateMonitorException ignored) {
-                Log.e("Problem getting CPU states");
-            }
-            if (fragment.mCPUFreq.isBigLITTLE()) {
-                try {
-                    mLITTLEMonitor.updateStates();
-                    if (fragment.mCPUFreq.hasMidCpu()) {
-                        mMidMonitor.updateStates();
-                    }
-                } catch (CpuStateMonitor.CpuStateMonitorException ignored) {
-                    Log.e("Problem getting CPU states");
-                }
-            }
-            return fragment;
-        }
-
-        @Override
-        protected void onPostExecute(OverallFragment fragment) {
-            super.onPostExecute(fragment);
-            fragment.updateView(mBigMonitor, fragment.mFreqBig);
-            if (fragment.mCPUFreq.isBigLITTLE()) {
-                fragment.updateView(mLITTLEMonitor, fragment.mFreqLITTLE);
-                if (fragment.mCPUFreq.hasMidCpu()) {
-                    fragment.updateView(mMidMonitor, fragment.mFreqMid);
-                }
-            }
-            fragment.adjustScrollPosition();
-            fragment.mFrequencyTask = null;
         }
     }
 
@@ -381,8 +318,6 @@ public class OverallFragment extends RecyclerViewFragment {
         frequencyCard.addItem(frequencyState);
     }
 
-    private Integer mGPUCurFreq;
-
     @Override
     protected void refreshThread() {
         super.refreshThread();
@@ -402,13 +337,6 @@ public class OverallFragment extends RecyclerViewFragment {
         }
     }
 
-    private BroadcastReceiver mBatteryReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            mBatteryRaw = intent.getIntExtra(BatteryManager.EXTRA_TEMPERATURE, 0) / 10D;
-        }
-    };
-
     @Override
     public void onResume() {
         super.onResume();
@@ -424,54 +352,100 @@ public class OverallFragment extends RecyclerViewFragment {
         }
     }
 
-    @Override
-    public void onStart(){
-        super.onStart();
+    private static class FrequencyTask extends AsyncTask<OverallFragment, Void, OverallFragment> {
 
-        if (AppSettings.getBoolean("show_changelog", true, getActivity())) {
-            Utils.changelogDialog(getActivity());
+        private CpuStateMonitor mBigMonitor;
+        private CpuStateMonitor mMidMonitor;
+        private CpuStateMonitor mLITTLEMonitor;
+
+        @Override
+        protected OverallFragment doInBackground(OverallFragment... overallFragments) {
+            OverallFragment fragment = overallFragments[0];
+            mBigMonitor = fragment.mCpuSpyBig.getCpuStateMonitor();
+            if (fragment.mCPUFreq.isBigLITTLE()) {
+                mLITTLEMonitor = fragment.mCpuSpyLITTLE.getCpuStateMonitor();
+                if (fragment.mCPUFreq.hasMidCpu()) {
+                    mMidMonitor = fragment.mCpuSpyMid.getCpuStateMonitor();
+                }
+            }
+            try {
+                mBigMonitor.updateStates();
+            } catch (CpuStateMonitor.CpuStateMonitorException ignored) {
+                Log.e("Problem getting CPU states");
+            }
+            if (fragment.mCPUFreq.isBigLITTLE()) {
+                try {
+                    mLITTLEMonitor.updateStates();
+                    if (fragment.mCPUFreq.hasMidCpu()) {
+                        mMidMonitor.updateStates();
+                    }
+                } catch (CpuStateMonitor.CpuStateMonitorException ignored) {
+                    Log.e("Problem getting CPU states");
+                }
+            }
+            return fragment;
+        }
+
+        @Override
+        protected void onPostExecute(OverallFragment fragment) {
+            super.onPostExecute(fragment);
+            fragment.updateView(mBigMonitor, fragment.mFreqBig);
+            if (fragment.mCPUFreq.isBigLITTLE()) {
+                fragment.updateView(mLITTLEMonitor, fragment.mFreqLITTLE);
+                if (fragment.mCPUFreq.hasMidCpu()) {
+                    fragment.updateView(mMidMonitor, fragment.mFreqMid);
+                }
+            }
+            fragment.mFrequencyTask = null;
         }
     }
 
-    public static class CPUUsageFragment extends BaseFragment {
-
+    class CPUUsageFView extends RecyclerViewItem {
         private Handler mHandler;
-
         private List<View> mUsages;
         private Thread mThread;
         private float[] mCPUUsages;
         private int[] mFreqs;
+        private Runnable mRefresh = new Runnable() {
+            @Override
+            public void run() {
+                refresh();
+                mHandler.postDelayed(this, 1000);
+            }
+        };
 
-        @Nullable
         @Override
-        public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-                                 @Nullable Bundle savedInstanceState) {
+        public void onCreateView(View view) {
             mHandler = new Handler();
             mUsages = new ArrayList<>();
-            LinearLayout rootView = new LinearLayout(getActivity());
-            rootView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.MATCH_PARENT));
-            rootView.setGravity(Gravity.CENTER);
-            rootView.setOrientation(LinearLayout.VERTICAL);
 
+            ((LinearLayout) view).removeAllViews();
             LinearLayout subView = null;
             for (int i = 0; i < CPUFreq.getInstance(getActivity()).getCpuCount(); i++) {
                 if (subView == null || i % 2 == 0) {
-                    subView = new LinearLayout(getActivity());
+                    subView = new LinearLayout(getContext());
                     subView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                             ViewGroup.LayoutParams.MATCH_PARENT, 1));
-                    rootView.addView(subView);
+                    ((LinearLayout) view).addView(subView);
                 }
 
-                View view = inflater.inflate(R.layout.fragment_usage_view, subView, false);
-                view.setLayoutParams(new LinearLayout
+                View usage_view = getLayoutInflater().inflate(R.layout.fragment_usage_view, subView, false);
+                usage_view.setLayoutParams(new LinearLayout
                         .LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                         ViewGroup.LayoutParams.MATCH_PARENT, 1));
-                ((TextView) view.findViewById(R.id.usage_core_text)).setText(getString(R.string.core, i + 1));
-                mUsages.add(view);
-                subView.addView(view);
+                ((TextView) usage_view.findViewById(R.id.usage_core_text)).setText(getString(R.string.core, i + 1));
+                mUsages.add(usage_view);
+                subView.addView(usage_view);
             }
-            return rootView;
+
+            onResume();
+            setFullSpan(true);
+            super.onCreateView(view);
+        }
+
+        @Override
+        public int getLayoutRes() {
+            return R.layout.fragment_linear_layout;
         }
 
         @Override
@@ -490,15 +464,9 @@ public class OverallFragment extends RecyclerViewFragment {
             }
         }
 
-        private Runnable mRefresh = new Runnable() {
-            @Override
-            public void run() {
-                refresh();
-                mHandler.postDelayed(this, 1000);
-            }
-        };
-
+        @Override
         public void refresh() {
+            super.refresh();
             if (mThread == null) {
                 mThread = new Thread(() -> {
                     while (true) {

@@ -20,6 +20,8 @@
 package com.hades.hKtweaks.views.recyclerview.customcontrols;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.ContextWrapper;
 import android.view.View;
 import android.widget.TextView;
 
@@ -50,8 +52,11 @@ public class CodeView extends RecyclerViewItem {
     private Thread mScriptThread;
     private OnTestListener mOnTestListener;
 
-    public interface OnTestListener {
-        void onTestResult(CodeView codeView, String output);
+    private static Activity unwrap(Context context) {
+        while (!(context instanceof Activity) && context instanceof ContextWrapper) {
+            context = ((ContextWrapper) context).getBaseContext();
+        }
+        return (Activity) context;
     }
 
     @Override
@@ -86,7 +91,7 @@ public class CodeView extends RecyclerViewItem {
             progress.setVisibility(View.VISIBLE);
             mScriptThread = new Thread(() -> {
                 mOutput = RootUtils.runScript(mCode.toString());
-                ((Activity) view.getContext()).runOnUiThread(() -> {
+                unwrap(view.getContext()).runOnUiThread(() -> {
                     progress.setVisibility(View.GONE);
                     outputTextView.setVisibility(View.VISIBLE);
                     outputTextView.setText(mOutput);
@@ -119,11 +124,6 @@ public class CodeView extends RecyclerViewItem {
         refresh();
     }
 
-    public void setCode(CharSequence code) {
-        mCode = code;
-        refresh();
-    }
-
     public void setTesting(boolean enabled) {
         mTesting = enabled;
         refresh();
@@ -140,6 +140,11 @@ public class CodeView extends RecyclerViewItem {
 
     public CharSequence getCode() {
         return mCode;
+    }
+
+    public void setCode(CharSequence code) {
+        mCode = code;
+        refresh();
     }
 
     public String getOutput() {
@@ -174,6 +179,10 @@ public class CodeView extends RecyclerViewItem {
         if (mOutput == null && mOutputParent != null) {
             mOutputParent.setVisibility(View.GONE);
         }
+    }
+
+    public interface OnTestListener {
+        void onTestResult(CodeView codeView, String output);
     }
 
 }

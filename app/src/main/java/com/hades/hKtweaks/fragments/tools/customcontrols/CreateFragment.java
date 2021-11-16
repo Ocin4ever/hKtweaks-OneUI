@@ -20,11 +20,7 @@
 package com.hades.hKtweaks.fragments.tools.customcontrols;
 
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import androidx.core.content.ContextCompat;
-import androidx.core.graphics.drawable.DrawableCompat;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
@@ -48,6 +44,9 @@ import java.util.List;
 public class CreateFragment extends RecyclerViewFragment {
 
     private static final String SETTINGS_INTENT = "settings";
+    private ArrayList<Items.Setting> mSettings;
+    private HashMap<Items.Setting, EditTextView> mEditTextViews = new HashMap<>();
+    private HashMap<Items.Setting, CodeView> mCodeViews = new HashMap<>();
 
     public static CreateFragment newInstance(ArrayList<Items.Setting> settings) {
         Bundle args = new Bundle();
@@ -57,18 +56,10 @@ public class CreateFragment extends RecyclerViewFragment {
         return fragment;
     }
 
-    private ArrayList<Items.Setting> mSettings;
-    private HashMap<Items.Setting, EditTextView> mEditTextViews = new HashMap<>();
-    private HashMap<Items.Setting, CodeView> mCodeViews = new HashMap<>();
-
-    @Override
-    protected boolean showViewPager() {
-        return false;
-    }
-
     @Override
     protected void init() {
         super.init();
+        getRecyclerView().setBackgroundResource(R.color.item_background_color);
 
         mSettings = getArguments().getParcelableArrayList(SETTINGS_INTENT);
         showFab();
@@ -146,9 +137,29 @@ public class CreateFragment extends RecyclerViewFragment {
             }
         }
         if (show) {
-            getBottomFab().show();
+            showToolbarActionButton(item -> {
+                HashMap<String, Object> arguments = new HashMap<>();
+                for (Items.Setting setting : mSettings) {
+                    if (setting.getUnit() == Items.Setting.Unit.ID) {
+                        arguments.put("id", setting.getName(getActivity()).toString());
+                        arguments.put("uniqueId", setting.getUniqueId());
+                    } else if (mEditTextViews.containsKey(setting)) {
+                        String text = mEditTextViews.get(setting).getText().toString();
+                        if (!text.isEmpty()) {
+                            arguments.put(setting.getId(), text);
+                        }
+                    } else if (mCodeViews.containsKey(setting)) {
+                        arguments.put(setting.getId(), mCodeViews.get(setting).getCode().toString());
+                    }
+                }
+
+                Intent intent = new Intent();
+                intent.putExtra(CustomControlsActivity.RESULT_INTENT, arguments);
+                getActivity().setResult(0, intent);
+                getActivity().finish();
+            }, R.id.menu_done);
         } else {
-            getBottomFab().hide();
+            hideToolbarActionButton();
         }
     }
 
@@ -164,43 +175,6 @@ public class CreateFragment extends RecyclerViewFragment {
                     return true;
             }
         }
-        return false;
-    }
-
-    @Override
-    protected void onBottomFabClick() {
-        super.onBottomFabClick();
-
-        HashMap<String, Object> arguments = new HashMap<>();
-        for (Items.Setting setting : mSettings) {
-            if (setting.getUnit() == Items.Setting.Unit.ID) {
-                arguments.put("id", setting.getName(getActivity()).toString());
-                arguments.put("uniqueId", setting.getUniqueId());
-            } else if (mEditTextViews.containsKey(setting)) {
-                String text = mEditTextViews.get(setting).getText().toString();
-                if (!text.isEmpty()) {
-                    arguments.put(setting.getId(), text);
-                }
-            } else if (mCodeViews.containsKey(setting)) {
-                arguments.put(setting.getId(), mCodeViews.get(setting).getCode().toString());
-            }
-        }
-
-        Intent intent = new Intent();
-        intent.putExtra(CustomControlsActivity.RESULT_INTENT, arguments);
-        getActivity().setResult(0, intent);
-        getActivity().finish();
-    }
-
-    @Override
-    protected Drawable getBottomFabDrawable() {
-        Drawable drawable = ContextCompat.getDrawable(getActivity(), R.drawable.ic_done);
-        DrawableCompat.setTint(drawable, Color.WHITE);
-        return drawable;
-    }
-
-    @Override
-    protected boolean autoHideBottomFab() {
         return false;
     }
 

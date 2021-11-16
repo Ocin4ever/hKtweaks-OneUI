@@ -4,85 +4,40 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.recyclerview.widget.RecyclerView
+    <de.dlyt.yanndroid.oneui.view.RecyclerView
         android:id="@+id/recyclerview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:clipToPadding="false"
-        android:paddingTop="@dimen/banner_default_height"
         android:visibility="gone" />
 
-    <LinearLayout
-        android:id="@+id/viewpagerparent"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/banner_default_height"
-        android:orientation="vertical">
-
-        <include
-            layout="@layout/viewpager_view"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
-
-        <View
-            android:id="@+id/viewpager_shadow"
-            android:layout_width="match_parent"
-            android:layout_height="4dp"
-            android:background="@drawable/dropshadow"
-            android:visibility="invisible" />
-    </LinearLayout>
-
-    <ProgressBar
+    <de.dlyt.yanndroid.oneui.view.ProgressBar
         android:id="@+id/progress"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="?android:progressBarStyleLarge"
+        android:layout_width="70.0dip"
+        android:layout_height="70.0dip"
         android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true" />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/top_fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/viewpagerparent"
-        android:layout_marginEnd="@dimen/recyclerview_fab_margin_right"
-        android:layout_marginRight="@dimen/recyclerview_fab_margin_right"
-        android:layout_marginTop="@dimen/recyclerview_fab_margin_top"
-        android:visibility="gone" />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/bottom_fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginBottom="@dimen/recyclerview_fab_margin_bottom"
-        android:layout_marginEnd="@dimen/recyclerview_fab_margin_right"
-        android:layout_marginRight="@dimen/recyclerview_fab_margin_right"
-        android:visibility="gone" />
+        android:layout_marginTop="40dp"
+        android:background="@drawable/progress_circle_dialog_bg"
+        android:elevation="5dp"
+        android:padding="5dp" />
 
     <FrameLayout
         android:id="@+id/foreground_parent"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="?attr/dim_dialog_background"
         android:clickable="true"
         android:focusable="true"
-        android:translationZ="10dp"
         android:visibility="gone">
 
-        <androidx.cardview.widget.CardView
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="bottom"
-            android:layout_marginBottom="100dp"
             android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp"
             android:layout_marginTop="100dp"
-            app:cardBackgroundColor="?android:attr/colorBackground"
-            app:cardCornerRadius="5dp">
+            android:layout_marginRight="30dp"
+            android:layout_marginBottom="100dp"
+            app:cardElevation="10dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -92,51 +47,48 @@
 
                 <TextView
                     android:id="@+id/foreground_text"
+                    style="?textAppearanceListItem"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
                     android:background="?attr/colorPrimaryDark"
                     android:gravity="center_vertical"
                     android:maxLines="1"
-                    android:paddingEnd="16dp"
-                    android:paddingLeft="16dp"
-                    android:paddingRight="16dp"
                     android:paddingStart="16dp"
-                    android:textColor="@color/white"
-                    android:textSize="17sp" />
+                    android:paddingLeft="16dp"
+                    android:paddingEnd="16dp"
+                    android:paddingRight="16dp" />
 
                 <FrameLayout
                     android:id="@+id/foreground_content"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
             </LinearLayout>
-        </androidx.cardview.widget.CardView>
+        </com.google.android.material.card.MaterialCardView>
     </FrameLayout>
 
     <FrameLayout
         android:id="@+id/dialog_parent"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="?attr/dim_dialog_background"
         android:clickable="true"
         android:focusable="true"
-        android:translationZ="10dp"
         android:visibility="gone">
 
-        <androidx.cardview.widget.CardView
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="bottom"
-            android:layout_marginBottom="100dp"
             android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp"
             android:layout_marginTop="100dp"
-            app:cardBackgroundColor="?android:attr/colorBackground"
-            app:cardCornerRadius="5dp">
+            android:layout_marginRight="30dp"
+            android:layout_marginBottom="100dp"
+            app:cardElevation="10dp"
+            app:contentPadding="20dp">
 
             <FrameLayout
                 android:id="@+id/dialog_content"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
-        </androidx.cardview.widget.CardView>
+        </com.google.android.material.card.MaterialCardView>
     </FrameLayout>
 </RelativeLayout>

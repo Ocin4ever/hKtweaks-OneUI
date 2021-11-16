@@ -32,18 +32,13 @@ import java.util.List;
  */
 public class DownloadKernelFragment extends RecyclerViewFragment {
 
+    private List<SupportedDownloads.KernelContent.Download> mDownloads;
+    private List<DownloadKernelView> mViews = new ArrayList<>();
+
     public static DownloadKernelFragment newInstance(List<SupportedDownloads.KernelContent.Download> downloads) {
         DownloadKernelFragment fragment = new DownloadKernelFragment();
         fragment.mDownloads = downloads;
         return fragment;
-    }
-
-    private List<SupportedDownloads.KernelContent.Download> mDownloads;
-    private List<DownloadKernelView> mViews = new ArrayList<>();
-
-    @Override
-    protected boolean showViewPager() {
-        return false;
     }
 
     @Override

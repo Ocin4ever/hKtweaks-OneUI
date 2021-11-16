@@ -20,11 +20,12 @@
 package com.hades.hKtweaks.fragments.kernel;
 
 import com.hades.hKtweaks.R;
-import com.hades.hKtweaks.fragments.ApplyOnBootFragment;
+import com.hades.hKtweaks.activities.tools.profile.ProfileActivity;
 import com.hades.hKtweaks.fragments.recyclerview.RecyclerViewFragment;
-import com.hades.hKtweaks.utils.Utils;
 import com.hades.hKtweaks.utils.kernel.entropy.Entropy;
-import com.hades.hKtweaks.views.recyclerview.DescriptionView;
+import com.hades.hKtweaks.views.recyclerview.ApplyOnBootFView;
+import com.hades.hKtweaks.views.recyclerview.CardView;
+import com.hades.hKtweaks.views.recyclerview.ProgressBarView;
 import com.hades.hKtweaks.views.recyclerview.RecyclerViewItem;
 import com.hades.hKtweaks.views.recyclerview.SeekBarView;
 
@@ -35,33 +36,27 @@ import java.util.List;
  */
 public class EntropyFragment extends RecyclerViewFragment {
 
-    private DescriptionView mAvailableView;
-    private DescriptionView mPoolSizeView;
-
-    @Override
-    protected void init() {
-        super.init();
-
-        addViewPagerFragment(ApplyOnBootFragment.newInstance(this));
-    }
+    private ProgressBarView mProgressBarView;
+    private Integer mPoolSize;
+    private Integer mAvailable;
 
     @Override
     protected void addItems(List<RecyclerViewItem> items) {
-        int ps = Entropy.getPoolsize();
+        if (!(getActivity() instanceof ProfileActivity))
+            items.add(new ApplyOnBootFView(getActivity(), this));
 
-        mAvailableView = new DescriptionView();
-        mAvailableView.setTitle(getString(R.string.available));
-        mAvailableView.setSummary(getAvailableDescription(Entropy.getAvailable(), ps));
-
-        items.add(mAvailableView);
-
-        mPoolSizeView = new DescriptionView();
-        mPoolSizeView.setTitle(getString(R.string.poolsize));
-        mPoolSizeView.setSummary(String.valueOf(ps));
-
-        items.add(mPoolSizeView);
+        CardView cardView = new CardView(getActivity());
+        cardView.setExpandable(false);
+        mProgressBarView = new ProgressBarView();
+        mProgressBarView.setTitle(getString(R.string.poolsize));
+        mProgressBarView.setItems(Entropy.getPoolsize(), Entropy.getAvailable());
+        mProgressBarView.setProgressColor(getResources().getColor(R.color.green));
+        mProgressBarView.setFullSpan(true);
+        cardView.addItem(mProgressBarView);
+        items.add(cardView);
 
         SeekBarView read = new SeekBarView();
+        read.setFullSpan(true);
         read.setTitle(getString(R.string.read));
         read.setMax(4096);
         read.setMin(64);
@@ -81,6 +76,7 @@ public class EntropyFragment extends RecyclerViewFragment {
         items.add(read);
 
         SeekBarView write = new SeekBarView();
+        write.setFullSpan(true);
         write.setTitle(getString(R.string.write));
         write.setMax(4096);
         write.setMin(64);
@@ -100,13 +96,6 @@ public class EntropyFragment extends RecyclerViewFragment {
         items.add(write);
     }
 
-    private String getAvailableDescription(int available, int poolsize) {
-        return Utils.roundTo2Decimals((double) available * 100 / (double) poolsize) + "% (" + available + ")";
-    }
-
-    private Integer mPoolSize;
-    private Integer mAvailable;
-
     @Override
     protected void refreshThread() {
         super.refreshThread();
@@ -118,11 +107,8 @@ public class EntropyFragment extends RecyclerViewFragment {
     @Override
     protected void refresh() {
         super.refresh();
-
-        if (mPoolSize != null && mAvailable != null
-                && mAvailableView != null && mPoolSizeView != null) {
-            mAvailableView.setSummary(getAvailableDescription(mAvailable, mPoolSize));
-            mPoolSizeView.setSummary(String.valueOf(mPoolSize));
+        if (mPoolSize != null && mAvailable != null && mProgressBarView != null) {
+            mProgressBarView.setItems(mPoolSize, mAvailable);
         }
     }
 }

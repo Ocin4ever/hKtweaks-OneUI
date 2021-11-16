@@ -9,6 +9,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.USE_BIOMETRIC" />
     <uses-permission android:name="android.permission.USE_FINGERPRINT" />
@@ -20,87 +21,68 @@
     <uses-feature
         android:name="android.hardware.touchscreen"
         android:required="false" />
-
     <uses-feature
         android:name="android.software.leanback"
         android:required="false" />
 
     <application
         android:allowBackup="true"
-        android:banner="@drawable/ic_banner"
+        android:banner="@drawable/logo"
         android:fullBackupContent="true"
         android:hardwareAccelerated="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:supportsRtl="true"
-        android:theme="@style/Theme.Default.Blue"
-        tools:ignore="GoogleAppIndexingWarning"
         android:requestLegacyExternalStorage="true"
+        android:supportsRtl="true"
+        android:theme="@style/OneUI3Theme"
+        tools:ignore="GoogleAppIndexingWarning"
         tools:targetApi="q">
-
-        <activity android:name="com.hades.hKtweaks.activities.StartActivity">
+        <activity
+            android:name=".activities.AboutInfoActivity"
+            android:theme="@style/OneUI3AboutTheme" />
+        <activity android:name=".activities.AboutActivity" />
+        <activity
+            android:name=".activities.SplashActivity"
+            android:theme="@style/OneUI3SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
                 <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
             </intent-filter>
+
             <meta-data
                 android:name="android.app.shortcuts"
                 android:resource="@xml/shortcuts" />
         </activity>
-
-        <activity
-            android:name="com.hades.hKtweaks.activities.StartActivityMaterial"
-            android:enabled="false"
-            android:icon="@mipmap/ic_launcher_material">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-                <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
-            </intent-filter>
-            <meta-data
-                android:name="android.app.shortcuts"
-                android:resource="@xml/shortcuts" />
-        </activity>
-
-        <activity android:name="com.hades.hKtweaks.activities.MainActivity" />
-        <activity android:name="com.hades.hKtweaks.activities.NavigationActivity" />
-        <activity android:name="com.hades.hKtweaks.activities.TextActivity" />
-        <activity
-            android:name="com.hades.hKtweaks.views.NavHeaderView$MainHeaderActivity"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-        <activity android:name="com.hades.hKtweaks.activities.tools.CustomControlsActivity" />
-        <activity android:name="com.hades.hKtweaks.activities.EditorActivity" />
-        <activity android:name="com.hades.hKtweaks.activities.FilePickerActivity" />
-        <activity android:name="com.hades.hKtweaks.activities.tools.DownloadsActivity" />
-        <activity android:name="com.hades.hKtweaks.activities.tools.profile.ProfileActivity" />
-        <activity
-            android:name="com.hades.hKtweaks.activities.SecurityActivity"
-            android:configChanges="locale|keyboard|keyboardHidden|orientation|screenSize|navigation" />
-        <activity android:name="com.hades.hKtweaks.activities.BannerResizerActivity" />
-        <activity android:name="com.hades.hKtweaks.activities.tools.profile.ProfileEditActivity" />
-        <activity android:name="com.hades.hKtweaks.activities.DataSharingSearchActivity" />
+        <activity android:name=".activities.NavigationActivity" />
+        <activity android:name=".views.NavHeaderView$MainHeaderActivity" />
+        <activity android:name=".activities.tools.CustomControlsActivity" />
+        <activity android:name=".activities.EditorActivity" />
+        <activity android:name=".activities.FilePickerActivity" />
+        <activity android:name=".activities.tools.DownloadsActivity" />
+        <activity android:name=".activities.tools.profile.ProfileActivity" />
+        <activity android:name=".activities.tools.profile.ProfileEditActivity" />
 
         <receiver
-            android:name="com.hades.hKtweaks.services.boot.OnBootReceiver"
+            android:name=".services.boot.OnBootReceiver"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </receiver>
 
-        <service android:name="com.hades.hKtweaks.services.boot.ApplyOnBootService" />
-        <receiver android:name="com.hades.hKtweaks.services.boot.ApplyOnBoot$CancelReceiver" />
+        <service android:name=".services.boot.ApplyOnBootService" />
 
-        <service android:name="com.hades.hKtweaks.services.monitor.Monitor" />
-        <receiver android:name="com.hades.hKtweaks.services.monitor.Monitor$DisableReceiver" />
+        <receiver android:name=".services.boot.ApplyOnBoot$CancelReceiver" />
 
-        <!-- Profile Widget -->
-        <receiver android:name="com.hades.hKtweaks.services.profile.Widget">
+        <service android:name=".services.monitor.Monitor" />
+
+        <receiver android:name=".services.monitor.Monitor$DisableReceiver" /> <!-- Profile Widget -->
+        <receiver android:name=".services.profile.Widget">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -111,19 +93,15 @@
         </receiver>
 
         <service
-            android:name="com.hades.hKtweaks.services.profile.Widget$WidgetService"
-            android:permission="android.permission.BIND_REMOTEVIEWS" />
-
-        <!-- CM SDK -->
-        <receiver android:name="com.hades.hKtweaks.services.profile.Tile">
+            android:name=".services.profile.Widget$WidgetService"
+            android:permission="android.permission.BIND_REMOTEVIEWS" /> <!-- CM SDK -->
+        <receiver android:name=".services.profile.Tile">
             <intent-filter>
                 <action android:name="com.hades.hKtweaks.action.ACTION_TOGGLE_STATE" />
             </intent-filter>
-        </receiver>
-
-        <!-- DashClock -->
+        </receiver> <!-- DashClock -->
         <service
-            android:name="com.hades.hKtweaks.services.DashClock"
+            android:name=".services.DashClock"
             android:icon="@drawable/ic_launcher_preview"
             android:permission="com.google.android.apps.dashclock.permission.READ_EXTENSION_DATA">
             <intent-filter>
@@ -133,30 +111,26 @@
             <meta-data
                 android:name="protocolVersion"
                 android:value="1" />
-        </service>
-
-        <!-- Tasker -->
-        <activity android:name="com.hades.hKtweaks.activities.tools.profile.ProfileTaskerActivity">
+        </service> <!-- Tasker -->
+        <activity android:name=".activities.tools.profile.ProfileTaskerActivity">
             <intent-filter>
                 <action android:name="com.twofortyfouram.locale.intent.action.EDIT_SETTING" />
             </intent-filter>
         </activity>
 
-        <receiver android:name="com.hades.hKtweaks.services.profile.Tasker">
+        <receiver android:name=".services.profile.Tasker">
             <intent-filter>
                 <action android:name="com.twofortyfouram.locale.intent.action.FIRE_SETTING" />
             </intent-filter>
-        </receiver>
-
-        <!-- Profile Tile -->
+        </receiver> <!-- Profile Tile -->
         <service
-            android:name="com.hades.hKtweaks.utils.kernel.spectrum.ProfileTile"
+            android:name=".utils.kernel.spectrum.ProfileTile"
             android:enabled="true"
             android:icon="@drawable/ic_spectrum_tile_logo"
             android:label="@string/profileTile"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
             <intent-filter>
-                <action android:name="android.service.quicksettings.action.QS_TILE"/>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
             </intent-filter>
         </service>
 
@@ -167,9 +141,14 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/provider_paths"/>
+                android:resource="@xml/provider_paths" />
         </provider>
-
     </application>
+
+    <queries>
+        <intent>
+            <action android:name="android.speech.action.RECOGNIZE_SPEECH" />
+        </intent>
+    </queries>
 
 </manifest>

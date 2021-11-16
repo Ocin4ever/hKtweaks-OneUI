@@ -35,26 +35,17 @@ import java.util.List;
  */
 public class S2w {
 
-    private static S2w sInstance;
-
-    public static S2w getInstance() {
-        if (sInstance == null) {
-            sInstance = new S2w();
-        }
-        return sInstance;
-    }
-
     private static final String S2W_ONLY = "/sys/android_touch/s2w_s2sonly";
     private static final String SW2 = "/sys/android_touch/sweep2wake";
     private static final String SW2_2 = "/sys/android_touch2/sweep2wake";
-
+    private static S2w sInstance;
     private final String LENIENT = "/sys/android_touch/sweep2wake_sensitive";
-
     private final HashMap<String, List<Integer>> mFiles = new HashMap<>();
     private final List<Integer> mS2wMenu = new ArrayList<>();
     private final List<Integer> mS2w2Menu = new ArrayList<>();
     private final List<Integer> mS2w3Menu = new ArrayList<>();
     private final List<Integer> mGenericMenu = new ArrayList<>();
+    private String FILE;
 
     {
         mS2wMenu.add(R.string.disabled);
@@ -81,8 +72,6 @@ public class S2w {
         mFiles.put(SW2_2, mS2w2Menu);
     }
 
-    private String FILE;
-
     private S2w() {
         for (String file : mFiles.keySet()) {
             if (Utils.existFile(file)) {
@@ -90,6 +79,13 @@ public class S2w {
                 break;
             }
         }
+    }
+
+    public static S2w getInstance() {
+        if (sInstance == null) {
+            sInstance = new S2w();
+        }
+        return sInstance;
     }
 
     public void enableLenient(boolean enable, Context context) {

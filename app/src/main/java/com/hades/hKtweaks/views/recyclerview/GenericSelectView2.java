@@ -31,10 +31,6 @@ import com.hades.hKtweaks.utils.ViewUtils;
  */
 public class GenericSelectView2 extends ValueView2 {
 
-    public interface OnGenericValueListener {
-        void onGenericValueSelected(GenericSelectView2 genericSelectView, String value);
-    }
-
     private String mValueRaw;
     private OnGenericValueListener mOnGenericValueListener;
     private int mInputType = -1;
@@ -98,6 +94,10 @@ public class GenericSelectView2 extends ValueView2 {
                         mShowDialog = false;
                     }
                 }).show();
+    }
+
+    public interface OnGenericValueListener {
+        void onGenericValueSelected(GenericSelectView2 genericSelectView, String value);
     }
 
 }

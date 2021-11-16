@@ -33,17 +33,7 @@ import java.util.List;
  */
 public class IO {
 
-    private static IO sIOInstance;
-
-    public static IO getInstance() {
-        if (sIOInstance == null) {
-            sIOInstance = new IO();
-        }
-        return sIOInstance;
-    }
-
     private static final String UFS = "/sys/block/sda/queue";
-
     private static final String SCHEDULER = "scheduler";
     private static final String IOSCHED = "iosched";
     private static final String READ_AHEAD = "read_ahead_kb";
@@ -53,12 +43,7 @@ public class IO {
     private static final String RQ_AFFINITY = "rq_affinity";
     private static final String NOMERGES = "nomerges";
     private static final String NR_REQUESTS = "nr_requests";
-
-    public enum Storage {
-        Internal,
-        External
-    }
-
+    private static IO sIOInstance;
     private String INTERNAL;
     private String EXTERNAL;
 
@@ -79,6 +64,13 @@ public class IO {
         if (EXTERNAL != null && EXTERNAL.equals(INTERNAL)) {
             EXTERNAL = null;
         }
+    }
+
+    public static IO getInstance() {
+        if (sIOInstance == null) {
+            sIOInstance = new IO();
+        }
+        return sIOInstance;
     }
 
     public boolean hasExternal() {
@@ -242,6 +234,11 @@ public class IO {
 
     private void run(String command, String id, Context context) {
         Control.runSetting(command, ApplyOnBootFragment.IO, id, context);
+    }
+
+    public enum Storage {
+        Internal,
+        External
     }
 
 }

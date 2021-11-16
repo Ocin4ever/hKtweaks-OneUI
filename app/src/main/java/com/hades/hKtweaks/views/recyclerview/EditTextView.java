@@ -19,11 +19,12 @@
  */
 package com.hades.hKtweaks.views.recyclerview;
 
-import androidx.appcompat.widget.AppCompatEditText;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.TextView;
+
+import androidx.appcompat.widget.AppCompatEditText;
 
 import com.hades.hKtweaks.R;
 
@@ -98,13 +99,13 @@ public class EditTextView extends RecyclerViewItem {
         refresh();
     }
 
+    public CharSequence getText() {
+        return mEditTextView == null ? null : mEditTextView.getText();
+    }
+
     public void setText(CharSequence text) {
         mText = text;
         refresh();
-    }
-
-    public CharSequence getText() {
-        return mEditTextView == null ? null : mEditTextView.getText();
     }
 
     @Override

@@ -20,6 +20,7 @@
 package com.hades.hKtweaks.activities.tools;
 
 import android.os.Bundle;
+
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
@@ -29,6 +30,8 @@ import com.hades.hKtweaks.fragments.tools.customcontrols.CreateFragment;
 import com.hades.hKtweaks.utils.tools.customcontrols.Items;
 
 import java.util.ArrayList;
+
+import de.dlyt.yanndroid.oneui.layout.ToolbarLayout;
 
 /**
  * Created by willi on 30.06.16.
@@ -45,13 +48,13 @@ public class CustomControlsActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fragments);
 
-        initToolBar();
+        ToolbarLayout toolbarLayout = getToolBarLayout();
+        toolbarLayout.setNavigationButtonOnClickListener(v -> onBackPressed());
 
         mSettings = getIntent().getParcelableArrayListExtra(SETTINGS_INTENT);
         for (Items.Setting setting : mSettings) {
             if (setting.getId().equals("id")) {
-                getSupportActionBar().setTitle(getString(Items.Control.getControl(setting.getName(null)
-                        .toString()).getRes()));
+                toolbarLayout.setTitle(getString(Items.Control.getControl(setting.getName(null).toString()).getRes()));
             }
         }
 

@@ -31,15 +31,6 @@ import com.hades.hKtweaks.utils.root.Control;
  */
 public class MSMHotplug {
 
-    private static MSMHotplug sInstance;
-
-    public static MSMHotplug getInstance() {
-        if (sInstance == null) {
-            sInstance = new MSMHotplug();
-        }
-        return sInstance;
-    }
-
     private static final String HOTPLUG_MSM = "/sys/module/msm_hotplug";
     private static final String HOTPLUG_MSM_ENABLE = HOTPLUG_MSM + "/enabled";
     private static final String HOTPLUG_MSM_ENABLE_2 = HOTPLUG_MSM + "/msm_enabled";
@@ -62,7 +53,7 @@ public class MSMHotplug {
     private static final String HOTPLUG_MSM_SUSPEND_FREQ = HOTPLUG_MSM + "/suspend_freq";
     private static final String HOTPLUG_MSM_SUSPEND_MAX_FREQ = HOTPLUG_MSM + "/suspend_max_freq";
     private static final String HOTPLUG_MSM_SUSPEND_DEFER_TIME = HOTPLUG_MSM + "/suspend_defer_time";
-
+    private static MSMHotplug sInstance;
     private String ENABLE_FILE;
     private String UPDATE_RATE_FILE;
     private String IO_IS_BUSY_FILE;
@@ -94,6 +85,13 @@ public class MSMHotplug {
                 SUSPEND_FREQ_FILE = HOTPLUG_MSM_SUSPEND_MAX_FREQ;
             }
         }
+    }
+
+    public static MSMHotplug getInstance() {
+        if (sInstance == null) {
+            sInstance = new MSMHotplug();
+        }
+        return sInstance;
     }
 
     public void setMsmHotplugSuspendDeferTime(int value, Context context) {

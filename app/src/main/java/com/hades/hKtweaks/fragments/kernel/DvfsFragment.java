@@ -1,10 +1,11 @@
 package com.hades.hKtweaks.fragments.kernel;
 
 import com.hades.hKtweaks.R;
-import com.hades.hKtweaks.fragments.ApplyOnBootFragment;
+import com.hades.hKtweaks.activities.tools.profile.ProfileActivity;
 import com.hades.hKtweaks.fragments.recyclerview.RecyclerViewFragment;
 import com.hades.hKtweaks.utils.Utils;
 import com.hades.hKtweaks.utils.kernel.dvfs.Dvfs;
+import com.hades.hKtweaks.views.recyclerview.ApplyOnBootFView;
 import com.hades.hKtweaks.views.recyclerview.CardView;
 import com.hades.hKtweaks.views.recyclerview.RecyclerViewItem;
 import com.hades.hKtweaks.views.recyclerview.SeekBarView;
@@ -21,14 +22,9 @@ import java.util.List;
 public class DvfsFragment extends RecyclerViewFragment {
 
     @Override
-    protected void init() {
-        super.init();
-
-        addViewPagerFragment(ApplyOnBootFragment.newInstance(this));
-    }
-
-    @Override
     protected void addItems(List<RecyclerViewItem> items) {
+        if (!(getActivity() instanceof ProfileActivity))
+            items.add(new ApplyOnBootFView(getActivity(), this));
 
         CardView dec = new CardView(getActivity());
         dec.setTitle(getString(R.string.dvfs_decision_mode));

@@ -35,15 +35,6 @@ import java.util.List;
  */
 public class KSM {
 
-    private static KSM sInstance;
-
-    public static KSM getInstance() {
-        if (sInstance == null) {
-            sInstance = new KSM();
-        }
-        return sInstance;
-    }
-
     private static final String KSM = "/sys/kernel/mm/ksm";
     private static final String UKSM = "/sys/kernel/mm/uksm";
     private static final String FULL_SCANS = "/full_scans";
@@ -57,9 +48,10 @@ public class KSM {
     private static final String SLEEP_MILLISECONDS = "/sleep_millisecs";
     private static final String MAX_CPU_PERCENTAGE = "/max_cpu_percentage";
     private static final String CPU_GOVERNOR = "/cpu_governor";
-
+    private static KSM sInstance;
     private final List<String> mParent = new ArrayList<>();
     private final LinkedHashMap<String, Integer> mInfos = new LinkedHashMap<>();
+    private String PARENT;
 
     {
         mParent.add(KSM);
@@ -72,8 +64,6 @@ public class KSM {
         mInfos.put(PAGES_VOLATILE, R.string.pages_volatile);
     }
 
-    private String PARENT;
-
     private KSM() {
         for (String file : mParent) {
             if (Utils.existFile(file)) {
@@ -83,15 +73,22 @@ public class KSM {
         }
     }
 
-    public boolean isUKSM(){
+    public static KSM getInstance() {
+        if (sInstance == null) {
+            sInstance = new KSM();
+        }
+        return sInstance;
+    }
+
+    public boolean isUKSM() {
         return Utils.existFile(UKSM);
     }
 
-    public boolean hasCpuGovernor(){
+    public boolean hasCpuGovernor() {
         return Utils.existFile(PARENT + CPU_GOVERNOR);
     }
 
-    public void setCpuGovernor(String value, Context context){
+    public void setCpuGovernor(String value, Context context) {
         run(Control.write(String.valueOf(value), PARENT + CPU_GOVERNOR), PARENT + CPU_GOVERNOR, context);
     }
 

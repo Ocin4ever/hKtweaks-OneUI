@@ -23,14 +23,14 @@ import com.hades.hKtweaks.R;
 import com.hades.hKtweaks.database.Settings;
 import com.hades.hKtweaks.database.tools.customcontrols.Controls;
 import com.hades.hKtweaks.database.tools.profiles.Profiles;
-import com.hades.hKtweaks.fragments.DescriptionFragment;
 import com.hades.hKtweaks.fragments.recyclerview.RecyclerViewFragment;
 import com.hades.hKtweaks.utils.AppSettings;
 import com.hades.hKtweaks.utils.ViewUtils;
 import com.hades.hKtweaks.views.dialog.Dialog;
+import com.hades.hKtweaks.views.recyclerview.CardView;
+import com.hades.hKtweaks.views.recyclerview.DescriptionFView;
 import com.hades.hKtweaks.views.recyclerview.DescriptionView;
 import com.hades.hKtweaks.views.recyclerview.RecyclerViewItem;
-import com.hades.hKtweaks.views.recyclerview.TitleView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -50,9 +50,6 @@ public class OnBootFragment extends RecyclerViewFragment {
     @Override
     protected void init() {
         super.init();
-
-        addViewPagerFragment(DescriptionFragment.newInstance(getString(R.string.welcome),
-                getString(R.string.on_boot_welcome_summary)));
 
         if (mDeleteDialog != null) {
             mDeleteDialog.show();
@@ -84,10 +81,11 @@ public class OnBootFragment extends RecyclerViewFragment {
     @Override
     protected void load(List<RecyclerViewItem> items) {
         super.load(items);
+        items.add(new DescriptionFView(getActivity(), getString(R.string.welcome), getString(R.string.on_boot_welcome_summary)));
 
-        List<RecyclerViewItem> applyOnBoot = new ArrayList<>();
-        TitleView applyOnBootTitle = new TitleView();
-        applyOnBootTitle.setText(getString(R.string.apply_on_boot));
+
+        CardView applyOnBootTitle = new CardView(getActivity());
+        applyOnBootTitle.setTitle(getString(R.string.apply_on_boot));
 
         List<Settings.SettingsItem> settings = mSettings.getAllSettings();
         HashMap<String, Boolean> applyOnBootEnabled = new HashMap<>();
@@ -130,17 +128,13 @@ public class OnBootFragment extends RecyclerViewFragment {
                 mDeleteDialog.show();
             });
 
-            applyOnBoot.add(applyOnBootView);
+            applyOnBootTitle.addItem(applyOnBootView);
         }
+        if (applyOnBootTitle.size() > 0) items.add(applyOnBootTitle);
 
-        if (applyOnBoot.size() > 0) {
-            items.add(applyOnBootTitle);
-            items.addAll(applyOnBoot);
-        }
 
-        List<RecyclerViewItem> customControls = new ArrayList<>();
-        TitleView customControlTitle = new TitleView();
-        customControlTitle.setText(getString(R.string.custom_controls));
+        CardView customControlTitle = new CardView(getActivity());
+        customControlTitle.setTitle(getString(R.string.custom_controls));
 
         for (final Controls.ControlItem controlItem : mControls.getAllControls()) {
             if (controlItem.isOnBootEnabled() && controlItem.getArguments() != null) {
@@ -161,18 +155,14 @@ public class OnBootFragment extends RecyclerViewFragment {
                     mDeleteDialog.show();
                 });
 
-                customControls.add(controlView);
+                customControlTitle.addItem(controlView);
             }
         }
+        if (customControlTitle.size() > 0) items.add(customControlTitle);
 
-        if (customControls.size() > 0) {
-            items.add(customControlTitle);
-            items.addAll(customControls);
-        }
 
-        List<RecyclerViewItem> profiles = new ArrayList<>();
-        TitleView profileTitle = new TitleView();
-        profileTitle.setText(getString(R.string.profile));
+        CardView profileTitle = new CardView(getActivity());
+        profileTitle.setTitle(getString(R.string.profile));
 
         for (final Profiles.ProfileItem profileItem : mProfiles.getAllProfiles()) {
             if (profileItem.isOnBootEnabled()) {
@@ -192,19 +182,15 @@ public class OnBootFragment extends RecyclerViewFragment {
                     mDeleteDialog.show();
                 });
 
-                profiles.add(profileView);
+                profileTitle.addItem(profileView);
             }
         }
+        if (profileTitle.size() > 0) items.add(profileTitle);
 
-        if (profiles.size() > 0) {
-            items.add(profileTitle);
-            items.addAll(profiles);
-        }
 
         if (AppSettings.isInitdOnBoot(getActivity())) {
-            TitleView initdTitle = new TitleView();
-            initdTitle.setText(getString(R.string.initd));
-            items.add(initdTitle);
+            CardView initdTitle = new CardView(getActivity());
+            initdTitle.setTitle(getString(R.string.initd));
 
             DescriptionView emulateInitd = new DescriptionView();
             emulateInitd.setSummary(getString(R.string.emulate_initd));
@@ -221,8 +207,17 @@ public class OnBootFragment extends RecyclerViewFragment {
                 mDeleteDialog.show();
             });
 
-            items.add(emulateInitd);
+            initdTitle.addItem(emulateInitd);
+            items.add(initdTitle);
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mSettings = null;
+        mControls = null;
+        mProfiles = null;
     }
 
     private class ApplyOnBootItem {
@@ -235,13 +230,5 @@ public class OnBootFragment extends RecyclerViewFragment {
             mCategory = category;
             mPosition = position;
         }
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        mSettings = null;
-        mControls = null;
-        mProfiles = null;
     }
 }

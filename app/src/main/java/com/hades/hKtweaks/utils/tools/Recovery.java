@@ -32,14 +32,6 @@ import java.util.List;
  */
 public class Recovery {
 
-    public enum RECOVERY {
-        CWM, TWRP
-    }
-
-    public enum RECOVERY_COMMAND {
-        WIPE_DATA, WIPE_CACHE, FLASH_ZIP
-    }
-
     private final RECOVERY_COMMAND mRecovery_command;
     private final File mFile;
 
@@ -67,6 +59,14 @@ public class Recovery {
                 return recoveryType.getFlashZip(mFile);
         }
         return null;
+    }
+
+    public enum RECOVERY {
+        CWM, TWRP
+    }
+
+    public enum RECOVERY_COMMAND {
+        WIPE_DATA, WIPE_CACHE, FLASH_ZIP
     }
 
     private abstract class RecoveryType {

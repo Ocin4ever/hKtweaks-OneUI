@@ -20,12 +20,13 @@
 package com.hades.hKtweaks.views.recyclerview.overallstatistics;
 
 import android.view.View;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.hades.hKtweaks.R;
 import com.hades.hKtweaks.utils.Utils;
 import com.hades.hKtweaks.views.recyclerview.RecyclerViewItem;
+
+import de.dlyt.yanndroid.oneui.view.ProgressBar;
 
 /**
  * Created by willi on 29.04.16.

@@ -1,10 +1,11 @@
 package com.hades.hKtweaks.fragments.kernel;
 
 import com.hades.hKtweaks.R;
-import com.hades.hKtweaks.fragments.ApplyOnBootFragment;
+import com.hades.hKtweaks.activities.tools.profile.ProfileActivity;
 import com.hades.hKtweaks.fragments.recyclerview.RecyclerViewFragment;
 import com.hades.hKtweaks.utils.Utils;
 import com.hades.hKtweaks.utils.kernel.wakelock.Wakelock;
+import com.hades.hKtweaks.views.recyclerview.ApplyOnBootFView;
 import com.hades.hKtweaks.views.recyclerview.CardView;
 import com.hades.hKtweaks.views.recyclerview.RecyclerViewItem;
 import com.hades.hKtweaks.views.recyclerview.SeekBarView;
@@ -19,26 +20,21 @@ import java.util.List;
 public class WakelockFragment extends RecyclerViewFragment {
 
     @Override
-    protected void init() {
-        super.init();
-
-        addViewPagerFragment(ApplyOnBootFragment.newInstance(this));
-    }
-
-    @Override
     protected void addItems(List<RecyclerViewItem> items) {
+        if (!(getActivity() instanceof ProfileActivity))
+            items.add(new ApplyOnBootFView(getActivity(), this));
 
         if (Wakelock.hasWakelock()) {
             wakelocksInit(items);
         }
     }
 
-    private void wakelocksInit(List<RecyclerViewItem> items){
+    private void wakelocksInit(List<RecyclerViewItem> items) {
 
         CardView wake = new CardView(getActivity());
         wake.setTitle(getString(R.string.wkl_control));
 
-        if(Wakelock.hasSensorHub()) {
+        if (Wakelock.hasSensorHub()) {
             SwitchView sh = new SwitchView();
             sh.setTitle(getString(R.string.wkl_sensorhub));
             sh.setSummary(getString(R.string.wkl_sensorhub_summary));
@@ -49,7 +45,7 @@ public class WakelockFragment extends RecyclerViewFragment {
             wake.addItem(sh);
         }
 
-        if(Wakelock.hasSSP()) {
+        if (Wakelock.hasSSP()) {
             SwitchView ssp = new SwitchView();
             ssp.setTitle(getString(R.string.wkl_ssp));
             ssp.setSummary(getString(R.string.wkl_ssp_summary));
@@ -60,7 +56,7 @@ public class WakelockFragment extends RecyclerViewFragment {
             wake.addItem(ssp);
         }
 
-        if(Wakelock.hasGPS()) {
+        if (Wakelock.hasGPS()) {
             SwitchView gps = new SwitchView();
             gps.setTitle(getString(R.string.wkl_gps));
             gps.setSummary(getString(R.string.wkl_gps_summary));
@@ -71,7 +67,7 @@ public class WakelockFragment extends RecyclerViewFragment {
             wake.addItem(gps);
         }
 
-        if(Wakelock.hasWireless()) {
+        if (Wakelock.hasWireless()) {
             SwitchView wifi = new SwitchView();
             wifi.setTitle(getString(R.string.wkl_wireless));
             wifi.setSummary(getString(R.string.wkl_wireless_summary));
@@ -82,7 +78,7 @@ public class WakelockFragment extends RecyclerViewFragment {
             wake.addItem(wifi);
         }
 
-        if(Wakelock.hasBluetooth()) {
+        if (Wakelock.hasBluetooth()) {
             SwitchView bt = new SwitchView();
             bt.setTitle(getString(R.string.wkl_bluetooth));
             bt.setSummary(getString(R.string.wkl_bluetooth_summary));
@@ -93,7 +89,7 @@ public class WakelockFragment extends RecyclerViewFragment {
             wake.addItem(bt);
         }
 
-        if(Wakelock.hasBattery()) {
+        if (Wakelock.hasBattery()) {
             SeekBarView bat = new SeekBarView();
             bat.setTitle(getString(R.string.wkl_battery));
             bat.setSummary(getString(R.string.wkl_battery_summary));
@@ -114,7 +110,7 @@ public class WakelockFragment extends RecyclerViewFragment {
             wake.addItem(bat);
         }
 
-        if(Wakelock.hasNFC()) {
+        if (Wakelock.hasNFC()) {
             SeekBarView nfc = new SeekBarView();
             nfc.setTitle(getString(R.string.wkl_nfc));
             nfc.setSummary(getString(R.string.wkl_nfc_summary));

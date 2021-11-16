@@ -19,28 +19,25 @@
  */
 package com.hades.hKtweaks.views.recyclerview;
 
-import androidx.appcompat.widget.AppCompatTextView;
-import androidx.appcompat.widget.SwitchCompat;
 import android.view.View;
+
+import androidx.appcompat.widget.AppCompatTextView;
 
 import com.hades.hKtweaks.R;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import de.dlyt.yanndroid.oneui.view.Switch;
+
 /**
  * Created by willi on 05.05.16.
  */
 public class SwitchView extends RecyclerViewItem {
 
-    public interface OnSwitchListener {
-        void onChanged(SwitchView switchView, boolean isChecked);
-    }
-
     private AppCompatTextView mTitle;
     private AppCompatTextView mSummary;
-    private SwitchCompat mSwitcher;
-
+    private Switch mSwitcher;
     private CharSequence mTitleText;
     private CharSequence mSummaryText;
     private CharSequence mSummaryOnText;
@@ -49,7 +46,6 @@ public class SwitchView extends RecyclerViewItem {
     private boolean mEnabled = true;
     private float mAlpha = 1f;
     private View mView;
-
     private List<OnSwitchListener> mOnSwitchListeners = new ArrayList<>();
 
     @Override
@@ -86,11 +82,6 @@ public class SwitchView extends RecyclerViewItem {
         });
     }
 
-    public void setTitle(CharSequence title) {
-        mTitleText = title;
-        refresh();
-    }
-
     public void setSummary(CharSequence summary) {
         mSummaryText = summary;
         refresh();
@@ -103,11 +94,6 @@ public class SwitchView extends RecyclerViewItem {
 
     public void setSummaryOff(CharSequence summary) {
         mSummaryOffText = summary;
-        refresh();
-    }
-
-    public void setChecked(boolean checked) {
-        mChecked = checked;
         refresh();
     }
 
@@ -125,8 +111,18 @@ public class SwitchView extends RecyclerViewItem {
         return mTitleText;
     }
 
+    public void setTitle(CharSequence title) {
+        mTitleText = title;
+        refresh();
+    }
+
     public boolean isChecked() {
         return mChecked;
+    }
+
+    public void setChecked(boolean checked) {
+        mChecked = checked;
+        refresh();
     }
 
     public void addOnSwitchListener(OnSwitchListener onSwitchListener) {
@@ -151,10 +147,10 @@ public class SwitchView extends RecyclerViewItem {
         if (mSummary != null && mSummaryText != null) {
             mSummary.setText(mSummaryText);
         }
-        if (mSummary != null && mSummaryOnText != null && mSummaryOffText != null){
+        if (mSummary != null && mSummaryOnText != null && mSummaryOffText != null) {
             if (mChecked) {
                 mSummary.setText(mSummaryOnText);
-            }else {
+            } else {
                 mSummary.setText(mSummaryOffText);
             }
         }
@@ -164,5 +160,9 @@ public class SwitchView extends RecyclerViewItem {
             mSwitcher.setEnabled(mEnabled);
             mSwitcher.setAlpha(mAlpha);
         }
+    }
+
+    public interface OnSwitchListener {
+        void onChanged(SwitchView switchView, boolean isChecked);
     }
 }

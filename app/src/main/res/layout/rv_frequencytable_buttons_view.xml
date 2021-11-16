@@ -21,8 +21,8 @@
             android:layout_gravity="center"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:scaleType="fitCenter"
-            android:tint="?attr/colorAccent"
-            app:srcCompat="@drawable/ic_refresh" />
+            android:tint="?colorSecondary"
+            app:srcCompat="@drawable/ic_samsung_refresh" />
 
         <TextView
             android:layout_width="match_parent"
@@ -50,8 +50,8 @@
             android:background="?attr/selectableItemBackgroundBorderless"
             android:scaleType="fitCenter"
             android:scaleY="-1"
-            android:tint="?attr/colorAccent"
-            app:srcCompat="@drawable/ic_refresh" />
+            android:tint="?colorSecondary"
+            app:srcCompat="@drawable/ic_samsung_refresh" />
 
         <TextView
             android:layout_width="match_parent"
@@ -78,8 +78,8 @@
             android:layout_gravity="center"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:scaleType="fitCenter"
-            android:tint="?attr/colorAccent"
-            app:srcCompat="@drawable/ic_restore" />
+            android:tint="?colorSecondary"
+            app:srcCompat="@drawable/ic_samsung_time" />
 
         <TextView
             android:layout_width="match_parent"

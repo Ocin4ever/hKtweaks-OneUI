@@ -34,26 +34,16 @@ import java.util.List;
  */
 public class T2w {
 
-    private static T2w sInstance;
-
-    public static T2w getInstance() {
-        if (sInstance == null) {
-            sInstance = new T2w();
-        }
-        return sInstance;
-    }
-
     private static final String TSP_T2W = "/sys/devices/f9966000.i2c/i2c-1/1-004a/tsp";
     private static final String TOUCHWAKE_T2W = "/sys/class/misc/touchwake/enabled";
-
+    private static T2w sInstance;
     private final List<String> mFiles = new ArrayList<>();
+    private String FILE;
 
     {
         mFiles.add(TSP_T2W);
         mFiles.add(TOUCHWAKE_T2W);
     }
-
-    private String FILE;
 
     private T2w() {
         for (String file : mFiles) {
@@ -62,6 +52,13 @@ public class T2w {
                 break;
             }
         }
+    }
+
+    public static T2w getInstance() {
+        if (sInstance == null) {
+            sInstance = new T2w();
+        }
+        return sInstance;
     }
 
     public void set(int value, Context context) {

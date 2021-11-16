@@ -25,10 +25,11 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
-import androidx.core.content.ContextCompat;
-import androidx.core.graphics.drawable.DrawableCompat;
 import android.util.AttributeSet;
 import android.widget.FrameLayout;
+
+import androidx.core.content.ContextCompat;
+import androidx.core.graphics.drawable.DrawableCompat;
 
 import com.hades.hKtweaks.R;
 import com.hades.hKtweaks.utils.ViewUtils;
@@ -36,9 +37,9 @@ import com.hades.hKtweaks.utils.ViewUtils;
 public class BorderCircleView extends FrameLayout {
 
     private final Drawable mCheck;
-    private boolean mChecked;
     private final Paint mPaint;
     private final Paint mPaintBorder;
+    private boolean mChecked;
 
     public BorderCircleView(Context context) {
         this(context, null);
@@ -54,7 +55,7 @@ public class BorderCircleView extends FrameLayout {
         if (isClickable()) {
             setForeground(ViewUtils.getSelectableBackground(context));
         }
-        mCheck = ContextCompat.getDrawable(context, R.drawable.ic_done);
+        mCheck = ContextCompat.getDrawable(context, R.drawable.ic_samsung_selected);
         DrawableCompat.setTint(mCheck, Color.WHITE);
 
         mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);

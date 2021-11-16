@@ -1,6 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+<de.dlyt.yanndroid.oneui.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory
+        android:key="user_interface"
+        android:title="@string/user_interface">
+        <HorizontalRadioPreference
+            android:key="dark_mode"
+            app:entries="@array/preferences_darkmode_entries"
+            app:entriesImage="@array/preferences_darkmode_entries_image"
+            app:entryValues="@array/preferences_darkmode_values"
+            app:viewType="image" />
+        <SwitchPreference
+            android:key="dark_mode_auto"
+            android:title="@string/system_default" />
+        <ColorPickerPreference
+            android:key="theme_color"
+            android:summary="@string/theme_color_summary"
+            android:title="@string/primary_color"
+            app:pickerType="classic" />
+        <SwitchPreference
+            android:key="forceenglish"
+            android:title="@string/force_english" />
+    </PreferenceCategory>
 
     <PreferenceCategory
         android:key="general"
@@ -9,71 +31,10 @@
             android:key="reset_data"
             android:summary="@string/reset_data_summary"
             android:title="@string/reset_data_title" />
-        <SwitchPreferenceCompat
+        <SwitchPreference
             android:key="useretardedmeasurement"
             android:summary="@string/fahrenheit_summary"
             android:title="@string/fahrenheit_title" />
-    </PreferenceCategory>
-
-    <PreferenceCategory
-        android:key="app_update"
-        android:title="@string/app_update_category">
-        <SwitchPreferenceCompat
-            android:key="app_update_notif"
-            android:defaultValue="true"
-            android:title="@string/app_update_notif_title"
-            android:summary="@string/app_update_notif_summary" />
-        <Preference
-            android:key="check_update"
-            android:summary="@string/check_update_summary"
-            android:title="@string/check_update_title" />
-    </PreferenceCategory>
-
-    <PreferenceCategory
-        android:key="user_interface"
-        android:title="@string/user_interface">
-        <SwitchPreferenceCompat
-            android:key="darktheme"
-            android:summary="@string/dark_theme" />
-        <ListPreference
-            android:key="darkthememode"
-            android:summary="Dark theme mode"
-            android:defaultValue="Default dark"
-            android:entries="@array/dark_theme_modes"
-            android:entryValues="@array/dark_theme_modes_values"
-            />
-        <SwitchPreferenceCompat
-            android:key="forceenglish"
-            android:summary="@string/force_english" />
-<!--
-        <SwitchPreferenceCompat
-            android:key="materialicon"
-            android:summary="@string/material_icon" />
--->
-        <Preference
-            android:key="banner_resizer"
-            android:summary="@string/banner_resizer" />
-        <SwitchPreferenceCompat
-            android:key="hide_banner"
-            android:summary="@string/hide_banner" />
-        <SwitchPreferenceCompat
-            android:key="forcecards"
-            android:summary="@string/force_cards_summary"
-            android:title="@string/force_cards" />
-        <Preference
-            android:key="primary_color"
-            android:summary="@string/primary_color"
-            android:widgetLayout="@layout/preference_primary_color_view" />
-        <Preference
-            android:key="accent_color"
-            android:summary="@string/accent_color"
-            android:widgetLayout="@layout/preference_accent_color_view" />
-        <SwitchPreferenceCompat
-            android:defaultValue="true"
-            android:key="section_icons"
-            app:defaultValue="true"
-            android:summary="@string/section_icons_summary"
-            android:title="@string/section_icons" />
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/apply_on_boot">
@@ -88,20 +49,20 @@
             android:key="applyonboottest"
             android:summary="@string/apply_on_boot_test_summary"
             android:title="@string/test" />
-        <SwitchPreferenceCompat
+        <SwitchPreference
             android:key="applyonboothide"
             android:summary="@string/apply_on_boot_hide_summary"
             android:title="@string/hide" />
-        <SwitchPreferenceCompat
+        <SwitchPreference
             android:defaultValue="true"
             android:key="applyonbootconfirmationnotification"
             android:summary="@string/apply_on_boot_confirmation_notification_summary"
             android:title="@string/confirmation_notification" />
-        <SwitchPreferenceCompat
+        <SwitchPreference
             android:key="applyonboottoast"
             android:summary="@string/apply_on_boot_toast_summary"
             android:title="@string/toast" />
-        <SwitchPreferenceCompat
+        <SwitchPreference
             android:key="applyonbootscript"
             android:summary="@string/apply_on_boot_script_summary"
             android:title="@string/script" />
@@ -133,8 +94,8 @@
             android:title="@string/set_password" />
         <Preference
             android:key="delete_password"
-            android:summary="@string/delete_password" />
-        <SwitchPreferenceCompat
+            android:title="@string/delete_password" />
+        <SwitchPreference
             android:key="fingerprint"
             android:summary="@string/fingerprint_summary"
             android:title="@string/fingerprint" />
@@ -144,4 +105,4 @@
         android:key="sections"
         android:title="@string/sections" />
 
-</PreferenceScreen>
+</de.dlyt.yanndroid.oneui.preference.PreferenceScreen>

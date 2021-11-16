@@ -37,11 +37,11 @@ public class ProfileTile extends TileService {
         int newState;
 
         // Update tile and set profile
-        if (!Spectrum.supported(getApplicationContext())){
+        if (!Spectrum.supported(getApplicationContext())) {
             newLabel = "No Spectrum support";
             newIcon = Icon.createWithResource(getApplicationContext(), R.drawable.ic_spectrum_tile_logo);
             newState = Tile.STATE_INACTIVE;
-        }else {
+        } else {
             if (isActive && click) {
                 newLabel = "Spectrum Gaming";
                 newIcon = Icon.createWithResource(getApplicationContext(), R.drawable.ic_spectrum_tile_game);
@@ -94,11 +94,11 @@ public class ProfileTile extends TileService {
         int newState;
 
         // Update tile
-        if (!Spectrum.supported(getApplicationContext())){
+        if (!Spectrum.supported(getApplicationContext())) {
             newLabel = "No Spectrum support";
             newIcon = Icon.createWithResource(getApplicationContext(), R.drawable.ic_spectrum_tile_logo);
             newState = Tile.STATE_INACTIVE;
-        }else {
+        } else {
             if (profile == 3) {
                 newLabel = "Spectrum Gaming";
                 newIcon = Icon.createWithResource(getApplicationContext(), R.drawable.ic_spectrum_tile_game);

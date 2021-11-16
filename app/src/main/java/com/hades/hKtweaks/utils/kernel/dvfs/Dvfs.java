@@ -16,14 +16,14 @@ public class Dvfs {
     private static final String THERMAL_CONTROL = "/sys/power/little_thermal_temp";
 
     public static void setDecisionMode(String value, Context context) {
-        switch (value){
-            case "Battery" :
+        switch (value) {
+            case "Battery":
                 run(Control.write("0", DECISION_MODE), DECISION_MODE, context);
                 break;
-            case "Balance" :
+            case "Balance":
                 run(Control.write("1", DECISION_MODE), DECISION_MODE, context);
                 break;
-            case "Performance" :
+            case "Performance":
                 run(Control.write("2", DECISION_MODE), DECISION_MODE, context);
                 break;
         }
@@ -44,7 +44,7 @@ public class Dvfs {
         return null;
     }
 
-    public static void setThermalControl (String value, Context context){
+    public static void setThermalControl(String value, Context context) {
         run(Control.write(String.valueOf(value), THERMAL_CONTROL), THERMAL_CONTROL, context);
     }
 

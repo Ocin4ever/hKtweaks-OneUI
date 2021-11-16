@@ -20,10 +20,12 @@
 package com.hades.hKtweaks.views.recyclerview;
 
 import android.app.Activity;
-import androidx.annotation.LayoutRes;
-import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.annotation.LayoutRes;
+
+import de.dlyt.yanndroid.oneui.sesl.recyclerview.StaggeredGridLayoutManager;
 
 /**
  * Created by willi on 24.04.16.
@@ -32,11 +34,6 @@ public abstract class RecyclerViewItem {
 
     private boolean mFullspan;
     private View mView;
-
-    public interface OnItemClickListener {
-        void onClick(RecyclerViewItem item);
-    }
-
     private OnItemClickListener mOnItemClickListener;
     private RecyclerViewAdapter.OnViewChangedListener mOnViewChangedListener;
 
@@ -55,16 +52,16 @@ public abstract class RecyclerViewItem {
     void onCreateHolder(ViewGroup parent, View view) {
     }
 
-    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
-        mOnItemClickListener = onItemClickListener;
-    }
-
     void setOnViewChangeListener(RecyclerViewAdapter.OnViewChangedListener onViewChangeListener) {
         mOnViewChangedListener = onViewChangeListener;
     }
 
     protected OnItemClickListener getOnItemClickListener() {
         return mOnItemClickListener;
+    }
+
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        mOnItemClickListener = onItemClickListener;
     }
 
     RecyclerViewAdapter.OnViewChangedListener getOnViewChangedListener() {
@@ -104,12 +101,12 @@ public abstract class RecyclerViewItem {
     public void onDestroy() {
     }
 
-    protected boolean cardCompatible() {
-        return true;
-    }
-
     boolean cacheable() {
         return false;
+    }
+
+    public interface OnItemClickListener {
+        void onClick(RecyclerViewItem item);
     }
 
 }

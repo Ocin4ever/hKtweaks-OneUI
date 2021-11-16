@@ -45,6 +45,8 @@ public class VoltageCl0 {
     private static final HashMap<String, String> sSplitNewline = new HashMap<>();
     private static final HashMap<String, String> sSplitLine = new HashMap<>();
     private static final HashMap<String, Boolean> sAppend = new HashMap<>();
+    private static String PATH;
+    private static String[] sFreqs;
 
     static {
         sVoltages.put(CL0_VOLTAGE, false);
@@ -59,9 +61,6 @@ public class VoltageCl0 {
 
         sAppend.put(CL0_VOLTAGE, false);
     }
-
-    private static String PATH;
-    private static String[] sFreqs;
 
     public static void setVoltage(String freq, String voltage, Context context) {
         int position = getFreqs().indexOf(freq);
@@ -78,13 +77,13 @@ public class VoltageCl0 {
             run(Control.write(command, PATH), PATH, context);
         } else {
             freq = String.valueOf(Utils.strToInt(freq) * sOffsetFreq.get(PATH));
-            String volt = String.valueOf((int)(Utils.strToFloat(voltage) * sOffset.get(PATH)));
+            String volt = String.valueOf((int) (Utils.strToFloat(voltage) * sOffset.get(PATH)));
             run(Control.write(freq + " " + volt, PATH), PATH + freq, context);
         }
 
     }
 
-    public static int getOffset () {
+    public static int getOffset() {
         return sOffset.get(PATH);
     }
 

@@ -1,24 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<de.dlyt.yanndroid.oneui.layout.ToolbarLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/toolbar_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    app:expanded="false"
+    app:navigationIcon="@drawable/ic_samsung_back">
 
-    <include layout="@layout/app_bar_main" />
-
-    <com.google.android.material.tabs.TabLayout
+    <de.dlyt.yanndroid.oneui.view.TabLayout
         android:id="@+id/tablayout"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:tabGravity="fill"
-        app:tabMode="fixed" />
+        android:layout_height="60.0dip" />
 
-    <androidx.viewpager.widget.ViewPager
-        android:id="@+id/viewpager"
+    <de.dlyt.yanndroid.oneui.layout.RoundLinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:roundedCorners="top_left|top_right">
 
-</LinearLayout>
+        <de.dlyt.yanndroid.oneui.view.ViewPager
+            android:id="@+id/viewpager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:overScrollMode="never" />
+
+    </de.dlyt.yanndroid.oneui.layout.RoundLinearLayout>
+
+</de.dlyt.yanndroid.oneui.layout.ToolbarLayout>

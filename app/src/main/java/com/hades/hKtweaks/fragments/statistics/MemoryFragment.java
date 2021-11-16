@@ -25,8 +25,8 @@ import com.hades.hKtweaks.R;
 import com.hades.hKtweaks.fragments.recyclerview.RecyclerViewFragment;
 import com.hades.hKtweaks.utils.Device;
 import com.hades.hKtweaks.utils.Utils;
-import com.hades.hKtweaks.views.recyclerview.DescriptionView;
 import com.hades.hKtweaks.views.recyclerview.RecyclerViewItem;
+import com.hades.hKtweaks.views.recyclerview.StatsView;
 
 import java.util.List;
 
@@ -40,20 +40,15 @@ public class MemoryFragment extends RecyclerViewFragment {
     @Override
     protected void init() {
         super.init();
-
+        getRecyclerView().setBackgroundResource(R.color.item_background_color);
         mMemInfo = Device.MemInfo.getInstance();
-    }
-
-    @Override
-    protected boolean showViewPager() {
-        return false;
     }
 
     @Override
     public int getSpanCount() {
         int span = Utils.isTablet(getActivity()) ? Utils.getOrientation(getActivity()) ==
-                Configuration.ORIENTATION_LANDSCAPE ? 5 : 4 : Utils.getOrientation(getActivity()) ==
-                Configuration.ORIENTATION_LANDSCAPE ? 3 : 2;
+                Configuration.ORIENTATION_LANDSCAPE ? 6 : 5 : Utils.getOrientation(getActivity()) ==
+                Configuration.ORIENTATION_LANDSCAPE ? 4 : 3;
         if (itemsSize() != 0 && span > itemsSize()) {
             span = itemsSize();
         }
@@ -64,10 +59,9 @@ public class MemoryFragment extends RecyclerViewFragment {
     protected void addItems(List<RecyclerViewItem> items) {
         List<String> mems = mMemInfo.getItems();
         for (String mem : mems) {
-            DescriptionView memView = new DescriptionView();
+            StatsView memView = new StatsView();
             memView.setTitle(mem);
-            memView.setSummary(mMemInfo.getItem(mem).replace(" ", "")
-                    .replace("kB", getString(R.string.kb)));
+            memView.setStat(mMemInfo.getItem(mem).replace(" ", "").replace("kB", getString(R.string.kb)));
 
             items.add(memView);
         }

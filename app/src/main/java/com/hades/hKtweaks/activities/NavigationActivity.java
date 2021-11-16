@@ -24,26 +24,28 @@ import android.content.pm.ShortcutInfo;
 import android.content.pm.ShortcutManager;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.Icon;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.os.SystemClock;
-import androidx.annotation.NonNull;
-import com.google.android.material.navigation.NavigationView;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.core.content.ContextCompat;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.widget.Toolbar;
+import android.provider.Settings;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.SubMenu;
 
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
+import androidx.core.view.GravityCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+
+import com.google.android.material.navigation.NavigationView;
+import com.hades.hKtweaks.BuildConfig;
 import com.hades.hKtweaks.R;
 import com.hades.hKtweaks.fragments.BaseFragment;
 import com.hades.hKtweaks.fragments.kernel.BatteryFragment;
@@ -52,19 +54,18 @@ import com.hades.hKtweaks.fragments.kernel.BusCamFragment;
 import com.hades.hKtweaks.fragments.kernel.BusDispFragment;
 import com.hades.hKtweaks.fragments.kernel.BusIntFragment;
 import com.hades.hKtweaks.fragments.kernel.BusMifFragment;
-import com.hades.hKtweaks.fragments.kernel.CPUVoltageCl1Fragment;
 import com.hades.hKtweaks.fragments.kernel.CPUFragment;
 import com.hades.hKtweaks.fragments.kernel.CPUHotplugFragment;
 import com.hades.hKtweaks.fragments.kernel.CPUVoltageCl0Fragment;
+import com.hades.hKtweaks.fragments.kernel.CPUVoltageCl1Fragment;
+import com.hades.hKtweaks.fragments.kernel.DvfsFragment;
 import com.hades.hKtweaks.fragments.kernel.EntropyFragment;
 import com.hades.hKtweaks.fragments.kernel.GPUFragment;
-import com.hades.hKtweaks.fragments.kernel.DvfsFragment;
 import com.hades.hKtweaks.fragments.kernel.HmpFragment;
 import com.hades.hKtweaks.fragments.kernel.IOFragment;
 import com.hades.hKtweaks.fragments.kernel.KSMFragment;
 import com.hades.hKtweaks.fragments.kernel.LEDFragment;
 import com.hades.hKtweaks.fragments.kernel.LMKFragment;
-import com.hades.hKtweaks.fragments.kernel.WakelockFragment;
 import com.hades.hKtweaks.fragments.kernel.MiscFragment;
 import com.hades.hKtweaks.fragments.kernel.ScreenFragment;
 import com.hades.hKtweaks.fragments.kernel.SoundFragment;
@@ -72,8 +73,7 @@ import com.hades.hKtweaks.fragments.kernel.SpectrumFragment;
 import com.hades.hKtweaks.fragments.kernel.ThermalFragment;
 import com.hades.hKtweaks.fragments.kernel.VMFragment;
 import com.hades.hKtweaks.fragments.kernel.WakeFragment;
-import com.hades.hKtweaks.fragments.other.AboutFragment;
-import com.hades.hKtweaks.fragments.other.DonationFragment;
+import com.hades.hKtweaks.fragments.kernel.WakelockFragment;
 import com.hades.hKtweaks.fragments.other.SettingsFragment;
 import com.hades.hKtweaks.fragments.statistics.DeviceFragment;
 import com.hades.hKtweaks.fragments.statistics.InputsFragment;
@@ -90,8 +90,10 @@ import com.hades.hKtweaks.fragments.tools.downloads.DownloadsFragment;
 import com.hades.hKtweaks.services.monitor.Monitor;
 import com.hades.hKtweaks.utils.AppSettings;
 import com.hades.hKtweaks.utils.Device;
+import com.hades.hKtweaks.utils.Updater;
 import com.hades.hKtweaks.utils.Utils;
 import com.hades.hKtweaks.utils.kernel.battery.Battery;
+import com.hades.hKtweaks.utils.kernel.boefflawakelock.BoefflaWakelock;
 import com.hades.hKtweaks.utils.kernel.bus.VoltageCam;
 import com.hades.hKtweaks.utils.kernel.bus.VoltageDisp;
 import com.hades.hKtweaks.utils.kernel.bus.VoltageInt;
@@ -99,10 +101,10 @@ import com.hades.hKtweaks.utils.kernel.bus.VoltageMif;
 import com.hades.hKtweaks.utils.kernel.cpuhotplug.Hotplug;
 import com.hades.hKtweaks.utils.kernel.cpuvoltage.VoltageCl0;
 import com.hades.hKtweaks.utils.kernel.cpuvoltage.VoltageCl1;
+import com.hades.hKtweaks.utils.kernel.dvfs.Dvfs;
 import com.hades.hKtweaks.utils.kernel.entropy.Entropy;
 import com.hades.hKtweaks.utils.kernel.gpu.GPU;
 import com.hades.hKtweaks.utils.kernel.hmp.Hmp;
-import com.hades.hKtweaks.utils.kernel.dvfs.Dvfs;
 import com.hades.hKtweaks.utils.kernel.io.IO;
 import com.hades.hKtweaks.utils.kernel.ksm.KSM;
 import com.hades.hKtweaks.utils.kernel.led.LED;
@@ -112,7 +114,6 @@ import com.hades.hKtweaks.utils.kernel.sound.Sound;
 import com.hades.hKtweaks.utils.kernel.spectrum.Spectrum;
 import com.hades.hKtweaks.utils.kernel.thermal.Thermal;
 import com.hades.hKtweaks.utils.kernel.wake.Wake;
-import com.hades.hKtweaks.utils.kernel.boefflawakelock.BoefflaWakelock;
 import com.hades.hKtweaks.utils.kernel.wakelock.Wakelock;
 import com.hades.hKtweaks.utils.root.RootUtils;
 import com.hades.hKtweaks.utils.tools.Backup;
@@ -125,6 +126,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
 
+import de.dlyt.yanndroid.oneui.layout.DrawerLayout;
+import de.dlyt.yanndroid.oneui.layout.ToolbarLayout;
+
 public class NavigationActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -135,15 +139,11 @@ public class NavigationActivity extends BaseActivity
     private Map<Integer, Class<? extends Fragment>> mActualFragments = new LinkedHashMap<>();
 
     private DrawerLayout mDrawer;
+    private ToolbarLayout mToolbarLayout;
     private NavigationView mNavigationView;
     private long mLastTimeBackbuttonPressed;
 
     private int mSelection;
-
-    @Override
-    protected boolean setStatusBarColor() {
-        return false;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -155,43 +155,31 @@ public class NavigationActivity extends BaseActivity
             mFragments = savedInstanceState.getParcelableArrayList("fragments");
             init(savedInstanceState);
         }
-    }
 
-    private static class FragmentLoader extends AsyncTask<Void, Void, Void> {
-
-        private WeakReference<NavigationActivity> mRefActivity;
-
-        private FragmentLoader(NavigationActivity activity) {
-            mRefActivity = new WeakReference<>(activity);
+        if (AppSettings.getBoolean("show_changelog", true, this)) {
+            Utils.changelogDialog(this);
         }
 
-        @Override
-        protected Void doInBackground(Void... voids) {
-            NavigationActivity activity = mRefActivity.get();
-            if (activity == null) return null;
-            activity.initFragments();
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            NavigationActivity activity = mRefActivity.get();
-            if (activity == null) return;
-            activity.init(null);
+        if (Build.VERSION.SDK_INT >= 30) {
+            if (!Environment.isExternalStorageManager()) {
+                //with root//RootUtils.runCommand("appops set --uid com.hades.hKtweaks MANAGE_EXTERNAL_STORAGE allow");
+                startActivity(new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, Uri.parse("package:" + BuildConfig.APPLICATION_ID)));
+            }
+        } else {
+            requestPermissions(new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
         }
     }
 
     private void initFragments() {
         mFragments.clear();
         mFragments.add(new NavigationActivity.NavigationFragment(R.string.statistics));
-        mFragments.add(new NavigationActivity.NavigationFragment(R.string.overall, OverallFragment.class, R.drawable.ic_chart));
-        mFragments.add(new NavigationActivity.NavigationFragment(R.string.device, DeviceFragment.class, R.drawable.ic_device));
+        mFragments.add(new NavigationActivity.NavigationFragment(R.string.overall, OverallFragment.class, R.drawable.ic_samsung_page));
+        mFragments.add(new NavigationActivity.NavigationFragment(R.string.device, DeviceFragment.class, R.drawable.ic_samsung_device));
         if (Device.MemInfo.getInstance().getItems().size() > 0) {
-            mFragments.add(new NavigationActivity.NavigationFragment(R.string.memory, MemoryFragment.class, R.drawable.ic_save));
+            mFragments.add(new NavigationActivity.NavigationFragment(R.string.memory, MemoryFragment.class, R.drawable.ic_samsung_network_storage_manage));
         }
         if (Device.Input.getInstance().supported()) {
-            mFragments.add(new NavigationActivity.NavigationFragment(R.string.inputs, InputsFragment.class, R.drawable.ic_keyboard));
+            mFragments.add(new NavigationActivity.NavigationFragment(R.string.inputs, InputsFragment.class, R.drawable.ic_samsung_keyboard));
         }
         mFragments.add(new NavigationActivity.NavigationFragment(R.string.kernel));
         mFragments.add(new NavigationActivity.NavigationFragment(R.string.cpu, CPUFragment.class, R.drawable.ic_cpu));
@@ -205,7 +193,7 @@ public class NavigationActivity extends BaseActivity
             mFragments.add(new NavigationActivity.NavigationFragment(R.string.thermal, ThermalFragment.class, R.drawable.ic_temperature));
         }
         if (GPU.supported()) {
-            mFragments.add(new NavigationActivity.NavigationFragment(R.string.gpu, GPUFragment.class, R.drawable.ic_gpu));
+            mFragments.add(new NavigationActivity.NavigationFragment(R.string.gpu, GPUFragment.class, R.drawable.ic_samsung_video_conference));
         }
         if (Dvfs.supported()) {
             mFragments.add(new NavigationActivity.NavigationFragment(R.string.dvfs_nav, DvfsFragment.class, R.drawable.ic_dvfs));
@@ -217,7 +205,7 @@ public class NavigationActivity extends BaseActivity
             mFragments.add(new NavigationActivity.NavigationFragment(R.string.gestures, WakeFragment.class, R.drawable.ic_touch));
         }
         if (Sound.getInstance().supported()) {
-            mFragments.add(new NavigationActivity.NavigationFragment(R.string.sound, SoundFragment.class, R.drawable.ic_music));
+            mFragments.add(new NavigationActivity.NavigationFragment(R.string.sound, SoundFragment.class, R.drawable.ic_samsung_audio));
         }
         if (Spectrum.supported(this)) {
             mFragments.add(new NavigationActivity.NavigationFragment(R.string.spectrum, SpectrumFragment.class, R.drawable.ic_spectrum_logo));
@@ -226,10 +214,10 @@ public class NavigationActivity extends BaseActivity
             mFragments.add(new NavigationActivity.NavigationFragment(R.string.battery, BatteryFragment.class, R.drawable.ic_battery));
         }
         if (LED.getInstance().supported()) {
-            mFragments.add(new NavigationActivity.NavigationFragment(R.string.led, LEDFragment.class, R.drawable.ic_led));
+            mFragments.add(new NavigationActivity.NavigationFragment(R.string.led, LEDFragment.class, R.drawable.ic_samsung_light_bulb));
         }
         if (IO.getInstance().supported()) {
-            mFragments.add(new NavigationActivity.NavigationFragment(R.string.io_scheduler, IOFragment.class, R.drawable.ic_sdcard));
+            mFragments.add(new NavigationActivity.NavigationFragment(R.string.io_scheduler, IOFragment.class, R.drawable.ic_samsung_sd_card));
         }
         if (KSM.getInstance().supported()) {
             if (KSM.getInstance().isUKSM()) {
@@ -239,19 +227,19 @@ public class NavigationActivity extends BaseActivity
             }
         }
         if (LMK.supported()) {
-            mFragments.add(new NavigationActivity.NavigationFragment(R.string.lmk, LMKFragment.class, R.drawable.ic_stackoverflow));
+            mFragments.add(new NavigationActivity.NavigationFragment(R.string.lmk, LMKFragment.class, R.drawable.ic_samsung_equalizer));
         }
         if (Wakelock.supported()) {
-            mFragments.add(new NavigationActivity.NavigationFragment(R.string.wakelock_nav, WakelockFragment.class, R.drawable.ic_unlock));
+            mFragments.add(new NavigationActivity.NavigationFragment(R.string.wakelock_nav, WakelockFragment.class, R.drawable.ic_samsung_unlock));
         }
         if (BoefflaWakelock.supported()) {
-            mFragments.add(new NavigationActivity.NavigationFragment(R.string.boeffla_wakelock, BoefflaWakelockFragment.class, R.drawable.ic_unlock));
+            mFragments.add(new NavigationActivity.NavigationFragment(R.string.boeffla_wakelock, BoefflaWakelockFragment.class, R.drawable.ic_samsung_unlock));
         }
-        mFragments.add(new NavigationActivity.NavigationFragment(R.string.virtual_memory, VMFragment.class, R.drawable.ic_server));
+        mFragments.add(new NavigationActivity.NavigationFragment(R.string.virtual_memory, VMFragment.class, R.drawable.ic_samsung_speed));
         if (Entropy.supported()) {
-            mFragments.add(new NavigationActivity.NavigationFragment(R.string.entropy, EntropyFragment.class, R.drawable.ic_numbers));
+            mFragments.add(new NavigationActivity.NavigationFragment(R.string.entropy, EntropyFragment.class, R.drawable.ic_samsung_devicecare));
         }
-        mFragments.add(new NavigationActivity.NavigationFragment(R.string.misc, MiscFragment.class, R.drawable.ic_clear));
+        mFragments.add(new NavigationActivity.NavigationFragment(R.string.misc, MiscFragment.class, R.drawable.ic_samsung_apps));
         mFragments.add(new NavigationActivity.NavigationFragment(R.string.voltage_control));
         if (VoltageCl1.supported()) {
             mFragments.add(new NavigationActivity.NavigationFragment(R.string.cpucl1_voltage, CPUVoltageCl1Fragment.class, R.drawable.ic_bolt));
@@ -272,38 +260,30 @@ public class NavigationActivity extends BaseActivity
             mFragments.add(new NavigationActivity.NavigationFragment(R.string.busCam_voltage, BusCamFragment.class, R.drawable.ic_bolt));
         }
         mFragments.add(new NavigationActivity.NavigationFragment(R.string.tools));
-        //mFragments.add(new NavigationActivity.NavigationFragment(R.string.data_sharing, DataSharingFragment.class, R.drawable.ic_database));
-        mFragments.add(new NavigationActivity.NavigationFragment(R.string.custom_controls, CustomControlsFragment.class, R.drawable.ic_console));
+        mFragments.add(new NavigationActivity.NavigationFragment(R.string.custom_controls, CustomControlsFragment.class, R.drawable.ic_samsung_plug_in));
 
         SupportedDownloads supportedDownloads = new SupportedDownloads(this);
         if (supportedDownloads.getLink() != null) {
-            mFragments.add(new NavigationActivity.NavigationFragment(R.string.downloads, DownloadsFragment.class, R.drawable.ic_download));
+            mFragments.add(new NavigationActivity.NavigationFragment(R.string.downloads, DownloadsFragment.class, R.drawable.ic_samsung_download));
         }
         if (Backup.hasBackup()) {
-            mFragments.add(new NavigationActivity.NavigationFragment(R.string.backup, BackupFragment.class, R.drawable.ic_restore));
+            mFragments.add(new NavigationActivity.NavigationFragment(R.string.backup, BackupFragment.class, R.drawable.ic_samsung_restore));
         }
-        mFragments.add(new NavigationActivity.NavigationFragment(R.string.build_prop_editor, BuildpropFragment.class, R.drawable.ic_edit));
-        mFragments.add(new NavigationActivity.NavigationFragment(R.string.profile, ProfileFragment.class, R.drawable.ic_layers));
-        mFragments.add(new NavigationActivity.NavigationFragment(R.string.recovery, RecoveryFragment.class, R.drawable.ic_security));
+        mFragments.add(new NavigationActivity.NavigationFragment(R.string.build_prop_editor, BuildpropFragment.class, R.drawable.ic_samsung_edit));
+        mFragments.add(new NavigationActivity.NavigationFragment(R.string.profile, ProfileFragment.class, R.drawable.ic_samsung_advanced_feature));
+        mFragments.add(new NavigationActivity.NavigationFragment(R.string.recovery, RecoveryFragment.class, R.drawable.ic_samsung_security));
         mFragments.add(new NavigationActivity.NavigationFragment(R.string.initd, InitdFragment.class, R.drawable.ic_shell));
-        mFragments.add(new NavigationActivity.NavigationFragment(R.string.on_boot, OnBootFragment.class, R.drawable.ic_start));
+        mFragments.add(new NavigationActivity.NavigationFragment(R.string.on_boot, OnBootFragment.class, R.drawable.ic_samsung_list_sort));
         mFragments.add(new NavigationActivity.NavigationFragment(R.string.other));
-        mFragments.add(new NavigationActivity.NavigationFragment(R.string.settings, SettingsFragment.class, R.drawable.ic_settings));
-        mFragments.add(new NavigationActivity.NavigationFragment(R.string.donation_title, DonationFragment.class, R.drawable.ic_donation));
-        mFragments.add(new NavigationActivity.NavigationFragment(R.string.about, AboutFragment.class, R.drawable.ic_about));
-        //mFragments.add(new NavigationActivity.NavigationFragment(R.string.contributors, ContributorsFragment.class, R.drawable.ic_people));
-        //mFragments.add(new NavigationActivity.NavigationFragment(R.string.help, HelpFragment.class, R.drawable.ic_help));
+        mFragments.add(new NavigationActivity.NavigationFragment(R.string.settings, SettingsFragment.class, R.drawable.ic_samsung_settings));
+        mFragments.add(new NavigationActivity.NavigationFragment(R.string.about, Fragment.class, R.drawable.ic_samsung_info));
     }
 
     private void init(Bundle savedInstanceState) {
         setContentView(R.layout.activity_navigation);
-        Toolbar toolbar = getToolBar();
-        setSupportActionBar(toolbar);
 
-        mDrawer = findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, mDrawer, toolbar, 0, 0);
-        mDrawer.addDrawerListener(toggle);
-        toggle.syncState();
+        mDrawer = getDrawerLayout();
+        mToolbarLayout = getToolBarLayout();
 
         mNavigationView = findViewById(R.id.nav_view);
         mNavigationView.setNavigationItemSelectedListener(this);
@@ -338,6 +318,26 @@ public class NavigationActivity extends BaseActivity
         if (AppSettings.isDataSharing(this)) {
             startService(new Intent(this, Monitor.class));
         }
+
+        Updater.checkForUpdate(this, new Updater.UpdateChecker() {
+            @Override
+            public void updateAvailable(boolean available, String url, String versionName) {
+                mDrawer.setButtonBadges(available ? ToolbarLayout.N_BADGE : 0, 0);
+                if (available)
+                    mNavigationView.getMenu().findItem(R.string.about).setActionView(R.layout.sesl_badge);
+                else mNavigationView.getMenu().findItem(R.string.about).setActionView(null);
+            }
+
+            @Override
+            public void githubAvailable(String url) {
+
+            }
+
+            @Override
+            public void noConnection() {
+
+            }
+        });
     }
 
     private int firstTab() {
@@ -363,10 +363,7 @@ public class NavigationActivity extends BaseActivity
             Class<? extends Fragment> fragmentClass = navigationFragment.mFragmentClass;
             int id = navigationFragment.mId;
 
-            Drawable drawable = ContextCompat.getDrawable(this,
-                        AppSettings.isSectionIcons(this)
-                        && navigationFragment.mDrawable != 0 ? navigationFragment.mDrawable :
-                        R.drawable.ic_blank);
+            Drawable drawable = ContextCompat.getDrawable(this, navigationFragment.mDrawable != 0 ? navigationFragment.mDrawable : R.drawable.ic_blank);
 
             if (fragmentClass == null) {
                 lastSubMenu = menu.addSubMenu(id);
@@ -420,7 +417,7 @@ public class NavigationActivity extends BaseActivity
         for (int i = 0; i < 4; i++) {
             NavigationFragment fragment = findNavigationFragmentByClass(queue.poll());
             if (fragment == null || fragment.mFragmentClass == null) continue;
-            Intent intent = new Intent(this, MainActivity.class);
+            Intent intent = new Intent(this, SplashActivity.class);
             intent.setAction(Intent.ACTION_VIEW);
             intent.putExtra(INTENT_SECTION, fragment.mFragmentClass.getCanonicalName());
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -448,8 +445,8 @@ public class NavigationActivity extends BaseActivity
 
     @Override
     public void onBackPressed() {
-        if (mDrawer != null && mDrawer.isDrawerOpen(GravityCompat.START)) {
-            mDrawer.closeDrawer(GravityCompat.START);
+        if (mDrawer != null && ((androidx.drawerlayout.widget.DrawerLayout) mDrawer.findViewById(R.id.drawerLayout)).isDrawerOpen(GravityCompat.START)) {
+            mDrawer.setDrawerOpen(false, true);
         } else {
             Fragment currentFragment = getFragment(mSelection);
             if (!(currentFragment instanceof BaseFragment)
@@ -490,13 +487,20 @@ public class NavigationActivity extends BaseActivity
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.string.about) {
+            startActivity(new Intent().setClass(this, AboutActivity.class));
+            return false;
+        }
+
         onItemSelected(item.getItemId(), true);
         return true;
     }
 
     private void onItemSelected(final int res, boolean saveOpened) {
-        mDrawer.closeDrawer(GravityCompat.START);
-        getSupportActionBar().setTitle(getString(res));
+        mToolbarLayout.setTitle(getString(res));
+        mToolbarLayout.setSubtitle(null);
+
+        mDrawer.setDrawerOpen(false, true);
         mNavigationView.setCheckedItem(res);
         mSelection = res;
         final Fragment fragment = getFragment(res);
@@ -526,8 +530,44 @@ public class NavigationActivity extends BaseActivity
         return fragment;
     }
 
+    private static class FragmentLoader extends AsyncTask<Void, Void, Void> {
+
+        private WeakReference<NavigationActivity> mRefActivity;
+
+        private FragmentLoader(NavigationActivity activity) {
+            mRefActivity = new WeakReference<>(activity);
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            NavigationActivity activity = mRefActivity.get();
+            if (activity == null) return null;
+            activity.initFragments();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            NavigationActivity activity = mRefActivity.get();
+            if (activity == null) return;
+            activity.init(null);
+        }
+    }
+
     public static class NavigationFragment implements Parcelable {
 
+        public static final Creator CREATOR = new Creator<NavigationFragment>() {
+            @Override
+            public NavigationFragment createFromParcel(Parcel source) {
+                return new NavigationFragment(source);
+            }
+
+            @Override
+            public NavigationFragment[] newArray(int size) {
+                return new NavigationFragment[0];
+            }
+        };
         public int mId;
         public Class<? extends Fragment> mFragmentClass;
         private int mDrawable;
@@ -564,18 +604,6 @@ public class NavigationActivity extends BaseActivity
             dest.writeSerializable(mFragmentClass);
             dest.writeInt(mDrawable);
         }
-
-        public static final Creator CREATOR = new Creator<NavigationFragment>() {
-            @Override
-            public NavigationFragment createFromParcel(Parcel source) {
-                return new NavigationFragment(source);
-            }
-
-            @Override
-            public NavigationFragment[] newArray(int size) {
-                return new NavigationFragment[0];
-            }
-        };
     }
 
 }

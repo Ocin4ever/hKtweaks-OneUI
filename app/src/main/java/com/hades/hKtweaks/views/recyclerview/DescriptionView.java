@@ -21,10 +21,11 @@ package com.hades.hKtweaks.views.recyclerview;
 
 import android.content.res.ColorStateList;
 import android.graphics.drawable.Drawable;
-import androidx.appcompat.widget.AppCompatImageView;
-import androidx.appcompat.widget.AppCompatTextView;
 import android.text.method.MovementMethod;
 import android.view.View;
+
+import androidx.appcompat.widget.AppCompatImageView;
+import androidx.appcompat.widget.AppCompatTextView;
 
 import com.hades.hKtweaks.R;
 
@@ -57,7 +58,7 @@ public class DescriptionView extends RecyclerViewItem {
         mImageView = view.findViewById(R.id.image);
         mTitleView = view.findViewById(R.id.title);
         mSummaryView = view.findViewById(R.id.summary);
-        if(mGrxIsInitSelected) this.setTextColor(mGrxColor);
+        if (mGrxIsInitSelected) this.setTextColor(mGrxColor);
 
         if (mTitleView != null) {
             mTitleView.setOnFocusChangeListener((v, hasFocus) -> {
@@ -77,7 +78,7 @@ public class DescriptionView extends RecyclerViewItem {
         super.onCreateView(view);
     }
 
-    public void setBackgroundColor (int color){
+    public void setBackgroundColor(int color) {
         mRootView.setBackgroundColor(color);
     }
 
@@ -86,17 +87,7 @@ public class DescriptionView extends RecyclerViewItem {
         refresh();
     }
 
-    public void setTitle(CharSequence title) {
-        mTitle = title;
-        refresh();
-    }
-
-    public void setSummary(CharSequence summary) {
-        mSummary = summary;
-        refresh();
-    }
-
-    public void GrxSetInitSelection(boolean isInitSelected, int color ){
+    public void GrxSetInitSelection(boolean isInitSelected, int color) {
         mGrxIsInitSelected = isInitSelected;
         mGrxColor = color;
     }
@@ -109,7 +100,7 @@ public class DescriptionView extends RecyclerViewItem {
         mSummaryView.setTextColor(color);
     }
 
-    public ColorStateList getTextColors(){
+    public ColorStateList getTextColors() {
         return mSummaryView.getTextColors();
     }
 
@@ -122,8 +113,18 @@ public class DescriptionView extends RecyclerViewItem {
         return mTitle;
     }
 
+    public void setTitle(CharSequence title) {
+        mTitle = title;
+        refresh();
+    }
+
     public CharSequence getSummary() {
         return mSummary;
+    }
+
+    public void setSummary(CharSequence summary) {
+        mSummary = summary;
+        refresh();
     }
 
     @Override

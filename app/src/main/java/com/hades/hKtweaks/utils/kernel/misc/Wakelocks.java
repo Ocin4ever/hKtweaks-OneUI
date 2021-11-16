@@ -20,6 +20,7 @@
 package com.hades.hKtweaks.utils.kernel.misc;
 
 import android.content.Context;
+
 import androidx.annotation.StringRes;
 
 import com.hades.hKtweaks.R;
@@ -39,59 +40,6 @@ public class Wakelocks {
     private static final String MSM_HSIC_DIVIDER = "/sys/module/xhci_hcd/parameters/wl_divide";
     private static final String BCMDHD_DIVIDER = "/sys/module/bcmdhd/parameters/wl_divide";
     private static final String WLAN_CTRL_DIVIDER = "/sys/module/bcmdhd/parameters/wlctrl_divide";
-
-    public static class Wakelock {
-
-        private final String mPath;
-        @StringRes
-        private final int mTitle;
-        @StringRes
-        private final int mDescription;
-
-        private Boolean mExists;
-
-        private Wakelock(String path) {
-            this(path, 0, 0);
-        }
-
-        private Wakelock(String path, @StringRes int title, @StringRes int description) {
-            mPath = path;
-            mTitle = title;
-            mDescription = description;
-        }
-
-        public String getDescription(Context context) {
-            return mDescription == 0 ? null : context.getString(mDescription);
-        }
-
-        public String getTitle(Context context) {
-            if (mTitle != 0) {
-                return context.getString(mTitle);
-            }
-
-            return Utils.upperCaseEachWord(mPath.substring(mPath.lastIndexOf('/') + 1)
-                    .replace("enable_", "")
-                    .replace("_ws", "")
-                    .replace("_", " "));
-        }
-
-        public void enable(boolean enable, Context context) {
-            run(Control.write(enable ? "Y" : "N", mPath), mPath, context);
-        }
-
-        public boolean isEnabled() {
-            return Utils.readFile(mPath).equals("Y");
-        }
-
-        public boolean exists() {
-            if (mExists == null) {
-                return (mExists = Utils.existFile(mPath));
-            }
-            return mExists;
-        }
-
-    }
-
     private static final List<Wakelock> sWakelocks = new ArrayList<>();
 
     static {
@@ -185,6 +133,58 @@ public class Wakelocks {
 
     private static void run(String command, String id, Context context) {
         Control.runSetting(command, ApplyOnBootFragment.MISC, id, context);
+    }
+
+    public static class Wakelock {
+
+        private final String mPath;
+        @StringRes
+        private final int mTitle;
+        @StringRes
+        private final int mDescription;
+
+        private Boolean mExists;
+
+        private Wakelock(String path) {
+            this(path, 0, 0);
+        }
+
+        private Wakelock(String path, @StringRes int title, @StringRes int description) {
+            mPath = path;
+            mTitle = title;
+            mDescription = description;
+        }
+
+        public String getDescription(Context context) {
+            return mDescription == 0 ? null : context.getString(mDescription);
+        }
+
+        public String getTitle(Context context) {
+            if (mTitle != 0) {
+                return context.getString(mTitle);
+            }
+
+            return Utils.upperCaseEachWord(mPath.substring(mPath.lastIndexOf('/') + 1)
+                    .replace("enable_", "")
+                    .replace("_ws", "")
+                    .replace("_", " "));
+        }
+
+        public void enable(boolean enable, Context context) {
+            run(Control.write(enable ? "Y" : "N", mPath), mPath, context);
+        }
+
+        public boolean isEnabled() {
+            return Utils.readFile(mPath).equals("Y");
+        }
+
+        public boolean exists() {
+            if (mExists == null) {
+                return (mExists = Utils.existFile(mPath));
+            }
+            return mExists;
+        }
+
     }
 
 }

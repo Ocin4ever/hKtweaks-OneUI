@@ -26,61 +26,26 @@ import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.LocaleList;
+
 import androidx.annotation.Nullable;
-import com.google.android.material.appbar.AppBarLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
-import androidx.appcompat.widget.Toolbar;
-import android.view.Window;
-import android.view.WindowManager;
 
 import com.hades.hKtweaks.R;
 import com.hades.hKtweaks.utils.AppSettings;
-import com.hades.hKtweaks.utils.Themes;
-import com.hades.hKtweaks.utils.Utils;
-import com.hades.hKtweaks.utils.ViewUtils;
 
 import java.util.Locale;
+
+import de.dlyt.yanndroid.oneui.layout.DrawerLayout;
+import de.dlyt.yanndroid.oneui.layout.ToolbarLayout;
+import de.dlyt.yanndroid.oneui.utils.ThemeUtil;
 
 /**
  * Created by willi on 14.04.16.
  */
 public abstract class BaseActivity extends AppCompatActivity {
 
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-
-        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
-        Utils.DARK_THEME = Themes.isDarkTheme(this);
-        Utils.AMOLED_DARK_THEME = Themes.isAmoledBlack(this);
-        Themes.Theme theme = Themes.getTheme(this, Utils.DARK_THEME, Utils.AMOLED_DARK_THEME);
-        if (Utils.DARK_THEME) {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-        } else {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-        }
-        setTheme(theme.getStyle());
-        super.onCreate(savedInstanceState);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && setStatusBarColor()) {
-            Window window = getWindow();
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(statusBarColor());
-        }
-    }
-
-    @Override
-    protected void attachBaseContext(Context newBase) {
-        if (AppSettings.isForceEnglish(newBase)) {
-            super.attachBaseContext(wrap(newBase, new Locale("en_US")));
-        } else {
-            super.attachBaseContext(newBase);
-        }
-    }
-
     public static ContextWrapper wrap(Context context, Locale newLocale) {
-
         Resources res = context.getResources();
         Configuration configuration = res.getConfiguration();
 
@@ -104,29 +69,32 @@ public abstract class BaseActivity extends AppCompatActivity {
         return new ContextWrapper(context);
     }
 
-    public AppBarLayout getAppBarLayout() {
-        return (AppBarLayout) findViewById(R.id.appbarlayout);
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
+        new ThemeUtil(this);
+        super.onCreate(savedInstanceState);
     }
 
-    public Toolbar getToolBar() {
-        return (Toolbar) findViewById(R.id.toolbar);
-    }
-
-    public void initToolBar() {
-        Toolbar toolbar = getToolBar();
-        if (toolbar != null) {
-            setSupportActionBar(toolbar);
-            toolbar.setNavigationOnClickListener(v -> finish());
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        if (AppSettings.isForceEnglish(newBase)) {
+            super.attachBaseContext(wrap(newBase, new Locale("en_US")));
+        } else {
+            super.attachBaseContext(newBase);
         }
     }
 
-    protected boolean setStatusBarColor() {
-        return true;
+    public Context getContext() {
+        return this;
     }
 
-    protected int statusBarColor() {
-        return ViewUtils.getColorPrimaryDarkColor(this);
+    public ToolbarLayout getToolBarLayout() {
+        if (getDrawerLayout() != null) return getDrawerLayout().getToolbarLayout();
+        return findViewById(R.id.toolbar_layout);
     }
 
+    public DrawerLayout getDrawerLayout() {
+        return findViewById(R.id.drawer_layout);
+    }
 }

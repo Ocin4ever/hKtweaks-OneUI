@@ -69,22 +69,45 @@ import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.widget.ProgressBar;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-
 import androidx.appcompat.widget.AppCompatSeekBar;
 import androidx.core.view.ViewCompat;
+
 import com.hades.hKtweaks.R;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 
 public class VerticalSeekBar extends AppCompatSeekBar {
     public static final int ROTATION_ANGLE_CW_90 = 90;
     public static final int ROTATION_ANGLE_CW_270 = 270;
+    public int mGrxZeroOffset;
+    public int mGrxDividerStep;
+    public boolean mGrxIsInit = false;
+    public boolean mIsEnabled = true;
+    /**
+     * grx
+     **/
 
+    Paint mGrxProgressPaint;
+    Paint mGrxDividerPaint;
+    ShapeDrawable mTickMark, mTickMarkSoft;
     private boolean mIsDragging;
     private Drawable mThumb_;
     private Method mMethodSetProgressFromUser;
     private int mRotationAngle = ROTATION_ANGLE_CW_90;
+    private int mGrxNumSteps;
+    private int mGrxLeftMin = 0;
+    private float mGrxHalfDividerLength;
+    private float mGrxHalfDividerThickness;
+    private float mGrxHalfProgressThickness;
+    private boolean mGrxShowBackgroundTrack = true;
+    private float mGrxZeroOffsetCircleRadius;
+    private int mGrxMin;
+    private boolean mGrxMeasuresSet = false;
+    private float mGrxPixelsPerStep = 0;
+    private float mGrxLeftZeroOffset = 0f;
+    private int mGrxCenterThickness = 0;
 
     public VerticalSeekBar(Context context) {
         super(context);
@@ -99,6 +122,10 @@ public class VerticalSeekBar extends AppCompatSeekBar {
     public VerticalSeekBar(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         initialize(context, attrs, defStyle, 0);
+    }
+
+    private static boolean isValidRotationAngle(int angle) {
+        return (angle == ROTATION_ANGLE_CW_90 || angle == ROTATION_ANGLE_CW_270);
     }
 
     private void initialize(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
@@ -134,7 +161,7 @@ public class VerticalSeekBar extends AppCompatSeekBar {
 
     private boolean onTouchEventTraditionalRotation(MotionEvent event) {
 
-        if(!mIsEnabled) return false;
+        if (!mIsEnabled) return false;
 
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
@@ -183,7 +210,7 @@ public class VerticalSeekBar extends AppCompatSeekBar {
     }
 
     private boolean onTouchEventUseViewRotation(MotionEvent event) {
-        if(!mIsEnabled) return false;
+        if (!mIsEnabled) return false;
 
         boolean handled = super.onTouchEvent(event);
         if (handled) {
@@ -362,41 +389,23 @@ public class VerticalSeekBar extends AppCompatSeekBar {
         }
     }
 
+    private void grxSetUPAdditionalOptions(TypedArray a) {
 
-    /** grx **/
-
-    Paint mGrxProgressPaint;
-
-    public int mGrxZeroOffset;
-    public int mGrxDividerStep;
-    private int mGrxNumSteps;
-    private int mGrxLeftMin=0;
-    private float mGrxHalfDividerLength;
-    private float mGrxHalfDividerThickness;
-    private float mGrxHalfProgressThickness;
-    private boolean mGrxShowBackgroundTrack = true;
-    private float mGrxZeroOffsetCircleRadius;
-    private int mGrxMin;
-    Paint mGrxDividerPaint;
-
-
-    private void grxSetUPAdditionalOptions(TypedArray a){
-
-        mGrxZeroOffset = a.getInt(R.styleable.VerticalSeekBar_zeroOffset,0);
-        mGrxDividerStep = a.getInt(R.styleable.VerticalSeekBar_dividerStep,0);
-        mGrxHalfDividerLength = a.getDimension(R.styleable.VerticalSeekBar_dividerLength,0f)/2;
-        mGrxHalfDividerThickness = a.getDimensionPixelSize(R.styleable.VerticalSeekBar_dividerThickness,0)/2;
-        mGrxHalfProgressThickness = a.getDimensionPixelSize(R.styleable.VerticalSeekBar_progressThickness,0)/2;
-        mGrxShowBackgroundTrack = a.getBoolean(R.styleable.VerticalSeekBar_showBackgroundTrack,true);
-        mGrxZeroOffsetCircleRadius = a.getDimensionPixelSize(R.styleable.VerticalSeekBar_zeroOffsetCircleRadius,0);
-        mGrxMin = a.getInt(R.styleable.VerticalSeekBar_min,0);
+        mGrxZeroOffset = a.getInt(R.styleable.VerticalSeekBar_zeroOffset, 0);
+        mGrxDividerStep = a.getInt(R.styleable.VerticalSeekBar_dividerStep, 0);
+        mGrxHalfDividerLength = a.getDimension(R.styleable.VerticalSeekBar_dividerLength, 0f) / 2;
+        mGrxHalfDividerThickness = a.getDimensionPixelSize(R.styleable.VerticalSeekBar_dividerThickness, 0) / 2;
+        mGrxHalfProgressThickness = a.getDimensionPixelSize(R.styleable.VerticalSeekBar_progressThickness, 0) / 2;
+        mGrxShowBackgroundTrack = a.getBoolean(R.styleable.VerticalSeekBar_showBackgroundTrack, true);
+        mGrxZeroOffsetCircleRadius = a.getDimensionPixelSize(R.styleable.VerticalSeekBar_zeroOffsetCircleRadius, 0);
+        mGrxMin = a.getInt(R.styleable.VerticalSeekBar_min, 0);
 
         mGrxNumSteps = getMax() - mGrxMin;
         mGrxProgressPaint = new Paint();
         mGrxProgressPaint.setStyle(Paint.Style.FILL);
 
         TypedValue typedValue = new TypedValue();
-        TypedArray b = getContext().obtainStyledAttributes(typedValue.data, new int[] { android.R.attr.colorAccent });
+        TypedArray b = getContext().obtainStyledAttributes(typedValue.data, new int[]{android.R.attr.colorAccent});
         int color = b.getColor(0, 0);
         b.recycle();
 
@@ -404,15 +413,15 @@ public class VerticalSeekBar extends AppCompatSeekBar {
 
         Drawable currentprogressdrawable = getProgressDrawable();
         Drawable track = null;
-        mGrxShowBackgroundTrack=false;//bbb
-        if(currentprogressdrawable!= null && currentprogressdrawable instanceof LayerDrawable) {
-            if (!mGrxShowBackgroundTrack){
+        mGrxShowBackgroundTrack = false;//bbb
+        if (currentprogressdrawable != null && currentprogressdrawable instanceof LayerDrawable) {
+            if (!mGrxShowBackgroundTrack) {
                 int indexbg = ((LayerDrawable) currentprogressdrawable).findIndexByLayerId(android.R.id.background);
                 ((LayerDrawable) currentprogressdrawable).setDrawable(indexbg, new ColorDrawable(0));
             }
 
-           int indexprogress = ((LayerDrawable) currentprogressdrawable).findIndexByLayerId(android.R.id.progress);
-           ((LayerDrawable) currentprogressdrawable).setDrawable(indexprogress, new ColorDrawable(0));
+            int indexprogress = ((LayerDrawable) currentprogressdrawable).findIndexByLayerId(android.R.id.progress);
+            ((LayerDrawable) currentprogressdrawable).setDrawable(indexprogress, new ColorDrawable(0));
 
         }
 
@@ -430,24 +439,17 @@ public class VerticalSeekBar extends AppCompatSeekBar {
         mTickMarkSoft = new ShapeDrawable(new OvalShape());
         mTickMarkSoft.setIntrinsicHeight(10);
         mTickMarkSoft.setIntrinsicWidth(10);
-        mTickMarkSoft.getPaint().setColor(color&0x10ffffff);
+        mTickMarkSoft.getPaint().setColor(color & 0x10ffffff);
         mTickMarkSoft.setBounds(new Rect(-4, -4, 4, 4));
     }
 
-
-    private boolean mGrxMeasuresSet=false;
-    private float mGrxPixelsPerStep=0;
-    private float mGrxLeftZeroOffset = 0f;
-    private int mGrxCenterThickness =0;
-
-
     private void drawTickMarks(Canvas canvas) {
         if (mTickMark != null) {
-            if (mGrxNumSteps> 1) {
+            if (mGrxNumSteps > 1) {
                 final int saveCount = canvas.save();
                 canvas.translate(getPaddingLeft(), getHeight() / 2);
                 for (int i = 0; i <= mGrxNumSteps; i++) {
-                    if((i%mGrxDividerStep)==0) mTickMark.draw(canvas);
+                    if ((i % mGrxDividerStep) == 0) mTickMark.draw(canvas);
                     else mTickMarkSoft.draw(canvas); // hacer opción
                     canvas.translate(mGrxPixelsPerStep, 0);
                 }
@@ -456,43 +458,39 @@ public class VerticalSeekBar extends AppCompatSeekBar {
         }
     }
 
-    ShapeDrawable mTickMark, mTickMarkSoft;
+    private void grxSetDimensions(Canvas canvas) {
 
-    private void grxSetDimensions(Canvas canvas){
-
-        if(canvas==null) return;
+        if (canvas == null) return;
 
         mGrxPixelsPerStep = (getWidth() - getPaddingLeft() - getPaddingRight()) / (float) mGrxNumSteps;
-        mGrxLeftZeroOffset = getPaddingRight() +  (int) ( (float) mGrxZeroOffset*mGrxPixelsPerStep );
+        mGrxLeftZeroOffset = getPaddingRight() + (int) ((float) mGrxZeroOffset * mGrxPixelsPerStep);
 
         mGrxCenterThickness = canvas.getClipBounds().centerY();
         mGrxMeasuresSet = true;
     }
 
-    public boolean mGrxIsInit = false;
-
     public void grxSetSeekBarProgress(String value) {
-        if(value == null || value.isEmpty()) setProgress(mGrxZeroOffset);
-        else setProgress(Integer.valueOf(value) + mGrxZeroOffset );
+        if (value == null || value.isEmpty()) setProgress(mGrxZeroOffset);
+        else setProgress(Integer.valueOf(value) + mGrxZeroOffset);
     }
 
-    public void grxSetInitialized(boolean initialized){
+    public void grxSetInitialized(boolean initialized) {
         mGrxIsInit = initialized;
     }
 
-    public void grxSetCurrentKernelValue(int band){
+    public void grxSetCurrentKernelValue(int band) {
 
 //        grxSetSeekBarProgress(ArizonaSound.getEqValue(band));
 
     }
 
-   public int grxGetNormalizedProgress(){
-        if(mGrxIsInit) return getProgress()-mGrxZeroOffset;
+    public int grxGetNormalizedProgress() {
+        if (mGrxIsInit) return getProgress() - mGrxZeroOffset;
         else return 0;
     }
 
-    public String grxGetNormalizedStringProgress(){
-        if(mGrxIsInit) return String.valueOf(getProgress()-mGrxZeroOffset);
+    public String grxGetNormalizedStringProgress() {
+        if (mGrxIsInit) return String.valueOf(getProgress() - mGrxZeroOffset);
         else return null;
     }
 
@@ -519,18 +517,18 @@ public class VerticalSeekBar extends AppCompatSeekBar {
 
         int totallines = mGrxNumSteps + 1;
 
-        if(mGrxMeasuresSet) {
+        if (mGrxMeasuresSet) {
             int stepstodraw = getProgress() - mGrxZeroOffset;
-            if(stepstodraw!=0)
+            if (stepstodraw != 0)
 
                 canvas.drawRect(mGrxLeftZeroOffset,
-                        mGrxCenterThickness-mGrxHalfProgressThickness,
-                        mGrxLeftZeroOffset + mGrxPixelsPerStep*stepstodraw,
-                        mGrxCenterThickness+mGrxHalfProgressThickness,
+                        mGrxCenterThickness - mGrxHalfProgressThickness,
+                        mGrxLeftZeroOffset + mGrxPixelsPerStep * stepstodraw,
+                        mGrxCenterThickness + mGrxHalfProgressThickness,
                         mGrxProgressPaint);
 
-            if(mGrxZeroOffsetCircleRadius!=0){
-                canvas.drawCircle(mGrxLeftZeroOffset,mGrxCenterThickness,mGrxZeroOffsetCircleRadius,mGrxProgressPaint );
+            if (mGrxZeroOffsetCircleRadius != 0) {
+                canvas.drawCircle(mGrxLeftZeroOffset, mGrxCenterThickness, mGrxZeroOffsetCircleRadius, mGrxProgressPaint);
             }
 
             super.onDraw(canvas);
@@ -564,7 +562,6 @@ public class VerticalSeekBar extends AppCompatSeekBar {
         }
     }
 
-
     // refresh thumb position
     private void refreshThumb() {
         onSizeChanged(super.getWidth(), super.getHeight(), 0, 0);
@@ -585,13 +582,7 @@ public class VerticalSeekBar extends AppCompatSeekBar {
         }
     }
 
-    private static boolean isValidRotationAngle(int angle) {
-        return (angle == ROTATION_ANGLE_CW_90 || angle == ROTATION_ANGLE_CW_270);
-    }
-
-    public boolean mIsEnabled = true;
-
-    public void grxSetEnabled(boolean enable){
+    public void grxSetEnabled(boolean enable) {
         mIsEnabled = enable;
     }
 

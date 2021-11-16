@@ -1,14 +1,17 @@
-apply plugin: 'com.android.application'
+plugins {
+    id 'com.android.application'
+    id 'com.google.gms.google-services'
+}
 
 android {
     compileSdkVersion 30
-    buildToolsVersion '30.0.2'
+    buildToolsVersion '30.0.3'
     defaultConfig {
         applicationId 'com.hades.hKtweaks'
         minSdkVersion 26
         targetSdkVersion 30
         versionCode 220
-        versionName "2.2.0"
+        versionName "2.2.0 - OneUI"
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -25,13 +28,6 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-    productFlavors {
-    }
-    android.applicationVariants.all { final variant ->
-        variant.outputs.all {
-            outputFileName = "hKtweaks_v${variant.versionName}.apk"
-        }
-    }
 }
 
 repositories {
@@ -39,31 +35,23 @@ repositories {
 }
 
 dependencies {
-    implementation fileTree(include: ['*.jar'], dir: 'libs')
-    androidTestImplementation('androidx.test.espresso:espresso-core:3.1.0', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
-    implementation('com.github.ozodrukh:CircularReveal:1.3.1@aar') {
-        transitive = true
-    }
+    implementation fileTree(include: ['*.aar'], dir: 'libs')
 
-    implementation 'androidx.core:core:1.5.0'
-    implementation 'androidx.core:core-ktx:1.5.0'
-    implementation 'androidx.appcompat:appcompat:1.3.0'
-    implementation 'androidx.cardview:cardview:1.0.0'
-    implementation 'com.google.android.material:material:1.4.0-beta01'
-    implementation 'androidx.legacy:legacy-preference-v14:1.0.0'
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'com.google.android.apps.dashclock:dashclock-api:2.0.0'
-    implementation 'com.mattprecious.swirl:swirl:1.2.0'
-    implementation 'com.mikhaellopez:circularimageview:4.2.0'
-    implementation 'org.adw.library:discrete-seekbar:1.0.1'
+    //implementation 'io.github.yanndroid:oneui:2.1.2' //v2.1.2 not released yet
     implementation 'org.cyanogenmod:platform.sdk:6.0'
-    implementation 'com.github.bumptech.glide:glide:4.11.0'
-    implementation 'com.akexorcist:RoundCornerProgressBar:2.0.3'
-    implementation 'com.squareup.okhttp3:okhttp:4.4.1'
+    implementation 'com.github.bumptech.glide:glide:4.12.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
-    testImplementation 'junit:junit:4.13'
+
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.1'
+    implementation 'androidx.appcompat:appcompat:1.3.1'
+    implementation 'com.google.code.gson:gson:2.8.6'
+    implementation 'com.google.firebase:firebase-database:20.0.2'
+    implementation 'com.google.android.material:material:1.4.0'
+    implementation 'com.google.android.apps.dashclock:dashclock-api:2.0.0'
+
+    testImplementation 'junit:junit:4.+'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 }
 
 configurations.all {

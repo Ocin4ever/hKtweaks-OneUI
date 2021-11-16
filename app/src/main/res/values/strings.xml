@@ -1,14 +1,12 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <string name="app_name">hKtweaks</string>
 
-    <string name="checking_info">Checking info…</string>
     <string name="checking_root">Checking root access</string>
     <string name="searching_busybox">Searching for busybox</string>
     <string name="collecting_info">Collecting info</string>
     <string name="no_root">No root</string>
     <string name="no_busybox">No busybox</string>
     <string name="open">Open %s</string>
-    <string name="disable">Disable</string>
     <string name="changelog">hKtweaks v%s</string>
     <string name="close">Close</string>
 
@@ -27,17 +25,11 @@
     <string name="free">free</string>
     <string name="total">total</string>
 
-    <string name="license_invalid">Thanks for purchasing the donation app! Unfortunately license check failed. Please try again later. If it\'s still not working, please contact me. You need internet access!</string>
-    <string name="pirated">Seems like the donation app wasn\'t purchased through Play Store! If you pirated it, then shame on you!</string>
     <string name="donate">Donate</string>
     <string name="donate_summary">This feature is only available when the donation app is installed! Don\'t worry though. Because this app is open source you can easily build it yourself and remove this check. But I hope you support developers anyway. Thanks for using Kernel Adiutor! Once you bought the donation app you have to restart Kernel Adiutor in order to enable all features.</string>
     <string name="donate_nope">I won\'t fall for this scam!</string>
     <string name="donate_yes">I love this app. Must donate!</string>
-    <string name="ad_here">Your advertisement could be here</string>
-    <string name="remove_ad">Remove ad</string>
     <string name="warning">Warning</string>
-    <string name="gh_ad">This is a non commercial ad! Do not take this seriously! Just a funny way to fill the space when an actual ad doesn\'t load (looking at you adblock users).</string>
-    <string name="open_ad_anyway">Open ad anyway</string>
 
     <string name="apply_on_boot">Apply on boot</string>
     <string name="apply_on_boot_text">Applying settings in %d seconds.</string>
@@ -66,14 +58,12 @@
     <string name="mb">MB</string>
     <string name="ms">ms</string>
     <string name="mv">mV</string>
-    <string name="uv">µV</string>
     <string name="min">min</string>
     <string name="mah">mAh</string>
     <string name="ma">mA</string>
     <string name="kb">kB</string>
     <string name="px">px</string>
     <string name="percent">%</string>
-    <string name="gb">GB</string>
     <string name="db">dB</string>
 
     <!-- Special signs -->
@@ -93,7 +83,6 @@
     <string name="memory">Memory</string>
     <string name="inputs">Inputs</string>
     <string name="cpu">CPU</string>
-    <string name="cpu_voltage">CPU Voltage</string>
     <string name="cpu_hotplug">CPU Hotplug</string>
     <string name="thermal">Thermal</string>
     <string name="gpu">GPU</string>
@@ -125,8 +114,6 @@
     <string name="on_boot">On Boot</string>
     <string name="settings">Settings</string>
     <string name="about">About</string>
-    <string name="contributors">Contributors</string>
-    <string name="help">Help</string>
 
     <!-- Overall -->
     <string name="offline">Offline</string>
@@ -146,7 +133,6 @@
 
     <!-- Device -->
     <string name="manufactured_date">Manufacturing Date</string>
-    <string name="processor">Processor</string>
     <string name="vendor">Vendor</string>
     <string name="features">Features</string>
     <string name="ram">RAM</string>
@@ -203,7 +189,6 @@
     <string name="cpu_quiet">CPUQuiet</string>
     <string name="cpu_quiet_summary">CPUQuiet implements pluggable policies for forcing cpu cores into quiescent state. Appropriate policies will save power without hurting performance.</string>
     <string name="cpu_quiet_governor">CPUQuiet Governor</string>
-    <string name="cpu_boost">CPU Boost</string>
     <string name="cpu_boost_summary_on">Enabled</string>
     <string name="cpu_boost_summary_off">Disabled</string>
     <string name="debug_mask">Debug Mask</string>
@@ -234,9 +219,6 @@
     <string name="fingerprint_boost_summary">Boosts available CPUs to max frequency on fingerprint sensor input.</string>
 
     <!-- CPU Voltage -->
-    <string name="global_offset">Global Offset</string>
-    <string name="override_vmin">Override Minimum Voltage</string>
-    <string name="override_vmin_summary">Disable to remove manufacturer limits on undervolting</string>
     <string name="cpu_volt_profile">Voltage Profile</string>
     <string name="cpu_volt_profile_summary">Modify the global voltage</string>
     <string name="cpuCl1_volt_control">CPU big Voltage Control</string>
@@ -301,7 +283,6 @@
     <string name="lazyplug">LazyPlug</string>
     <string name="lazyplug_summary">An in-kernel replacement for Qualcomm\'s MPDecision. Developed by arter97.</string>
     <string name="lazy">Lazy</string>
-    <string name="possible_cpu_cores">Possible CPU Cores</string>
     <string name="possible_cpu_cores_summary">Possible CPU Cores that lazyplug can use.</string>
     <string name="blu_plug">Blu_Plug</string>
     <string name="blu_plug_summary">An in-kernel replacement for Qualcomm\'s MPDecision. Developed by Code_Blue team.</string>
@@ -354,7 +335,7 @@
     <string name="cl_vote_threshold_down_summary">Vote for threshold to offline CPUs.</string>
     <string name="cl_vote_threshold_up">Vote Threshold Up</string>
     <string name="cl_vote_threshold_up_summary">Vote for threshold to online CPUs.</string>
-    <string name="cl_sampling_time">Sampling Time</string>	
+    <string name="cl_sampling_time">Sampling Time</string>
     <string name="msm_mpdecision_hotplug">MSM MPDecision Hotplug</string>
     <string name="bricked_hotplug">Bricked Hotplug</string>
     <string name="mb_hotplug_summary">An in-kernel replacement for Qualcomm\'s MPDecision. Developed by show-p1984.</string>
@@ -376,12 +357,12 @@
     <string name="sampling_rate">Sampling Rate</string>
     <string name="cpu_down_rate">CPU Down Rate</string>
     <string name="cpu_up_rate">CPU Up Rate</string>
-    <string name="freq_1_1"> The frequency at which the other (instead of x the # of the core) core is hotplugged in - turned on (probably based on the frequency of the previous core or core 0)</string>	
+    <string name="freq_1_1"> The frequency at which the other (instead of x the # of the core) core is hotplugged in - turned on (probably based on the frequency of the previous core or core 0)</string>
     <string name="freq_2_0"> The frequency at which the other (instead of x the #-1 of the core) core is hotplugged out - turned off (probably based on the frequency of the previous core or core 0)</string>
-    <string name="freq_2_1"> The frequency at which the other (instead of x the # of the core) core is hotplugged in - turned on (probably based on the frequency of the previous core or core 0)</string>	
-    <string name="freq_3_0"> The frequency at which the other (instead of x the #-1 of the core) core is hotplugged out - turned off (probably based on the frequency of the previous core or core 0)</string>	
-    <string name="freq_3_1"> The frequency at which the other (instead of x the # of the core) core is hotplugged in - turned on (probably based on the frequency of the previous core or core 0)</string>	
-    <string name="freq_4_0"> The frequency at which the other (instead of x the #-1 of the core) core is hotplugged out - turned off (probably based on the frequency of the previous core or core 0)</string>	
+    <string name="freq_2_1"> The frequency at which the other (instead of x the # of the core) core is hotplugged in - turned on (probably based on the frequency of the previous core or core 0)</string>
+    <string name="freq_3_0"> The frequency at which the other (instead of x the #-1 of the core) core is hotplugged out - turned off (probably based on the frequency of the previous core or core 0)</string>
+    <string name="freq_3_1"> The frequency at which the other (instead of x the # of the core) core is hotplugged in - turned on (probably based on the frequency of the previous core or core 0)</string>
+    <string name="freq_4_0"> The frequency at which the other (instead of x the #-1 of the core) core is hotplugged out - turned off (probably based on the frequency of the previous core or core 0)</string>
     <string name="load_1_1"> The % of load of the core (instead of x the # of the core) the frequency for the core is scaled up.</string>
     <string name="load_2_0"> The % of load of the core (instead of y the #-1 of the core) the frequency for the core is scaled down.</string>
     <string name="load_2_1"> The % of load of the core (instead of x the # of the core) the frequency for the core is scaled up.</string>
@@ -397,13 +378,11 @@
     <string name="rq_1_1"> The time reserved for each process in the queue for scale up.</string>
     <string name="rq_2_0"> The time reserved for each process in the queue for scale down.</string>
     <string name="rq_2_1"> The time reserved for each process in the queue for scale up.</string>
-    <string name="rq_3_0"> The time reserved for each process in the queue for scale down.</string>	
+    <string name="rq_3_0"> The time reserved for each process in the queue for scale down.</string>
     <string name="rq_3_1"> The time reserved for each process in the queue for scale up.</string>
-    <string name="rq_4_0"> The time reserved for each process in the queue for scale down.</string>	
+    <string name="rq_4_0"> The time reserved for each process in the queue for scale down.</string>
     <string name="samsungPlug">SamsungPlug</string>
     <string name="samsungPlug_summary">An in-kernel Samsung Stock Hotplugging</string>
-    <string name="samsungPlug_max_cpu">Maximum turned On cores</string>
-    <string name="samsungPlug_min_cpu">Minimum turned On cores</string>
     <string name="thunderplug">ThunderPlug</string>
     <string name="thunderplug_summary">An in-kernel replacement for Qualcomm\'s hotplugging. Developed by varunchitre15.</string>
     <string name="min_cpu_online_screen_off">Minimum CPU Screen Off</string>
@@ -475,7 +454,6 @@
     <string name="hmp_up_threshold_summary">Min load required for migrating tasks to the faster big cores.</string>
     <string name="hmp_down_threshold">Down Threshold</string>
     <string name="hmp_down_threshold_summary">Max load allowed for tasks migrating to the slower little cores.</string>
-    <string name="hmp_profile_summary">Select your profile for HMP thresholds.</string>
 
     <!--Thermal-->
     <string name="thermal_info">Use only one thermal driver from the following options, using more at the same time may cause unexpected behavior.</string>
@@ -728,11 +706,7 @@
     <string name="earpiece_gain_summary">You need the DualSpeaker mod</string>
     <string name="arizona_title">Arizona Control Sound</string>
     <string name="arizona_sound_sw">Main Control</string>
-    <string name="arizona_sound_sw_summary_on">Enable or Disable the sound control\nEnabled</string>
-    <string name="arizona_sound_sw_summary_off">Enable or Disable the sound control\nDisabled</string>
     <string name="arizona_volume_title">Volume</string>
-    <string name="arizona_hp_l">Left Headphone Gain</string>
-    <string name="arizona_hp_r">Right Headphone Gain</string>
     <string name="arizona_eq_title">Equalizer</string>
     <string name="arizona_eq_sw">Equalizer Control</string>
     <string name="arizona_eql1">Band 1 Gain</string>
@@ -753,17 +727,11 @@
     <string name="arizona_eql8_summary">Cutoff-frequency: 16000 Hz</string>
     <string name="arizona_eqprofile_tit">EQ Profiles</string>
     <string name="arizona_eqprofile_desc">Select an equalizer profile</string>
-    <string name="arizona_eq_prof1">Extreme Bass</string>
-    <string name="arizona_eq_prof2">Bass-Treble Balance</string>
-    <string name="arizona_eq_prof3">Treble Gain</string>
-    <string name="arizona_eq_prof4">Eargasm</string>
     <string name="arizona_mono_tit">Mono Mixer</string>
     <string name="arizona_mono_desc">Mixes together left and right channels</string>
 
     <!-- Grx Sound Control -->
     <string name="headphones_volume">HeadPhones</string>
-    <string name="left_headphone">Left</string>
-    <string name="right_headphone">Right</string>
     <string name="eq_profile">Active Profile / Manage Profiles</string>
     <string name="eq_profile_custom">Custom</string>
     <string name="eq_profile_delete">Delete Profile</string>
@@ -772,7 +740,6 @@
     <string name="eq_profile_invalid_name">Invalid profile name</string>
     <string name="eq_profile_saved">Profile saved</string>
     <string name="eq_profile_deleted">deleted</string>
-    <string name="eq_profile_delete_confirm">Are you sure you want to delete this equalizer profile?</string>
 
     <!-- Battery -->
     <string name="store_mode">Store Mode</string>
@@ -785,7 +752,6 @@
     <string name="voltage">Voltage</string>
     <string name="current_now">Current Now</string>
     <string name="current_avg">Current Average</string>
-    <string name="char_type">Charge Type</string>
     <string name="char_source">Charge Source</string>
     <string name="temp">Temp</string>
     <string name="status">Status</string>
@@ -803,8 +769,6 @@
     <string name="charge_rate">Charge Rate</string>
     <string name="charging_current">Charging Current</string>
     <string name="charging_current_summary">Set charging current. Caution: Exceeding 1250mA may damage your charging driver.</string>
-    <string name="hv_prep_charge">HV Prepare Mains Charge Current</string>
-    <string name="hv_prep_input">HV Prepare Mains Input Current</string>
     <string name="hv_charge">HV Charge Current</string>
     <string name="hv_input">HV Input Current</string>
     <string name="hv_power_supply">HV Power Supplies</string>
@@ -889,7 +853,6 @@
     <string name="bright_light_environment_summary">Set the relative intensity of the LED when in bright environments.</string>
     <string name="low_light_environment">Low Light Environment</string>
     <string name="low_light_environment_summary">Set the relative intensity of the LED when in low brightness environments.</string>
-    <string name="notification">Notification</string>
     <string name="on">On</string>
     <string name="off">Off</string>
     <string name="fade_ramp_control">Fade Ramp Control</string>
@@ -921,7 +884,6 @@
     <string name="nomerges">NoMerges</string>
     <string name="nomerges_summary">This enables the user to disable the lookup logic involved with IO merging requests in the block layer.</string>
     <string name="nr_requests">Nr Requests</string>
-    <string name="nr_requests_summary">This controls how many requests may be allocated in the block layer for read or write requests.</string>
 
     <!-- Kernel Samepage Merging -->
     <string name="full_scans">Full scans</string>
@@ -954,7 +916,6 @@
     <string name="light">Light</string>
     <string name="medium">Medium</string>
     <string name="very_aggressive">Very Aggressive</string>
-    <string name="stocks7">Stock S7</string>
     <string name="kill_lmk">Kill LMK</string>
     <string name="kill_lmk_summary">Kill LMK when swap is in use.</string>
     <string name="kill_lmk_threshold">Kill LMK Threshold</string>
@@ -1005,7 +966,6 @@
     <string name="vm_tun_switch_summary">Choose between displaying list with the most common settings, or all available settings (for advanced users).</string>
     <string name="vm_tun_tit_all">All settings</string>
     <string name="vm_tun_tit_common">Common settings</string>
-    <string name="vm_tunnables">VM Tunnables</string>
     <string name="zram">Z-RAM</string>
     <string name="zramsw_summary">Enable or disable ZRAM</string>
     <string name="disksize">Disksize</string>
@@ -1019,10 +979,6 @@
     <string name="maximum_compression_ratio_summary">Maximum compression ratio, as percentage, for an acceptable compressed page. Any page that does not compress by at least this ratio will be rejected.</string>
     <string name="zram_comp_algorithm">ZRAM compression algorithm</string>
     <string name="zram_comp_algorithm_summary">First disable ZRAM to be able to adjust this setting.</string>
-    <string name="zram_lzo">lzo</string>
-    <string name="zram_lz4">lz4</string>
-    <string name="zram_deflate">deflate</string>
-    <string name="zram_none">Unknown compression algorithm or zram not supported!</string>
 
     <!-- Entropy -->
     <string name="available">Available</string>
@@ -1091,27 +1047,6 @@
     <string name="pwm">PWM Flicker Free</string>
     <string name="pwm_summary">Reduces negative impact on eyesight</string>
     <string name="wireguard_title">WireGuard VPN</string>
-
-    <!-- Data Sharing -->
-    <string name="data_sharing_summary_notification">Data sharing is active! Click to learn more about this feature.</string>
-    <string name="data_sharing_summary">Share your settings with others! Kernel Adiutor will automatically collect information and compile a score list available to all people.</string>
-    <string name="data_sharing_summary_link">You can access the list on &lt;a href="https://www.grarak.com/kerneladiutor">grarak.com&lt;/a>.</string>
-    <string name="sharing_enable">Sharing enable</string>
-    <string name="filter">Filter</string>
-    <string name="board">Board</string>
-    <string name="show_all">Show all</string>
-    <string name="failed_board">Failed to load boards.</string>
-    <string name="failed_devices">Failed to load devices.</string>
-    <string name="previous">Previous</string>
-    <string name="page">Page</string>
-    <string name="next">Next</string>
-    <string name="kernel_version">Kernel Version</string>
-    <string name="potential_sot">Potential SOT</string>
-    <string name="screen_always_on">when screen is always on</string>
-    <string name="lower_better">lower is better</string>
-    <string name="cpu_score">CPU Score</string>
-    <string name="cpu_information">CPU Information</string>
-    <string name="default_settings">Default (no modifications made)</string>
 
     <!-- Custom Controls -->
     <string name="welcome">Welcome</string>
@@ -1233,27 +1168,23 @@
     <string name="open_settings">Open Settings</string>
     <string name="general">General</string>
     <string name="reset_data_title">Restore application</string>
-    <string name="app_update_category">Update settings</string>
-    <string name="app_update_notif_title">Update Notification</string>
-    <string name="app_update_notif_summary">Show update notifications when new version ia available</string>
-    <string name="check_update_title">Check update</string>
-    <string name="check_update_summary">Check if there is a new update of hKtweaks</string>
     <string name="reset_data_summary">Clear data and restore the application settings</string>
     <string name="reset_data_dialog1">The data and the configuration of the entire application will be erased.\n\nAre you sure?\n</string>
-    <string name="reset_data_dialog2_title">Reboot</string>
-    <string name="reset_data_dialog2_message">To avoid configuration failures it is recommended to reboot the system.\n\nDo you want to reboot?\n</string>
     <string name="fahrenheit_title">Fahrenheit</string>
     <string name="fahrenheit_summary">Use fahrenheit to measure temperature.</string>
     <string name="force_english">Force displaying english language</string>
     <string name="user_interface">User interface</string>
-    <string name="dark_theme">Dark theme</string>
-    <string name="material_icon">Material icon</string>
+
+    <string name="light_theme">Light</string>
+    <string name="dark_theme">Dark</string>
+    <string name="system_default">System default</string>
+    <string name="theme_color_summary">Change the app color.</string>
+
     <string name="banner_resizer">Banner resizer</string>
     <string name="hide_banner">Hide banner</string>
     <string name="force_cards">Force cards</string>
     <string name="force_cards_summary">Use cards for items if possible.</string>
     <string name="primary_color">Primary color</string>
-    <string name="accent_color">Accent Color</string>
     <string name="section_icons">Section Icons</string>
     <string name="section_icons_summary">Show icons for each section in navigation drawer.</string>
     <string name="instant">Instant</string>
@@ -1295,50 +1226,22 @@
     <string name="sections">Sections</string>
 
     <!-- About -->
-    <!--<string name="about_me">Hi, I\'m Willi Ye aka Grarak, a 19 year old student living in Vienna. I\'ve been developing on Android for quite a long time. Beside hKtweaks I\'m also maintaining LineageOS for few devices and working on ParanoidAndroid. So please understand if I don\'t find the time to update this application.</string>-->
-    <!--<string name="about_me">Hi, I\'m MoroGoku, developer of MoRoKernel of Samsung S7. This app is a mod of \"hKtweaks\" of Willi Ye, aka Grarak. I make this mod for compatibilize hKtweaks with Galaxy S7 smartphone, and add some new options. Thanks Willi for this great app.</string>-->
-    <string name="about_me">Hi, I\'m corsicanu, developer of many things, including and not limited to this mod of \"MTweaks\" by MoroGoku, properly adapted to be used on many Samsung Exynos soc based devices.\n\nThanks Willi for his great app, special thanks to MoroGoku for his awesome MTweaks app.</string>
-    <string name="libraries_used">Libraries used</string>
+    <string name="about_me_grarak">Hi, I\'m Willi Ye aka Grarak, a 19 year old student living in Vienna. I\'ve been developing on Android for quite a long time. Beside Kernel Adiutor I\'m also maintaining LineageOS for few devices and working on ParanoidAndroid. So please understand if I don\'t find the time to update this application.</string>
+    <string name="about_me_morogoku">Hi, I\'m MoroGoku, developer of MoRoKernel of Samsung S7. This app is a mod of \"Kernel Adiutor\" of Willi Ye, aka Grarak. I make this mod for compatibilize Kernel Adiutor with Galaxy S7 smartphone, and add some new options. Thanks Willi for this great app.</string>
+    <string name="about_me_corsicanu">Hi, I\'m corsicanu, developer of many things, including and not limited to this mod of \"MTweaks\" by MoroGoku, properly adapted to be used on many Samsung Exynos soc based devices.\nThanks Willi for his great app, special thanks to MoroGoku for his awesome MTweaks app.</string>
+    <string name="about_me_yanndroid">Hi, I\'m Yanndroid, developer of the OneUI design library used in this mod of corsicanu\'s hKtweaks app. Since he modded this app specifically for Samsung devices, I thought it would be nice to make it correspond to it\'s environment. Thanks to the others for actually making this app.</string>
 
-    <!-- Donation -->
-    <string name="donation_title">Donation</string>
-    <string name="donation_summary_mg">Hi, MTweaks v2 is an application based on \"Kernel Adiutor\" by Willi Ye, aka Grarak.\n\nIt has several new modifications and adjustments, especially for the latest Samsung Galaxy.\n\nI do this because I have fun and I like to share my work, that\'s why it\'s free and does not carry advertising.\n\nAlthough if you liked the work I have done and you want to donate something and invite me to a beer, as they say, you can do it in the following Paypal link.</string>
-    <string name="donation_summary">hKtweaks is an app based on \"MTweaks\" by MoroGoku, properly adapted to be used on many Samsung Exynos soc based devices.\nIf you appreciate my work and you want to donate to support my work and provide me more coffee, you can do it on the following Paypal link.</string>
+    <string name="developers">Developers</string>
+    <string name="libraries">Libraries</string>
 
-    <!-- Contributors -->
-    <string name="commits">%d commits</string>
-    <string name="no_internet">Please check your internet connection!</string>
-    <string name="app_version">App version</string>
-
-    <!-- Help -->
-    <string name="misspelled">Why did you misspell \"Adiutor\"?</string>
-    <string name="misspelled_summary">Adiutor is Latin and means helper.</string>
-    <string name="have_to_donate">Do I have to donate in order to use those premium features?</string>
-    <string name="have_to_donate_summary">No, this application is open source. You can easily build it yourself. Donation features are enabled by default once you build a debugging apk, so no need to change any line of code.</string>
-    <string name="cpu_freq_not_sticking">Why doesn\'t my determined CPU freq stick?</string>
-    <string name="cpu_freq_not_sticking_summary">This could be due to many reasons. Many kernels nowadays have their own hotplugging system which controls the CPU frequency and CyanogenMod has their own CPU Boost implementation which regulate the frequency. I would suggest you don\'t touch the CPU frequencies and let the kernel do its job. This also counts for other functions! If they don\'t stick, it\'s because the kernel/system doesn\'t want to let you change it.</string>
-    <string name="feature_not_appearing">Why don\'t features x and y show up?</string>
-    <string name="feature_not_appearing_summary">Only features which are supported by your device are shown!</string>
-    <string name="feature_function">What does feature x do?</string>
-    <string name="feature_function_summary">If you don\'t know what this control does, then simply don\'t touch it. Please do a proper research before playing with your expensive hardware.</string>
-    <string name="add_new_features">Could you add feature x and y?</string>
-    <string name="add_new_features_summary">That\'s hard to say. I try to add all features, but it\'s hard to make this app universal for all devices.</string>
+    <string name="firebase_childName" translatable="false">hKtweaks</string>
+    <string name="firebase_versionCode" translatable="false">versionCode</string>
+    <string name="firebase_github" translatable="false">github</string>
+    <string name="firebase_versionName" translatable="false">versionName</string>
+    <string name="firebase_apk" translatable="false">apk</string>
+    <string name="github" translatable="false">Github</string>
 
     <!-- APP Updater -->
-    <string name="appupdater_update_available">New update available!</string>
-    <string name="appupdater_update_title">New update available!\n%1$s v%2$s</string>
-    <string name="appupdater_update_available_description_dialog">Update %1$s is available to download. By downloading the latest update you will get the latest features, improvements and bug fixes for %2$s.</string>
-    <string name="appupdater_update_available_description_dialog_before_release_notes">Update %1$s is available to download.\n\nYou can get these new features:\n%2$s</string>
-    <string name="appupdater_update_available_description_snackbar">Update %1$s is available!</string>
-    <string name="appupdater_update_available_description_notification">Update %1$s of %2$s is available to download</string>
-    <string name="appupdater_update_not_available">No updates available</string>
-    <string name="appupdater_update_not_available_description">You\'ve got the latest version available of %s!</string>
-    <string name="appupdater_btn_update">Update</string>
-    <string name="appupdater_btn_disable">Don\'t show again</string>
-    <string name="appupdater_btn_dismiss">Dismiss</string>
-    <string name="appupdater_download_filed">Download FAILED!</string>
-    <string name="appupdater_downloading_file">Downloading</string>
-    <string name="appupdater_json">https://raw.githubusercontent.com/corsicanu/hKtweaks/master/app/src/main/assets/update.json</string>
     <string name="not_supported">Not supported…</string>
     <string name="battery_health">Battery Health</string>
     <string name="swInfo">Software Info</string>

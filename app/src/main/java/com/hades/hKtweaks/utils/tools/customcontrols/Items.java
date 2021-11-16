@@ -33,6 +33,47 @@ import java.util.HashMap;
  */
 public class Items {
 
+    private static final HashMap<Control, ArrayList<Setting>> sControls = new HashMap<>();
+    private static final ArrayList<Setting> sSwitchSettings = new ArrayList<>();
+    private static final ArrayList<Setting> sSeekBarSettings = new ArrayList<>();
+    private static final ArrayList<Setting> sGenericSettings = new ArrayList<>();
+
+    static {
+        sSwitchSettings.add(new Setting("id", 0, 0, 0, "switch", null, null, false, false, Setting.Unit.ID));
+        sSwitchSettings.add(new Setting("title", R.string.title, "", true, Setting.Unit.STRING));
+        sSwitchSettings.add(new Setting("description", R.string.description, "", false, Setting.Unit.STRING));
+        sSwitchSettings.add(new Setting("enable", R.string.enabled, R.string.switch_enabled_summary, "#!/system/bin/sh\n\n#echo 1 (Enabled)\n#echo 0 (Disabled)\n\necho 0 #disabled", true, true, Setting.Unit.BOOLEAN));
+        sSwitchSettings.add(new Setting("apply", R.string.applying, R.string.switch_apply_summary, "#!/system/bin/sh\n\n#status=$1\n\n#$status is either 1 or 0\n#echo $status > /sys/class/..", true, true, Setting.Unit.APPLY));
+
+        sSeekBarSettings.add(new Setting("id", 0, 0, 0, "seekbar", null, null, false, false, Setting.Unit.ID));
+        sSeekBarSettings.add(new Setting("title", R.string.title, "", true, Setting.Unit.STRING));
+        sSeekBarSettings.add(new Setting("description", R.string.description, "", false, Setting.Unit.STRING));
+        sSeekBarSettings.add(new Setting("min", R.string.seekbar_min, "0", true, Setting.Unit.INTEGER));
+        sSeekBarSettings.add(new Setting("max", R.string.seekbar_max, "100", true, Setting.Unit.INTEGER));
+        sSeekBarSettings.add(new Setting("progress", R.string.seekbar_progress, R.string.seekbar_progress_summary, "#!/system/bin/sh\n\necho 0", true, true, Setting.Unit.INTEGER));
+        sSeekBarSettings.add(new Setting("apply", R.string.applying, R.string.seekbar_apply_summary, "#!/system/bin/sh\n\n#progress=$1\n\n#echo $progress > /sys/class/..", true, true, Setting.Unit.APPLY));
+
+        sGenericSettings.add(new Setting("id", 0, 0, 0, "generic", null, null, false, false, Setting.Unit.ID));
+        sGenericSettings.add(new Setting("title", R.string.title, "", true, Setting.Unit.STRING));
+        sGenericSettings.add(new Setting("description", R.string.description, "", false, Setting.Unit.STRING));
+        sGenericSettings.add(new Setting("value", R.string.generic_value, R.string.generic_value_summary, "#!/system/bin/sh\n\necho foo", true, true, Setting.Unit.STRING));
+        sGenericSettings.add(new Setting("apply", R.string.applying, R.string.generic_apply_summary, "#!/system/bin/sh\n\n#value=$1\n\n#echo value > /sys/class/..", true, true, Setting.Unit.APPLY));
+    }
+
+    static {
+        sControls.put(Control.SWITCH, sSwitchSettings);
+        sControls.put(Control.SEEKBAR, sSeekBarSettings);
+        sControls.put(Control.GENERIC, sGenericSettings);
+    }
+
+    public static ArrayList<Setting> getSettings(Control control) {
+        return sControls.get(control);
+    }
+
+    public static ArrayList<Setting> getSettings(int control) {
+        return getSettings(Control.getControl(control));
+    }
+
     public enum Control {
         SWITCH(0, "switch", R.string.control_switch),
         SEEKBAR(1, "seekbar", R.string.control_seekbar),
@@ -80,77 +121,30 @@ public class Items {
 
     }
 
-    private static final HashMap<Control, ArrayList<Setting>> sControls = new HashMap<>();
-
-    private static final ArrayList<Setting> sSwitchSettings = new ArrayList<>();
-    private static final ArrayList<Setting> sSeekBarSettings = new ArrayList<>();
-    private static final ArrayList<Setting> sGenericSettings = new ArrayList<>();
-
-    static {
-        sSwitchSettings.add(new Setting("id", 0, 0, 0, "switch", null, null, false, false, Setting.Unit.ID));
-        sSwitchSettings.add(new Setting("title", R.string.title, "", true, Setting.Unit.STRING));
-        sSwitchSettings.add(new Setting("description", R.string.description, "", false, Setting.Unit.STRING));
-        sSwitchSettings.add(new Setting("enable", R.string.enabled, R.string.switch_enabled_summary, "#!/system/bin/sh\n\n#echo 1 (Enabled)\n#echo 0 (Disabled)\n\necho 0 #disabled", true, true, Setting.Unit.BOOLEAN));
-        sSwitchSettings.add(new Setting("apply", R.string.applying, R.string.switch_apply_summary, "#!/system/bin/sh\n\n#status=$1\n\n#$status is either 1 or 0\n#echo $status > /sys/class/..", true, true, Setting.Unit.APPLY));
-
-        sSeekBarSettings.add(new Setting("id", 0, 0, 0, "seekbar", null, null, false, false, Setting.Unit.ID));
-        sSeekBarSettings.add(new Setting("title", R.string.title, "", true, Setting.Unit.STRING));
-        sSeekBarSettings.add(new Setting("description", R.string.description, "", false, Setting.Unit.STRING));
-        sSeekBarSettings.add(new Setting("min", R.string.seekbar_min, "0", true, Setting.Unit.INTEGER));
-        sSeekBarSettings.add(new Setting("max", R.string.seekbar_max, "100", true, Setting.Unit.INTEGER));
-        sSeekBarSettings.add(new Setting("progress", R.string.seekbar_progress, R.string.seekbar_progress_summary, "#!/system/bin/sh\n\necho 0", true, true, Setting.Unit.INTEGER));
-        sSeekBarSettings.add(new Setting("apply", R.string.applying, R.string.seekbar_apply_summary, "#!/system/bin/sh\n\n#progress=$1\n\n#echo $progress > /sys/class/..", true, true, Setting.Unit.APPLY));
-
-        sGenericSettings.add(new Setting("id", 0, 0, 0, "generic", null, null, false, false, Setting.Unit.ID));
-        sGenericSettings.add(new Setting("title", R.string.title, "", true, Setting.Unit.STRING));
-        sGenericSettings.add(new Setting("description", R.string.description, "", false, Setting.Unit.STRING));
-        sGenericSettings.add(new Setting("value", R.string.generic_value, R.string.generic_value_summary, "#!/system/bin/sh\n\necho foo", true, true, Setting.Unit.STRING));
-        sGenericSettings.add(new Setting("apply", R.string.applying, R.string.generic_apply_summary, "#!/system/bin/sh\n\n#value=$1\n\n#echo value > /sys/class/..", true, true, Setting.Unit.APPLY));
-    }
-
-    static {
-        sControls.put(Control.SWITCH, sSwitchSettings);
-        sControls.put(Control.SEEKBAR, sSeekBarSettings);
-        sControls.put(Control.GENERIC, sGenericSettings);
-    }
-
-    public static ArrayList<Setting> getSettings(Control control) {
-        return sControls.get(control);
-    }
-
-    public static ArrayList<Setting> getSettings(int control) {
-        return getSettings(Control.getControl(control));
-    }
-
     public static class Setting implements Parcelable {
 
-        public enum Unit {
-            BOOLEAN(0),
-            INTEGER(1),
-            APPLY(2),
-            ID(3),
-            STRING(4);
-
-            private int mId;
-
-            Unit(int id) {
-                mId = id;
+        public static final Creator CREATOR = new Creator() {
+            @Override
+            public Setting createFromParcel(Parcel source) {
+                String id = source.readString();
+                int uniqueId = source.readInt();
+                int name = source.readInt();
+                int description = source.readInt();
+                String nameText = source.readString();
+                String descriptionText = source.readString();
+                String def = source.readString();
+                boolean required = source.readByte() == 1;
+                boolean script = source.readByte() == 1;
+                int unit = source.readInt();
+                return new Setting(id, uniqueId, name, description, nameText, descriptionText, def,
+                        required, script, Unit.getUnit(unit));
             }
 
-            public static Unit getUnit(int id) {
-                for (Unit u : Unit.values()) {
-                    if (u.mId == id) {
-                        return u;
-                    }
-                }
-                return null;
+            @Override
+            public Setting[] newArray(int size) {
+                return new Setting[size];
             }
-
-            public int getId() {
-                return mId;
-            }
-        }
-
+        };
         private final String mId;
         private final int mUniqueId;
         private final int mName;
@@ -239,28 +233,32 @@ public class Items {
             dest.writeInt(mUnit == null ? -1 : mUnit.getId());
         }
 
-        public static final Creator CREATOR = new Creator() {
-            @Override
-            public Setting createFromParcel(Parcel source) {
-                String id = source.readString();
-                int uniqueId = source.readInt();
-                int name = source.readInt();
-                int description = source.readInt();
-                String nameText = source.readString();
-                String descriptionText = source.readString();
-                String def = source.readString();
-                boolean required = source.readByte() == 1;
-                boolean script = source.readByte() == 1;
-                int unit = source.readInt();
-                return new Setting(id, uniqueId, name, description, nameText, descriptionText, def,
-                        required, script, Unit.getUnit(unit));
+        public enum Unit {
+            BOOLEAN(0),
+            INTEGER(1),
+            APPLY(2),
+            ID(3),
+            STRING(4);
+
+            private int mId;
+
+            Unit(int id) {
+                mId = id;
             }
 
-            @Override
-            public Setting[] newArray(int size) {
-                return new Setting[size];
+            public static Unit getUnit(int id) {
+                for (Unit u : Unit.values()) {
+                    if (u.mId == id) {
+                        return u;
+                    }
+                }
+                return null;
             }
-        };
+
+            public int getId() {
+                return mId;
+            }
+        }
 
     }
 

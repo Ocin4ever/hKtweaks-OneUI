@@ -35,45 +35,30 @@ import java.util.List;
  */
 public class Misc {
 
-    private static Misc sInstance;
-
-    public static Misc getInstance() {
-        if (sInstance == null) {
-            sInstance = new Misc();
-        }
-        return sInstance;
-    }
-
     private static final String SCREEN_WAKE_OPTIONS = "/sys/devices/f9924000.i2c/i2c-2/2-0020/input/input2/screen_wake_options";
-
     private static final String CAMERA_GESTURE = "/sys/android_touch/camera_gesture";
     private static final String CAMERA_ENABLE = "/proc/touchpanel/camera_enable";
-
     private static final String POCKET_MODE = "/sys/android_touch/pocket_mode";
     private static final String POCKET_DETECT = "/sys/android_touch/pocket_detect";
-
     private static final String WAKE_TIMEOUT = "/sys/android_touch/wake_timeout";
     private static final String WAKE_TIMEOUT_2 = "/sys/android_touch2/wake_timeout";
     private static final String T2W_TIMEOUT_SMDK4412 = "/sys/devices/virtual/misc/touchwake/delay";
-
     private static final String T2W_CHARGE_TIMEOUT_SMDK4412 = "/sys/devices/virtual/misc/touchwake/charging_delay";
-
     private static final String POWER_KEY_SUSPEND = "/sys/module/qpnp_power_on/parameters/pwrkey_suspend";
     private static final String KEYPOWER_MODE_SMDK4412 = "/sys/devices/virtual/misc/touchwake/keypower_mode";
-
     private static final String VIBRATION = "/proc/touchpanel/haptic_feedback_disable";
     private static final String VIB_VIBRATION = "/sys/android_touch2/vib_strength";
-
     private static final String CHARGING_MODE_SMDK4412 = "/sys/devices/virtual/misc/touchwake/charging_mode";
-
+    private static Misc sInstance;
     private final HashMap<String, List<Integer>> mWakeFiles = new HashMap<>();
     private final List<Integer> mScreenWakeOptionsMenu = new ArrayList<>();
-
     private final List<String> mCameraFiles = new ArrayList<>();
-
     private final List<String> mPocketFiles = new ArrayList<>();
-
     private final HashMap<String, Integer> mTimeoutFiles = new HashMap<>();
+    private String WAKE;
+    private String CAMERA;
+    private String POCKET;
+    private String TIMEOUT;
 
     {
         mScreenWakeOptionsMenu.add(R.string.disabled);
@@ -104,11 +89,6 @@ public class Misc {
         mTimeoutFiles.put(T2W_TIMEOUT_SMDK4412, 60);
     }
 
-    private String WAKE;
-    private String CAMERA;
-    private String POCKET;
-    private String TIMEOUT;
-
     private Misc() {
         for (String file : mWakeFiles.keySet()) {
             if (Utils.existFile(file)) {
@@ -134,6 +114,13 @@ public class Misc {
                 break;
             }
         }
+    }
+
+    public static Misc getInstance() {
+        if (sInstance == null) {
+            sInstance = new Misc();
+        }
+        return sInstance;
     }
 
     public void setVibVibration(int value, Context context) {

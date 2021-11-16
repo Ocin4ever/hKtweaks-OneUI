@@ -13,7 +13,7 @@ import java.util.List;
 
 /**
  * Created by Morogoku on 27/10/2017.
- *
+ * <p>
  * Wakelocks array items
  * 0 name
  * 1 active_count
@@ -26,7 +26,6 @@ import java.util.List;
  * 8 last_change
  * 9 prevent_suspend_time
  * 10 time_while_screen_off
- *
  */
 
 public class BoefflaWakelock {
@@ -42,11 +41,11 @@ public class BoefflaWakelock {
     private static int mWakelockOrder = 1;
 
 
-    public static String getVersion(){
+    public static String getVersion() {
         return Utils.readFile(VERSION);
     }
 
-    public static void CopyWakelockBlockerDefault(){
+    public static void CopyWakelockBlockerDefault() {
         try {
             String wbd = Utils.readFile(WAKELOCK_BLOCKER_DEFAULT);
             if (!wbd.contentEquals("")) {
@@ -64,11 +63,11 @@ public class BoefflaWakelock {
                 RootUtils.runCommand("echo '" + list + "' > " + WAKELOCK_BLOCKER);
                 RootUtils.runCommand("echo '" + "" + "' > " + WAKELOCK_BLOCKER_DEFAULT);
             }
-        }catch(Exception ignored){
+        } catch (Exception ignored) {
         }
     }
 
-    public static void setWakelockBlocked(String wakelock, Context context){
+    public static void setWakelockBlocked(String wakelock, Context context) {
         String list = "";
         try {
             list = Utils.readFile(WAKELOCK_BLOCKER);
@@ -77,18 +76,18 @@ public class BoefflaWakelock {
             } else {
                 list += ";" + wakelock;
             }
-        } catch (Exception ignored){
+        } catch (Exception ignored) {
         }
 
         run(Control.write(list, WAKELOCK_BLOCKER), WAKELOCK_BLOCKER, context);
     }
 
-    public static void setWakelockAllowed(String wakelock, Context context){
+    public static void setWakelockAllowed(String wakelock, Context context) {
         StringBuilder list = new StringBuilder();
         try {
             String[] wakes = Utils.readFile(WAKELOCK_BLOCKER).split(";");
-            for(String wake : wakes){
-                if(!wake.contentEquals(wakelock)){
+            for (String wake : wakes) {
+                if (!wake.contentEquals(wakelock)) {
                     if (list.toString().contentEquals("")) {
                         list = new StringBuilder(wake);
                     } else {
@@ -96,21 +95,21 @@ public class BoefflaWakelock {
                     }
                 }
             }
-        } catch (Exception ignored){
+        } catch (Exception ignored) {
         }
 
         run(Control.write(list.toString(), WAKELOCK_BLOCKER), WAKELOCK_BLOCKER, context);
     }
 
-    public static int getWakelockOrder(){
+    public static int getWakelockOrder() {
         return mWakelockOrder;
     }
 
-    public static void setWakelockOrder(int order){
+    public static void setWakelockOrder(int order) {
         mWakelockOrder = order;
     }
 
-    public static List<WakeLockInfo> getWakelockInfo(){
+    public static List<WakeLockInfo> getWakelockInfo() {
 
         List<WakeLockInfo> wakelocksinfo = new ArrayList<>();
 
@@ -122,7 +121,7 @@ public class BoefflaWakelock {
                     wakelocksinfo.add(new WakeLockInfo(wl[0], Integer.valueOf(wl[6]), Integer.valueOf(wl[3])));
                 }
             }
-        }catch (Exception ignored) {
+        } catch (Exception ignored) {
         }
 
 
@@ -130,10 +129,10 @@ public class BoefflaWakelock {
 
         try {
             blocked = Utils.readFile(WAKELOCK_BLOCKER).split(";");
-        }catch (Exception ignored){
+        } catch (Exception ignored) {
         }
 
-        if( blocked != null){
+        if (blocked != null) {
             for (String name_bloqued : blocked) {
                 for (WakeLockInfo wakeLockInfo : wakelocksinfo) {
                     if (wakeLockInfo.wName.equals(name_bloqued)) {
@@ -145,11 +144,11 @@ public class BoefflaWakelock {
         }
 
         Collections.sort(wakelocksinfo, (w2, w1) -> {
-            if(mWakelockOrder == 0) {
+            if (mWakelockOrder == 0) {
                 return w2.wName.compareTo(w1.wName);
-            } else if ( mWakelockOrder == 1){
+            } else if (mWakelockOrder == 1) {
                 return Integer.compare(w1.wTime, w2.wTime);
-            } else if (mWakelockOrder == 2){
+            } else if (mWakelockOrder == 2) {
                 return Integer.compare(w1.wWakeups, w2.wWakeups);
             }
             return 0;

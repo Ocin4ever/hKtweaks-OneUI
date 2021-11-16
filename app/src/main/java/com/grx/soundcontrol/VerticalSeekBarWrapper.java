@@ -161,7 +161,7 @@ public class VerticalSeekBarWrapper extends FrameLayout {
                     }
                     break;
                 case VerticalSeekBar.ROTATION_ANGLE_CW_270:
-                    seekBar.setRotation( 270);
+                    seekBar.setRotation(270);
                     if (isLTR) {
                         seekBar.setTranslationX(hOffset);
                         seekBar.setTranslationY(seekBarMeasuredWidth);

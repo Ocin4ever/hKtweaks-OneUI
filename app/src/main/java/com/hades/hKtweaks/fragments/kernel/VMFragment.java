@@ -22,14 +22,14 @@ package com.hades.hKtweaks.fragments.kernel;
 import android.text.InputType;
 
 import com.hades.hKtweaks.R;
-import com.hades.hKtweaks.fragments.ApplyOnBootFragment;
-
+import com.hades.hKtweaks.activities.tools.profile.ProfileActivity;
 import com.hades.hKtweaks.fragments.recyclerview.RecyclerViewFragment;
 import com.hades.hKtweaks.utils.AppSettings;
 import com.hades.hKtweaks.utils.Device;
 import com.hades.hKtweaks.utils.kernel.vm.VM;
 import com.hades.hKtweaks.utils.kernel.vm.ZRAM;
 import com.hades.hKtweaks.utils.kernel.vm.ZSwap;
+import com.hades.hKtweaks.views.recyclerview.ApplyOnBootFView;
 import com.hades.hKtweaks.views.recyclerview.CardView;
 import com.hades.hKtweaks.views.recyclerview.DescriptionView;
 import com.hades.hKtweaks.views.recyclerview.GenericSelectView2;
@@ -48,7 +48,7 @@ import java.util.List;
  */
 public class VMFragment extends RecyclerViewFragment {
 
-    private List<GenericSelectView2> mVMs = new ArrayList<>();
+    private final List<GenericSelectView2> mVMs = new ArrayList<>();
     private boolean mCompleteList;
 
     private Device.MemInfo mMemInfo;
@@ -59,12 +59,13 @@ public class VMFragment extends RecyclerViewFragment {
     protected void init() {
         super.init();
 
-        addViewPagerFragment(ApplyOnBootFragment.newInstance(this));
         mMemInfo = Device.MemInfo.getInstance();
     }
 
     @Override
     protected void addItems(List<RecyclerViewItem> items) {
+        if (!(getActivity() instanceof ProfileActivity))
+            items.add(new ApplyOnBootFView(getActivity(), this));
 
         memBarsInit(items);
         vmTunablesInit(items);
@@ -74,7 +75,7 @@ public class VMFragment extends RecyclerViewFragment {
         zswapInit(items);
     }
 
-    private void memBarsInit (List<RecyclerViewItem> items){
+    private void memBarsInit(List<RecyclerViewItem> items) {
         CardView card = new CardView(getActivity());
         card.setTitle(getString(R.string.memory));
 
@@ -85,7 +86,7 @@ public class VMFragment extends RecyclerViewFragment {
         swap.setTitle("SWAP");
         swap.setItems(swap_total, swap_progress);
         swap.setUnit(getResources().getString(R.string.mb));
-        swap.setProgressColor(getResources().getColor(R.color.blueAccent));
+        swap.setProgressColor(getResources().getColor(R.color.blue));
         card.addItem(swap);
 
         long mem_total = mMemInfo.getItemMb("MemTotal");
@@ -95,13 +96,13 @@ public class VMFragment extends RecyclerViewFragment {
         mem.setTitle("RAM");
         mem.setItems(mem_total, mem_progress);
         mem.setUnit(getResources().getString(R.string.mb));
-        mem.setProgressColor(getResources().getColor(R.color.orangeAccent));
+        mem.setProgressColor(getResources().getColor(R.color.orange));
         card.addItem(mem);
         card.setFullSpan(true);
         items.add(card);
     }
 
-    private void vmTunablesInit (List<RecyclerViewItem> items){
+    private void vmTunablesInit(List<RecyclerViewItem> items) {
         final CardView CardVm = new CardView(getActivity());
         CardVm.setTitle(getString(R.string.vm_tunables));
 
@@ -134,8 +135,7 @@ public class VMFragment extends RecyclerViewFragment {
         TitleView tit = new TitleView();
         if (mCompleteList) {
             tit.setText(getString(R.string.vm_tun_tit_all));
-        }
-        else {
+        } else {
             tit.setText(getString(R.string.vm_tun_tit_common));
         }
 
@@ -237,7 +237,7 @@ public class VMFragment extends RecyclerViewFragment {
         }
 
         if (ZSwap.hasMaxPoolPercent()) {
-            if(!AppSettings.getBoolean("memory_pool_percent", false, getActivity())) {
+            if (!AppSettings.getBoolean("memory_pool_percent", false, getActivity())) {
                 SeekBarView maxPoolPercent = new SeekBarView();
                 maxPoolPercent.setTitle(getString(R.string.memory_pool));
                 maxPoolPercent.setSummary(getString(R.string.memory_pool_summary));

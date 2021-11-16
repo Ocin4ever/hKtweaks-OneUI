@@ -20,15 +20,15 @@
 package com.hades.hKtweaks.fragments.tools.customcontrols;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Environment;
-import androidx.core.content.ContextCompat;
-import androidx.core.graphics.drawable.DrawableCompat;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
+
+import androidx.appcompat.view.menu.MenuBuilder;
 
 import com.hades.hKtweaks.R;
 import com.hades.hKtweaks.activities.FilePickerActivity;
@@ -36,7 +36,6 @@ import com.hades.hKtweaks.activities.tools.CustomControlsActivity;
 import com.hades.hKtweaks.database.tools.customcontrols.Controls;
 import com.hades.hKtweaks.database.tools.customcontrols.ExportControl;
 import com.hades.hKtweaks.database.tools.customcontrols.ImportControl;
-import com.hades.hKtweaks.fragments.DescriptionFragment;
 import com.hades.hKtweaks.fragments.recyclerview.RecyclerViewFragment;
 import com.hades.hKtweaks.utils.Utils;
 import com.hades.hKtweaks.utils.ViewUtils;
@@ -45,6 +44,7 @@ import com.hades.hKtweaks.utils.tools.customcontrols.Items;
 import com.hades.hKtweaks.utils.tools.customcontrols.Values;
 import com.hades.hKtweaks.views.dialog.Dialog;
 import com.hades.hKtweaks.views.recyclerview.CardView;
+import com.hades.hKtweaks.views.recyclerview.DescriptionFView;
 import com.hades.hKtweaks.views.recyclerview.GenericSelectView;
 import com.hades.hKtweaks.views.recyclerview.RecyclerViewItem;
 import com.hades.hKtweaks.views.recyclerview.SeekBarView;
@@ -64,53 +64,10 @@ public class CustomControlsFragment extends RecyclerViewFragment {
     private Dialog mOptionsDialog;
     private Dialog mItemsDialog;
     private Dialog mDeleteDialog;
-    private Dialog mDonateDialog;
 
     private AsyncTask<Void, Void, ImportControl> mImportingThread;
     private Controls mControlsProvider;
     private Controls.ControlItem mExportItem;
-
-    @Override
-    protected boolean showTopFab() {
-        return true;
-    }
-
-    @Override
-    protected Drawable getTopFabDrawable() {
-        Drawable drawable = DrawableCompat.wrap(
-                ContextCompat.getDrawable(getActivity(), R.drawable.ic_add));
-        DrawableCompat.setTint(drawable, Color.WHITE);
-        return drawable;
-    }
-
-    @Override
-    protected void onTopFabClick() {
-        super.onTopFabClick();
-        mOptionsDialog = new Dialog(getActivity()).setItems(getResources().getStringArray(
-                R.array.custom_controls_options),
-                (dialog, which) -> {
-                    switch (which) {
-                        case 0:
-                            showControls();
-                            break;
-                        case 1:
-                            Intent intent = new Intent(getActivity(), FilePickerActivity.class);
-                            intent.putExtra(FilePickerActivity.PATH_INTENT,
-                                    Environment.getExternalStorageDirectory().toString());
-                            intent.putExtra(FilePickerActivity.EXTENSION_INTENT, ".json");
-                            startActivityForResult(intent, 1);
-
-                            break;
-                    }
-                })
-                .setOnDismissListener(dialog -> mOptionsDialog = null);
-        if (!getActivity().isFinishing()) {
-            try {
-                mOptionsDialog.show();
-            } catch (NullPointerException ignored) {
-            }
-        }
-    }
 
     private void showControls() {
         mItemsDialog = new Dialog(getActivity()).setItems(getResources().getStringArray(
@@ -125,6 +82,32 @@ public class CustomControlsFragment extends RecyclerViewFragment {
     @Override
     protected void init() {
         super.init();
+        showToolbarActionButton(item -> {
+            mOptionsDialog = new Dialog(getActivity()).setItems(getResources().getStringArray(
+                    R.array.custom_controls_options),
+                    (dialog, which) -> {
+                        switch (which) {
+                            case 0:
+                                showControls();
+                                break;
+                            case 1:
+                                Intent intent = new Intent(getActivity(), FilePickerActivity.class);
+                                intent.putExtra(FilePickerActivity.PATH_INTENT,
+                                        Environment.getExternalStorageDirectory().toString());
+                                intent.putExtra(FilePickerActivity.EXTENSION_INTENT, ".json");
+                                startActivityForResult(intent, 1);
+
+                                break;
+                        }
+                    })
+                    .setOnDismissListener(dialog -> mOptionsDialog = null);
+            if (!getActivity().isFinishing()) {
+                try {
+                    mOptionsDialog.show();
+                } catch (NullPointerException ignored) {
+                }
+            }
+        }, R.id.menu_add);
 
         try {
             if (mOptionsDialog != null) {
@@ -139,16 +122,8 @@ public class CustomControlsFragment extends RecyclerViewFragment {
             if (mExportItem != null) {
                 showExportDialog();
             }
-            if (mDonateDialog != null) {
-                mDonateDialog.show();
-            }
         } catch (NullPointerException ignored) {
         }
-
-        addViewPagerFragment(DescriptionFragment.newInstance(getString(R.string.welcome),
-                getString(R.string.custom_controls_summary)));
-        addViewPagerFragment(DescriptionFragment.newInstance(getString(R.string.example),
-                Utils.htmlFrom(getString(R.string.custom_controls_example_summary))));
     }
 
     @Override
@@ -164,6 +139,8 @@ public class CustomControlsFragment extends RecyclerViewFragment {
     @Override
     protected void load(List<RecyclerViewItem> items) {
         super.load(items);
+
+        items.add(new DescriptionFView(getActivity(), getString(R.string.welcome), Utils.htmlFrom(getString(R.string.custom_controls_summary) + " " + getString(R.string.custom_controls_example_summary))));
 
         mControlsProvider = new Controls(getActivity());
         for (final Controls.ControlItem item : mControlsProvider.getAllControls()) {
@@ -244,12 +221,17 @@ public class CustomControlsFragment extends RecyclerViewFragment {
     private CardView getCard(final Controls.ControlItem controlItem) {
         CardView cardView = new CardView(getActivity());
         cardView.setOnMenuListener((cardView1, popupMenu) -> {
-            Menu menu = popupMenu.getMenu();
+
+            @SuppressLint("RestrictedApi") Menu menu = new MenuBuilder(getContext());
             menu.add(Menu.NONE, 0, Menu.NONE, getString(R.string.edit));
-            final MenuItem onBoot = menu.add(Menu.NONE, 1, Menu.NONE, getString(R.string.on_boot)).setCheckable(true);
-            onBoot.setChecked(controlItem.isOnBootEnabled());
+            final MenuItem onBoot = menu.add(Menu.NONE, 1, Menu.NONE, getString(R.string.on_boot) + ": " + controlItem.isOnBootEnabled());
+            onBoot.setCheckable(true).setChecked(controlItem.isOnBootEnabled());
             menu.add(Menu.NONE, 2, Menu.NONE, getString(R.string.export));
             menu.add(Menu.NONE, 3, Menu.NONE, getString(R.string.delete));
+
+            ArrayList<MenuItem> menuItems = new ArrayList<>();
+            for (int i = 0; i < menu.size(); i++) menuItems.add(menu.getItem(i));
+            popupMenu.inflate(menuItems);
 
             popupMenu.setOnMenuItemClickListener(item -> {
                 switch (item.getItemId()) {
@@ -259,6 +241,11 @@ public class CustomControlsFragment extends RecyclerViewFragment {
                     case 1:
                         onBoot.setChecked(!onBoot.isChecked());
                         controlItem.enableOnBoot(onBoot.isChecked());
+
+                        //todo: new popupmenu
+                        onBoot.setTitle(getString(R.string.on_boot) + ": " + onBoot.isChecked());
+                        Toast.makeText(getContext(), getString(R.string.on_boot) + ": " + onBoot.isChecked(), Toast.LENGTH_SHORT).show();
+
                         mControlsProvider.commit();
                         break;
                     case 2:
@@ -275,7 +262,7 @@ public class CustomControlsFragment extends RecyclerViewFragment {
                         mDeleteDialog.show();
                         break;
                 }
-                return false;
+                popupMenu.dismiss();
             });
         });
         return cardView;
@@ -352,52 +339,6 @@ public class CustomControlsFragment extends RecyclerViewFragment {
         }
     }
 
-    private static class ImportTask extends AsyncTask<Void, Void, ImportControl> {
-
-        private WeakReference<CustomControlsFragment> mRefFragment;
-        private String mPath;
-
-        private ImportTask(CustomControlsFragment fragment, String path) {
-            mRefFragment = new WeakReference<>(fragment);
-            mPath = path;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            CustomControlsFragment fragment = mRefFragment.get();
-            if (fragment != null) {
-                fragment.showProgress();
-            }
-        }
-
-        @Override
-        protected ImportControl doInBackground(Void... voids) {
-            CustomControlsFragment fragment = mRefFragment.get();
-            if (fragment != null) {
-                return new ImportControl(mPath);
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(ImportControl importControl) {
-            super.onPostExecute(importControl);
-            CustomControlsFragment fragment = mRefFragment.get();
-            if (fragment == null) return;
-
-            fragment.hideProgress();
-            fragment.mImportingThread = null;
-            if (!importControl.readable()) {
-                Utils.toast(R.string.import_malformed, fragment.getActivity());
-            } else if (!importControl.matchesVersion()) {
-                Utils.toast(R.string.import_wrong_version, fragment.getActivity());
-            } else {
-                fragment.updateControls(importControl.getResults());
-            }
-        }
-    }
-
     @Override
     public void onPermissionGranted(int request) {
         super.onPermissionGranted(request);
@@ -457,6 +398,52 @@ public class CustomControlsFragment extends RecyclerViewFragment {
         if (mImportingThread != null) {
             mImportingThread.cancel(true);
             mImportingThread = null;
+        }
+    }
+
+    private static class ImportTask extends AsyncTask<Void, Void, ImportControl> {
+
+        private WeakReference<CustomControlsFragment> mRefFragment;
+        private String mPath;
+
+        private ImportTask(CustomControlsFragment fragment, String path) {
+            mRefFragment = new WeakReference<>(fragment);
+            mPath = path;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            CustomControlsFragment fragment = mRefFragment.get();
+            if (fragment != null) {
+                fragment.showProgress();
+            }
+        }
+
+        @Override
+        protected ImportControl doInBackground(Void... voids) {
+            CustomControlsFragment fragment = mRefFragment.get();
+            if (fragment != null) {
+                return new ImportControl(mPath);
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(ImportControl importControl) {
+            super.onPostExecute(importControl);
+            CustomControlsFragment fragment = mRefFragment.get();
+            if (fragment == null) return;
+
+            fragment.hideProgress();
+            fragment.mImportingThread = null;
+            if (!importControl.readable()) {
+                Utils.toast(R.string.import_malformed, fragment.getActivity());
+            } else if (!importControl.matchesVersion()) {
+                Utils.toast(R.string.import_wrong_version, fragment.getActivity());
+            } else {
+                fragment.updateControls(importControl.getResults());
+            }
         }
     }
 }

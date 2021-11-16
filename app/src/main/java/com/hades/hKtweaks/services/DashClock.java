@@ -24,7 +24,7 @@ import android.content.Intent;
 import com.google.android.apps.dashclock.api.DashClockExtension;
 import com.google.android.apps.dashclock.api.ExtensionData;
 import com.hades.hKtweaks.R;
-import com.hades.hKtweaks.activities.MainActivity;
+import com.hades.hKtweaks.activities.SplashActivity;
 import com.hades.hKtweaks.utils.kernel.cpu.CPUFreq;
 import com.hades.hKtweaks.utils.kernel.gpu.GPUFreq;
 import com.hades.hKtweaks.utils.root.RootUtils;
@@ -43,7 +43,7 @@ public class DashClock extends DashClockExtension {
         final int cores = CPUFreq.getInstance(this).getCpuCount();
 
         if (extensionData == null) {
-            Intent intent = new Intent(this, MainActivity.class);
+            Intent intent = new Intent(this, SplashActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
             extensionData = new ExtensionData()
                     .visible(true)

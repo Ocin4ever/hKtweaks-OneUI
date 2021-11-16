@@ -22,11 +22,11 @@ package com.hades.hKtweaks.activities;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
-import androidx.appcompat.app.ActionBar;
+import androidx.fragment.app.Fragment;
 
 import com.hades.hKtweaks.R;
 import com.hades.hKtweaks.fragments.recyclerview.RecyclerViewFragment;
@@ -39,6 +39,8 @@ import com.hades.hKtweaks.views.recyclerview.RecyclerViewItem;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import de.dlyt.yanndroid.oneui.layout.ToolbarLayout;
 
 /**
  * Created by willi on 04.07.16.
@@ -53,12 +55,15 @@ public class FilePickerActivity extends BaseActivity {
     private String mExtension;
     private FilePickerFragment mFragment;
 
+    private ToolbarLayout toolbarLayout;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fragments);
 
-        initToolBar();
+        toolbarLayout = super.getToolBarLayout();
+        toolbarLayout.setNavigationButtonOnClickListener(v -> super.onBackPressed());
 
         mPath = getIntent().getStringExtra(PATH_INTENT);
         mExtension = getIntent().getStringExtra(EXTENSION_INTENT);
@@ -70,6 +75,11 @@ public class FilePickerActivity extends BaseActivity {
 
         getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, mFragment
                 = (FilePickerFragment) getFragment(), "fragment").commit();
+    }
+
+    @Override
+    public ToolbarLayout getToolBarLayout() {
+        return toolbarLayout;
     }
 
     private Fragment getFragment() {
@@ -104,11 +114,6 @@ public class FilePickerActivity extends BaseActivity {
         private Drawable mFileImage;
         private Dialog mPickDialog;
 
-        @Override
-        protected boolean showViewPager() {
-            return false;
-        }
-
         public static FilePickerFragment newInstance(String path, String extension) {
             Bundle args = new Bundle();
             args.putString(PATH_INTENT, path);
@@ -129,23 +134,23 @@ public class FilePickerActivity extends BaseActivity {
             }
             int accentColor = ViewUtils.getThemeAccentColor(getContext());
             if (mDirImage == null) {
-                mDirImage = DrawableCompat.wrap(
-                        ContextCompat.getDrawable(getActivity(), R.drawable.ic_dir));
+                mDirImage = DrawableCompat.wrap(ContextCompat.getDrawable(getActivity(), R.drawable.ic_samsung_folder));
                 DrawableCompat.setTint(mDirImage, accentColor);
             }
             if (mFileImage == null) {
                 mFileImage = DrawableCompat.wrap(
-                        ContextCompat.getDrawable(getActivity(), R.drawable.ic_file));
-                DrawableCompat.setTint(mFileImage, ViewUtils.getTextSecondaryColor(getContext()));
+                        ContextCompat.getDrawable(getActivity(), R.drawable.ic_samsung_document));
             }
             if (mPickDialog != null) {
                 mPickDialog.show();
             }
 
-            ActionBar actionBar;
-            if ((actionBar = ((FilePickerActivity) getActivity()).getSupportActionBar()) != null) {
-                actionBar.setTitle(mPath);
+            ToolbarLayout toolbarLayout;
+            if ((toolbarLayout = ((FilePickerActivity) getActivity()).getToolBarLayout()) != null) {
+                toolbarLayout.setTitle(mPath);
             }
+
+
         }
 
         @Override
@@ -156,30 +161,15 @@ public class FilePickerActivity extends BaseActivity {
         @Override
         protected void postInit() {
             super.postInit();
-            ActionBar actionBar;
-            if ((actionBar = ((BaseActivity) getActivity()).getSupportActionBar()) != null) {
-                actionBar.setTitle(mPath);
+            ToolbarLayout toolbarLayout;
+            if ((toolbarLayout = ((FilePickerActivity) getActivity()).getToolBarLayout()) != null) {
+                toolbarLayout.setTitle(mPath);
             }
         }
 
         private void reload() {
             clearItems();
             reload(new ReloadHandler());
-        }
-
-        private static class ReloadHandler
-                extends RecyclerViewFragment.ReloadHandler<FilePickerFragment> {
-            @Override
-            public void onPostExecute(FilePickerFragment fragment, List<RecyclerViewItem> items) {
-                super.onPostExecute(fragment, items);
-
-                BaseActivity activity = (BaseActivity) fragment.getActivity();
-                ActionBar actionBar;
-                if (activity != null
-                        && (actionBar = activity.getSupportActionBar()) != null) {
-                    actionBar.setTitle(fragment.mPath);
-                }
-            }
         }
 
         @Override
@@ -254,6 +244,21 @@ public class FilePickerActivity extends BaseActivity {
                 });
 
                 items.add(descriptionView);
+            }
+        }
+
+        private static class ReloadHandler
+                extends RecyclerViewFragment.ReloadHandler<FilePickerFragment> {
+            @Override
+            public void onPostExecute(FilePickerFragment fragment, List<RecyclerViewItem> items) {
+                super.onPostExecute(fragment, items);
+
+                FilePickerActivity activity = (FilePickerActivity) fragment.getActivity();
+                ToolbarLayout toolbarLayout;
+                if (activity != null
+                        && (toolbarLayout = activity.getToolBarLayout()) != null) {
+                    toolbarLayout.setTitle(fragment.mPath);
+                }
             }
         }
     }

@@ -38,21 +38,7 @@ public class ServerSearchDevice extends Server {
 
     private static final String DEVICE_GET = "/kerneladiutor/api/v1/device/get";
     private static final String BOARD_GET = "/kerneladiutor/api/v1/board/get";
-
-    public interface DeviceSearchListener {
-        void onDevicesResult(List<DeviceInfo> devices, int page);
-
-        void onDevicesFailure();
-    }
-
-    public interface BoardSearchListener {
-        void onBoardResult(List<String> boards);
-
-        void onBoardFailure();
-    }
-
     private Activity mActivity;
-
     private WebpageReader mDeviceReader;
     private WebpageReader mBoardReader;
 
@@ -117,6 +103,18 @@ public class ServerSearchDevice extends Server {
     public void cancel() {
         if (mDeviceReader != null) mDeviceReader.cancel();
         if (mBoardReader != null) mBoardReader.cancel();
+    }
+
+    public interface DeviceSearchListener {
+        void onDevicesResult(List<DeviceInfo> devices, int page);
+
+        void onDevicesFailure();
+    }
+
+    public interface BoardSearchListener {
+        void onBoardResult(List<String> boards);
+
+        void onBoardFailure();
     }
 
 }

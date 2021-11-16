@@ -31,17 +31,12 @@ import java.util.List;
  */
 public class AboutFragment extends RecyclerViewFragment {
 
+    private SupportedDownloads.KernelContent mKernelContent;
+
     public static AboutFragment newInstance(SupportedDownloads.KernelContent kernelContent) {
         AboutFragment fragment = new AboutFragment();
         fragment.mKernelContent = kernelContent;
         return fragment;
-    }
-
-    private SupportedDownloads.KernelContent mKernelContent;
-
-    @Override
-    protected boolean showViewPager() {
-        return false;
     }
 
     @Override

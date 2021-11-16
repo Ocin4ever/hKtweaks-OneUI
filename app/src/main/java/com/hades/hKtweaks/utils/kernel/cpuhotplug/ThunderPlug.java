@@ -174,7 +174,7 @@ public class ThunderPlug {
     public static boolean hasThunderPlugSuspendCpus() {
         return Utils.existFile(HOTPLUG_THUNDER_PLUG_SUSPEND_CPUS);
     }
-	
+
     public static void enableThunderPlugSuspend(boolean enable, Context context) {
         run(Control.write(enable ? "1" : "0", HOTPLUG_THUNDER_PLUG_SUSPEND), HOTPLUG_THUNDER_PLUG_SUSPEND, context);
     }

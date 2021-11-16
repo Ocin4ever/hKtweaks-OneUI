@@ -21,7 +21,6 @@ package com.hades.hKtweaks.fragments.tools.downloads;
 
 import android.Manifest;
 import android.content.Intent;
-import com.google.android.material.snackbar.Snackbar;
 
 import com.hades.hKtweaks.R;
 import com.hades.hKtweaks.activities.tools.DownloadsActivity;
@@ -35,22 +34,19 @@ import com.hades.hKtweaks.views.recyclerview.downloads.KernelItemView;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.dlyt.yanndroid.oneui.view.Snackbar;
+
 /**
  * Created by willi on 06.07.16.
  */
 public class DownloadsFragment extends RecyclerViewFragment {
 
+    private final List<WebpageReader> mKernelWebpageReader = new ArrayList<>();
     private SupportedDownloads mSupport;
     private WebpageReader mWebpageReader;
-    private final List<WebpageReader> mKernelWebpageReader = new ArrayList<>();
     private Snackbar mErrorBar;
 
     private SupportedDownloads.KernelContent mKernelContent;
-
-    @Override
-    protected boolean showViewPager() {
-        return false;
-    }
 
     @Override
     protected void addItems(List<RecyclerViewItem> items) {

@@ -23,7 +23,7 @@ import android.content.Context;
 import android.os.Vibrator;
 
 import com.hades.hKtweaks.R;
-import com.hades.hKtweaks.fragments.ApplyOnBootFragment;
+import com.hades.hKtweaks.activities.tools.profile.ProfileActivity;
 import com.hades.hKtweaks.fragments.recyclerview.RecyclerViewFragment;
 import com.hades.hKtweaks.utils.Utils;
 import com.hades.hKtweaks.utils.kernel.misc.Misc;
@@ -33,8 +33,7 @@ import com.hades.hKtweaks.utils.kernel.misc.Selinux;
 import com.hades.hKtweaks.utils.kernel.misc.Vibration;
 import com.hades.hKtweaks.utils.kernel.misc.Wakelocks;
 import com.hades.hKtweaks.utils.root.RootUtils;
-import com.hades.hKtweaks.views.recyclerview.ButtonView;
-import com.hades.hKtweaks.views.recyclerview.ButtonView2;
+import com.hades.hKtweaks.views.recyclerview.ApplyOnBootFView;
 import com.hades.hKtweaks.views.recyclerview.CardView;
 import com.hades.hKtweaks.views.recyclerview.DescriptionView;
 import com.hades.hKtweaks.views.recyclerview.GenericSelectView;
@@ -56,20 +55,24 @@ public class MiscFragment extends RecyclerViewFragment {
 
     private Vibration mVibration;
     private Misc mMisc;
+
     public int getSpanCount() {
         return 1;
     }
+
     @Override
     protected void init() {
         super.init();
 
         mVibration = Vibration.getInstance();
         mMisc = Misc.getInstance();
-        addViewPagerFragment(ApplyOnBootFragment.newInstance(this));
     }
 
     @Override
     protected void addItems(List<RecyclerViewItem> items) {
+        if (!(getActivity() instanceof ProfileActivity))
+            items.add(new ApplyOnBootFView(getActivity(), this));
+
         if (mVibration.supported()) {
             vibrationInit(items);
         }
@@ -89,7 +92,7 @@ public class MiscFragment extends RecyclerViewFragment {
         if (mMisc.hasMagiskBin()) {
             secureKernel(items);
         }
-        if (Selinux.supported()){
+        if (Selinux.supported()) {
             selinuxInit(items);
         }
         if (PowerSuspend.supported()) {
@@ -102,7 +105,7 @@ public class MiscFragment extends RecyclerViewFragment {
         wakelockInit(items);
     }
 
-    private void secureKernel(List<RecyclerViewItem> items){
+    private void secureKernel(List<RecyclerViewItem> items) {
         CardView skCard = new CardView(getActivity());
         skCard.setTitle(getString(R.string.secure_kernel_tit));
 
@@ -121,11 +124,11 @@ public class MiscFragment extends RecyclerViewFragment {
         adb.setSummaryOff(getString(R.string.adb_secure_off));
         adb.setChecked(RootUtils.getProp("ro.adb.secure").equals("1"));
         adb.addOnSwitchListener(((switchView, isChecked) -> {
-                mMisc.setProp("ro.adb.secure", isChecked, getActivity());
-                mMisc.setProp("persist.service.adb.enable", isChecked, getActivity());
-                Utils.toast(getString(R.string.restart_usb_toast), getActivity());
-                RootUtils.runCommand("stop adbd");
-                RootUtils.runCommand("start adbd");
+            mMisc.setProp("ro.adb.secure", isChecked, getActivity());
+            mMisc.setProp("persist.service.adb.enable", isChecked, getActivity());
+            Utils.toast(getString(R.string.restart_usb_toast), getActivity());
+            RootUtils.runCommand("stop adbd");
+            RootUtils.runCommand("start adbd");
         }));
 
         skCard.addItem(adb);
@@ -136,11 +139,11 @@ public class MiscFragment extends RecyclerViewFragment {
         debug.setSummaryOff(getString(R.string.debug_off));
         debug.setChecked(RootUtils.getProp("ro.debuggable").equals("1"));
         debug.addOnSwitchListener(((switchView, isChecked) -> {
-                mMisc.setProp("ro.debuggable", isChecked, getActivity());
-                mMisc.setProp("persist.service.debuggable", isChecked, getActivity());
-                Utils.toast(getString(R.string.restart_usb_toast), getActivity());
-                RootUtils.runCommand("stop adbd");
-                RootUtils.runCommand("start adbd");
+            mMisc.setProp("ro.debuggable", isChecked, getActivity());
+            mMisc.setProp("persist.service.debuggable", isChecked, getActivity());
+            Utils.toast(getString(R.string.restart_usb_toast), getActivity());
+            RootUtils.runCommand("stop adbd");
+            RootUtils.runCommand("start adbd");
         }));
         skCard.addItem(debug);
 
@@ -149,7 +152,7 @@ public class MiscFragment extends RecyclerViewFragment {
         }
     }
 
-    private void selinuxInit(List<RecyclerViewItem> items){
+    private void selinuxInit(List<RecyclerViewItem> items) {
         CardView sl = new CardView(getActivity());
         sl.setTitle(getString(R.string.selinux));
 
@@ -286,6 +289,7 @@ public class MiscFragment extends RecyclerViewFragment {
 
         items.add(pwmCard);
     }
+
     private void powersuspendInit(List<RecyclerViewItem> items) {
         String v = PowerSuspend.getVersion().replace("version: ", " v");
         CardView ps = new CardView(getActivity());

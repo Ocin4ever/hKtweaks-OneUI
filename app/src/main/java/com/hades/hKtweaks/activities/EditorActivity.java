@@ -20,17 +20,17 @@
 package com.hades.hKtweaks.activities;
 
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.widget.TextView;
+
 import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
-import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.appcompat.widget.AppCompatEditText;
-import android.view.Menu;
-import android.view.MenuItem;
 
 import com.hades.hKtweaks.R;
+
+import de.dlyt.yanndroid.oneui.layout.ToolbarLayout;
 
 /**
  * Created by willi on 01.07.16.
@@ -48,41 +48,69 @@ public class EditorActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editor);
 
-        initToolBar();
         String title = getIntent().getStringExtra(TITLE_INTENT);
-        if (title != null) {
-            getSupportActionBar().setTitle(title);
-        }
+
+        ToolbarLayout toolbarLayout;
+        toolbarLayout = getToolBarLayout();
+        toolbarLayout.setTitle(title != null ? title : "");
+        toolbarLayout.setNavigationButtonOnClickListener(v -> onBackPressed());
+
+        toolbarLayout.inflateToolbarMenu(R.menu.save_menu);
+        toolbarLayout.setOnToolbarMenuItemClickListener(item -> {
+            Intent intent = new Intent();
+            intent.putExtra(TEXT_INTENT, mEditText.getText());
+            setResult(0, intent);
+            finish();
+        });
 
         CharSequence text = getIntent().getCharSequenceExtra(TEXT_INTENT);
         mEditText = findViewById(R.id.edittext);
         if (text != null) {
             mEditText.append(text);
         }
+        mEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                updateLineCounter(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+        mEditText.post(() -> updateLineCounter(mEditText.getText().toString()));
+    }
+
+    private void updateLineCounter(String text) {
+        StringBuilder lineCounterText = new StringBuilder();
+        String[] lines = new String[mEditText.getLineCount()];
+
+        int lineBreakCount = 0, start = 0, end;
+
+        for (int i = 0; i < mEditText.getLineCount(); i++) {
+            end = mEditText.getLayout().getLineEnd(i);
+            lines[i] = text.substring(start, end);
+
+            if (i == 0 || lines[i - 1].contains("\n")) {
+                lineBreakCount++;
+                lineCounterText.append(lineBreakCount).append("\n");
+            } else lineCounterText.append("\n");
+
+            start = end;
+        }
+        ((TextView) findViewById(R.id.editor_lines)).setText(lineCounterText);
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putCharSequence(EDITTEXT_INTENT, mEditText.getText());
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        Drawable drawable = ContextCompat.getDrawable(this, R.drawable.ic_save);
-        DrawableCompat.setTint(drawable, Color.WHITE);
-        menu.add(0, Menu.FIRST, Menu.FIRST, getString(R.string.save)).setIcon(drawable)
-                .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        Intent intent = new Intent();
-        intent.putExtra(TEXT_INTENT, mEditText.getText());
-        setResult(0, intent);
-        finish();
-        return super.onOptionsItemSelected(item);
     }
 
 }

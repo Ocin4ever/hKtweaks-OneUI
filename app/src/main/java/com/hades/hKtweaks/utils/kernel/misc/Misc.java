@@ -35,15 +35,6 @@ import java.util.List;
  */
 public class Misc {
 
-    private static Misc sInstance;
-
-    public static Misc getInstance() {
-        if (sInstance == null) {
-            sInstance = new Misc();
-        }
-        return sInstance;
-    }
-
     private static final String DYNAMIC_FSYNC = "/sys/kernel/dyn_fsync/Dyn_fsync_active";
     private static final String GENTLE_FAIR_SLEEPERS = "/sys/kernel/sched/gentle_fair_sleepers";
     private static final String ARCH_POWER = "/sys/kernel/sched/arch_power";
@@ -52,10 +43,15 @@ public class Misc {
     private static final String WIREGUARD = "/sys/module/wireguard/version";
     private static final String MAGISK_BIN = "/res/magisk";
     private static final String RESETPROP = MAGISK_BIN + " resetprop -v -n ";
-
+    private static Misc sInstance;
     private final List<String> mLoggers = new ArrayList<>();
     private final List<String> mCrcs = new ArrayList<>();
     private final List<String> mFsyncs = new ArrayList<>();
+    private String LOGGER_FILE;
+    private String CRC_FILE;
+    private Boolean CRC_USE_INTEGER;
+    private String FSYNC_FILE;
+    private Boolean FSYNC_USE_INTEGER;
 
     {
         mLoggers.add("/sys/kernel/logger_mode/logger_mode");
@@ -68,12 +64,6 @@ public class Misc {
         mFsyncs.add("/sys/devices/virtual/misc/fsynccontrol/fsync_enabled");
         mFsyncs.add("/sys/module/sync/parameters/fsync_enabled");
     }
-
-    private String LOGGER_FILE;
-    private String CRC_FILE;
-    private Boolean CRC_USE_INTEGER;
-    private String FSYNC_FILE;
-    private Boolean FSYNC_USE_INTEGER;
 
     private Misc() {
         for (String file : mLoggers) {
@@ -100,12 +90,11 @@ public class Misc {
         }
     }
 
-    public boolean hasMagiskBin(){
-        return Utils.existFile(MAGISK_BIN);
-    }
-
-    public void setProp(String prop, boolean value, Context context){
-        run(RESETPROP + prop + " " + (value ? 1 : 0), prop, context);
+    public static Misc getInstance() {
+        if (sInstance == null) {
+            sInstance = new Misc();
+        }
+        return sInstance;
     }
 
     public static boolean hasWireguard() {
@@ -114,6 +103,14 @@ public class Misc {
 
     public static String getWireguard() {
         return Utils.readFile(WIREGUARD);
+    }
+
+    public boolean hasMagiskBin() {
+        return Utils.existFile(MAGISK_BIN);
+    }
+
+    public void setProp(String prop, boolean value, Context context) {
+        run(RESETPROP + prop + " " + (value ? 1 : 0), prop, context);
     }
 
     public void setHostname(String value, Context context) {

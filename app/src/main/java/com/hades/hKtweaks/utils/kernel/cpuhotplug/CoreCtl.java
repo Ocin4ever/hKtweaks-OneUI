@@ -35,29 +35,18 @@ import java.util.List;
  */
 public class CoreCtl {
 
-    private static CoreCtl sInstance;
-
-    public static CoreCtl getInstance() {
-        if (sInstance == null) {
-            sInstance = new CoreCtl();
-        }
-        return sInstance;
-    }
-
     public static final String CORE_CTL = "/sys/devices/system/cpu/cpu%d/core_ctl";
+    public static final String MIN_CPUS = "/min_cpus";
     private static final String HCUBE = "/sys/devices/system/cpu/cpu%d/hcube";
-
     private static final String ENABLE = "/hc_on";
     private static final String IS_BIG_CLUSTER = "/is_big_cluster";
-    public static final String MIN_CPUS = "/min_cpus";
     private static final String BUSY_DOWN_THRESHOLD = "/busy_down_thres";
     private static final String BUSY_UP_THRESHOLD = "/busy_up_thres";
     private static final String OFFLINE_DELAY_MS = "/offline_delay_ms";
     private static final String ONLINE_DELAY_MS = "/online_delay_ms";
-
-    private String PARENT;
-
+    private static CoreCtl sInstance;
     private final List<String> sFiles = new ArrayList<>();
+    private String PARENT;
 
     {
         sFiles.add(CORE_CTL);
@@ -80,6 +69,13 @@ public class CoreCtl {
                 }
             }
         }
+    }
+
+    public static CoreCtl getInstance() {
+        if (sInstance == null) {
+            sInstance = new CoreCtl();
+        }
+        return sInstance;
     }
 
     public void setOfflineDelayMs(int value, Context context) {

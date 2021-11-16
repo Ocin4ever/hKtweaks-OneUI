@@ -20,7 +20,7 @@
 package com.hades.hKtweaks.fragments.kernel;
 
 import com.hades.hKtweaks.R;
-import com.hades.hKtweaks.fragments.ApplyOnBootFragment;
+import com.hades.hKtweaks.activities.tools.profile.ProfileActivity;
 import com.hades.hKtweaks.fragments.recyclerview.RecyclerViewFragment;
 import com.hades.hKtweaks.utils.kernel.wake.Dt2s;
 import com.hades.hKtweaks.utils.kernel.wake.Dt2w;
@@ -30,6 +30,7 @@ import com.hades.hKtweaks.utils.kernel.wake.Misc;
 import com.hades.hKtweaks.utils.kernel.wake.S2s;
 import com.hades.hKtweaks.utils.kernel.wake.S2w;
 import com.hades.hKtweaks.utils.kernel.wake.T2w;
+import com.hades.hKtweaks.views.recyclerview.ApplyOnBootFView;
 import com.hades.hKtweaks.views.recyclerview.CardView;
 import com.hades.hKtweaks.views.recyclerview.RecyclerViewItem;
 import com.hades.hKtweaks.views.recyclerview.SeekBarView;
@@ -63,11 +64,13 @@ public class WakeFragment extends RecyclerViewFragment {
         mDt2s = Dt2s.getInstance();
         mS2s = S2s.getInstance();
         mMisc = Misc.getInstance();
-        addViewPagerFragment(ApplyOnBootFragment.newInstance(this));
     }
 
     @Override
     protected void addItems(List<RecyclerViewItem> items) {
+        if (!(getActivity() instanceof ProfileActivity))
+            items.add(new ApplyOnBootFView(getActivity(), this));
+
         if (mDt2w.supported()) {
             dt2wInit(items);
         }
@@ -211,7 +214,7 @@ public class WakeFragment extends RecyclerViewFragment {
         items.add(s2sCard);
     }
 
-    private void gesVibInit(List<RecyclerViewItem> items){
+    private void gesVibInit(List<RecyclerViewItem> items) {
         CardView gesVibCard = new CardView(getActivity());
         gesVibCard.setTitle(getString(R.string.gesVib_title));
 

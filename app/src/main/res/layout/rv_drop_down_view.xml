@@ -46,7 +46,7 @@
                 android:layout_height="25dp"
                 android:layout_gravity="center_vertical"
                 android:tint="?android:attr/textColorSecondary"
-                app:srcCompat="@drawable/ic_arrow" />
+                app:srcCompat="@drawable/ic_samsung_arrow_up" />
         </LinearLayout>
     </FrameLayout>
 

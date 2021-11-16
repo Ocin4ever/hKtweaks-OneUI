@@ -51,6 +51,9 @@ public class Sec {
     private static final List<String> sLedFade = new ArrayList<>();
     private static final List<String> sLedFadeTimeUp = new ArrayList<>();
     private static final List<String> sLedFadeTimeDown = new ArrayList<>();
+    private static String LNRC;
+    private static String LNRU;
+    private static String LNRD;
 
     static {
         sLedFade.add(LNRC1);
@@ -62,11 +65,6 @@ public class Sec {
         sLedFadeTimeDown.add(LNRD1);
         sLedFadeTimeDown.add(LNRD2);
     }
-
-    private static String LNRC;
-    private static String LNRU;
-    private static String LNRD;
-
 
     public static void testPattern(boolean test) {
         run(Control.write(test ? "3" : "0", LP), null, null);

@@ -21,9 +21,10 @@ package com.hades.hKtweaks.views.recyclerview.overallstatistics;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import androidx.appcompat.widget.AppCompatImageButton;
 import android.view.View;
 import android.view.ViewPropertyAnimator;
+
+import androidx.appcompat.widget.AppCompatImageButton;
 
 import com.hades.hKtweaks.R;
 import com.hades.hKtweaks.views.recyclerview.RecyclerViewItem;
@@ -49,13 +50,13 @@ public class FrequencyButtonView extends RecyclerViewItem {
         AppCompatImageButton restore = view.findViewById(R.id.frequency_restore);
 
         refresh.setOnClickListener(v -> {
-            rotate(v, false);
+            rotate(v, true);
             if (mRefreshListener != null) {
                 mRefreshListener.onClick(v);
             }
         });
         reset.setOnClickListener(v -> {
-            rotate(v, true);
+            rotate(v, false);
             if (mResetListener != null) {
                 mResetListener.onClick(v);
             }

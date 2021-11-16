@@ -19,17 +19,16 @@
  */
 package com.hades.hKtweaks.fragments.tools;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
-import androidx.core.content.ContextCompat;
-import androidx.core.graphics.drawable.DrawableCompat;
 import android.view.Menu;
+import android.view.MenuItem;
+
+import androidx.appcompat.view.menu.MenuBuilder;
 
 import com.hades.hKtweaks.R;
 import com.hades.hKtweaks.activities.EditorActivity;
-import com.hades.hKtweaks.fragments.SwitcherFragment;
 import com.hades.hKtweaks.fragments.recyclerview.RecyclerViewFragment;
 import com.hades.hKtweaks.utils.AppSettings;
 import com.hades.hKtweaks.utils.Utils;
@@ -40,7 +39,9 @@ import com.hades.hKtweaks.views.dialog.Dialog;
 import com.hades.hKtweaks.views.recyclerview.CardView;
 import com.hades.hKtweaks.views.recyclerview.DescriptionView;
 import com.hades.hKtweaks.views.recyclerview.RecyclerViewItem;
+import com.hades.hKtweaks.views.recyclerview.SwitcherFView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -58,27 +59,9 @@ public class InitdFragment extends RecyclerViewFragment {
     private String mEditInitd;
 
     @Override
-    protected Drawable getTopFabDrawable() {
-        Drawable drawable = DrawableCompat.wrap(
-                ContextCompat.getDrawable(getActivity(), R.drawable.ic_add));
-        DrawableCompat.setTint(drawable, Color.WHITE);
-        return drawable;
-    }
-
-    @Override
-    protected boolean showTopFab() {
-        return true;
-    }
-
-    @Override
     protected void init() {
         super.init();
-
-        addViewPagerFragment(SwitcherFragment.newInstance(
-                getString(R.string.emulate_initd),
-                getString(R.string.emulate_initd_summary),
-                AppSettings.isInitdOnBoot(getActivity()),
-                (compoundButton, b) -> AppSettings.saveInitdOnBoot(b, getActivity())));
+        showToolbarActionButton(item -> showCreateDialog(), R.id.menu_add);
 
         if (mExecuteDialog != null) {
             mExecuteDialog.show();
@@ -110,12 +93,23 @@ public class InitdFragment extends RecyclerViewFragment {
     protected void load(List<RecyclerViewItem> items) {
         super.load(items);
 
+        items.add(new SwitcherFView(
+                getString(R.string.emulate_initd),
+                getString(R.string.emulate_initd_summary),
+                AppSettings.isInitdOnBoot(getActivity()),
+                (compoundButton, b) -> AppSettings.saveInitdOnBoot(b, getActivity())));
+
         for (final String initd : Initd.list()) {
             CardView cardView = new CardView(getActivity());
             cardView.setOnMenuListener((cardView1, popupMenu) -> {
-                Menu menu = popupMenu.getMenu();
+
+                @SuppressLint("RestrictedApi") Menu menu = new MenuBuilder(getContext());
                 menu.add(Menu.NONE, 0, Menu.NONE, getString(R.string.edit));
                 menu.add(Menu.NONE, 1, Menu.NONE, getString(R.string.delete));
+
+                ArrayList<MenuItem> menuItems = new ArrayList<>();
+                for (int i = 0; i < menu.size(); i++) menuItems.add(menu.getItem(i));
+                popupMenu.inflate(menuItems);
 
                 popupMenu.setOnMenuItemClickListener(item -> {
                     switch (item.getItemId()) {
@@ -138,7 +132,7 @@ public class InitdFragment extends RecyclerViewFragment {
                             mDeleteDialog.show();
                             break;
                     }
-                    return false;
+                    popupMenu.dismiss();
                 });
             });
 
@@ -163,37 +157,6 @@ public class InitdFragment extends RecyclerViewFragment {
         showDialog(new ExecuteTask(getActivity(), initd));
     }
 
-    private static class ExecuteTask extends DialogLoadHandler<InitdFragment> {
-        private String mInitd;
-        private String mResult;
-
-        private ExecuteTask(Context context, String initd) {
-            super(null, context.getString(R.string.executing));
-            mInitd = initd;
-        }
-
-        @Override
-        public Void doInBackground(InitdFragment fragment) {
-            mResult = Initd.execute(mInitd);
-            return null;
-        }
-
-        @Override
-        public void onPostExecute(InitdFragment fragment, Void aVoid) {
-            super.onPostExecute(fragment, aVoid);
-
-            if (mResult != null && !mResult.isEmpty()) {
-                fragment.mResultDialog = ViewUtils.dialogBuilder(mResult,
-                        null,
-                        null,
-                        dialogInterface -> fragment.mResultDialog = null,
-                        fragment.getActivity()).setTitle(
-                        fragment.getString(R.string.result));
-                fragment.mResultDialog.show();
-            }
-        }
-    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -207,13 +170,6 @@ public class InitdFragment extends RecyclerViewFragment {
             mCreateName = null;
             reload();
         }
-    }
-
-    @Override
-    protected void onTopFabClick() {
-        super.onTopFabClick();
-
-        showCreateDialog();
     }
 
     private void showCreateDialog() {
@@ -246,5 +202,36 @@ public class InitdFragment extends RecyclerViewFragment {
     public void onDestroy() {
         super.onDestroy();
         RootUtils.mount(false, "/system");
+    }
+
+    private static class ExecuteTask extends DialogLoadHandler<InitdFragment> {
+        private String mInitd;
+        private String mResult;
+
+        private ExecuteTask(Context context, String initd) {
+            super(null, context.getString(R.string.executing));
+            mInitd = initd;
+        }
+
+        @Override
+        public Void doInBackground(InitdFragment fragment) {
+            mResult = Initd.execute(mInitd);
+            return null;
+        }
+
+        @Override
+        public void onPostExecute(InitdFragment fragment, Void aVoid) {
+            super.onPostExecute(fragment, aVoid);
+
+            if (mResult != null && !mResult.isEmpty()) {
+                fragment.mResultDialog = ViewUtils.dialogBuilder(mResult,
+                        null,
+                        null,
+                        dialogInterface -> fragment.mResultDialog = null,
+                        fragment.getActivity()).setTitle(
+                        fragment.getString(R.string.result));
+                fragment.mResultDialog.show();
+            }
+        }
     }
 }

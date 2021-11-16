@@ -20,16 +20,17 @@
 package com.hades.hKtweaks.fragments.kernel;
 
 import com.hades.hKtweaks.R;
-import com.hades.hKtweaks.fragments.ApplyOnBootFragment;
+import com.hades.hKtweaks.activities.tools.profile.ProfileActivity;
 import com.hades.hKtweaks.fragments.recyclerview.RecyclerViewFragment;
 import com.hades.hKtweaks.utils.Device;
 import com.hades.hKtweaks.utils.Utils;
 import com.hades.hKtweaks.utils.kernel.lmk.LMK;
+import com.hades.hKtweaks.views.recyclerview.ApplyOnBootFView;
+import com.hades.hKtweaks.views.recyclerview.CardView;
 import com.hades.hKtweaks.views.recyclerview.DescriptionView;
 import com.hades.hKtweaks.views.recyclerview.RecyclerViewItem;
 import com.hades.hKtweaks.views.recyclerview.SeekBarView;
 import com.hades.hKtweaks.views.recyclerview.SwitchView;
-import com.hades.hKtweaks.views.recyclerview.TitleView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -43,7 +44,7 @@ public class LMKFragment extends RecyclerViewFragment {
 
     private final LinkedHashMap<Integer, String> sProfiles = new LinkedHashMap<>();
 
-    private List<SeekBarView> mMinFrees = new ArrayList<>();
+    private final List<SeekBarView> mMinFrees = new ArrayList<>();
 
     @Override
     protected void init() {
@@ -56,15 +57,13 @@ public class LMKFragment extends RecyclerViewFragment {
         sProfiles.put(R.string.medium, getAdjustedSize(3, 4, 5, 6, 7, 9));
         sProfiles.put(R.string.aggressive, getAdjustedSize(2, 3, 6, 10, 14, 15));
         sProfiles.put(R.string.very_aggressive, getAdjustedSize(3, 4, 5, 11, 15, 16));
-
-        addViewPagerFragment(ApplyOnBootFragment.newInstance(this));
     }
 
     private String getAdjustedSize(int... offsets) {
         long memTotal = Device.MemInfo.getInstance().getTotalMem() * 1024L / 100L / 4L;
         StringBuilder stringBuilder = new StringBuilder();
         for (int offset : offsets) {
-            stringBuilder.append(String.valueOf((int) memTotal * offset)).append(",");
+            stringBuilder.append((int) memTotal * offset).append(",");
         }
         stringBuilder.setLength(stringBuilder.length() - 1);
         return stringBuilder.toString();
@@ -72,6 +71,9 @@ public class LMKFragment extends RecyclerViewFragment {
 
     @Override
     protected void addItems(List<RecyclerViewItem> items) {
+        if (!(getActivity() instanceof ProfileActivity))
+            items.add(new ApplyOnBootFView(getActivity(), this));
+
         if (LMK.hasAdaptive()) {
             adaptiveInit(items);
         }
@@ -129,7 +131,7 @@ public class LMKFragment extends RecyclerViewFragment {
     }
 
     private void profileInit(List<RecyclerViewItem> items) {
-        TitleView profilesTitle = new TitleView();
+        /*TitleView profilesTitle = new TitleView();
         profilesTitle.setText(getString(R.string.profile));
         items.add(profilesTitle);
 
@@ -143,7 +145,24 @@ public class LMKFragment extends RecyclerViewFragment {
             });
 
             items.add(profile);
+        }*/
+
+        CardView cardView = new CardView(getActivity());
+        cardView.setTitle(getString(R.string.profile));
+        cardView.setFullSpan(true);
+        for (int id : sProfiles.keySet()) {
+            DescriptionView profile = new DescriptionView();
+            profile.setTitle(getString(id));
+            profile.setSummary(sProfiles.get(id));
+            profile.setOnItemClickListener(item -> {
+                LMK.setMinFree(((DescriptionView) item).getSummary().toString(), getActivity());
+                refreshMinFree();
+            });
+
+            cardView.addItem(profile);
         }
+        items.add(cardView);
+
     }
 
     private void swapWait(List<RecyclerViewItem> items) {

@@ -76,15 +76,15 @@ public class ZRAM {
     }
 
     public static void enable(boolean enable, Context context) {
-        if(enable){
+        if (enable) {
             run("mkswap " + BLOCK + " > /dev/null 2>&1", BLOCK + "mkswap", context);
             run("swapon " + BLOCK + " > /dev/null 2>&1", BLOCK + "swapon", context);
-        } else{
+        } else {
             run("swapoff " + BLOCK + " > /dev/null 2>&1", BLOCK + "swapoff", context);
         }
     }
 
-    public static boolean isEnabled(){
+    public static boolean isEnabled() {
         return Utils.strToLong(Utils.readFile(DISKSIZE)) != 0;
     }
 

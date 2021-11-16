@@ -1,9 +1,13 @@
 {
-  "latestVersion": "2.2.0",
-  "latestVersionCode": "220",
-  "url": "https://github.com/corsicanu/hKtweaks/releases/download/v2.2.0/hKtweaks_v2.2.0.apk",
   "releaseNotes": [
-    "Changelog:",
+    "Changelog - Yanndroid:",
+    "- entirely themed with OneUI",
+    "- some optimizations for api 30+",
+    "- cleanup of unnecessary classes and resources",
+    "- design features (from OneUI)",
+    "- bug fixes",
+    "",
+    "Changelog - Corsicanu:",
     "- device: full rearrange, added manufacturing date, alternate ASV detection, battery health, uptime",
     "- cpufreq: added S21 cpu support (exynos2100/sd888)",
     "- battery: fixed S21 battery health detection + possibly for other new devices running 5.* kernel",

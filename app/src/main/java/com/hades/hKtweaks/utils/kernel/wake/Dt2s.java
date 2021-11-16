@@ -35,22 +35,13 @@ import java.util.List;
  */
 public class Dt2s {
 
-    private static Dt2s sInstance;
-
-    public static Dt2s getInstance() {
-        if (sInstance == null) {
-            sInstance = new Dt2s();
-        }
-        return sInstance;
-    }
-
     private static final String DT2S = "/sys/android_touch2/doubletap2sleep";
     private static final String SCREEN_SLEEP_OPTIONS = "/sys/devices/f9924000.i2c/i2c-2/2-0020/input/input2/screen_sleep_options";
     private static final String WIDTH = "/sys/android_touch2/doubletap2sleep_x";
     private static final String HEIGHT = "/sys/android_touch2/doubletap2sleep_y";
-
     private static final HashMap<String, List<Integer>> mFiles = new HashMap<>();
     private static final List<Integer> mGenericMenu = new ArrayList<>();
+    private static Dt2s sInstance;
 
     static {
         mGenericMenu.add(R.string.disabled);
@@ -69,6 +60,13 @@ public class Dt2s {
                 break;
             }
         }
+    }
+
+    public static Dt2s getInstance() {
+        if (sInstance == null) {
+            sInstance = new Dt2s();
+        }
+        return sInstance;
     }
 
     public void setHeight(int value, Context context) {

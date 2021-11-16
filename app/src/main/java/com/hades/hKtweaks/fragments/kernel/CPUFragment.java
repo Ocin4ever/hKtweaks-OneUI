@@ -23,9 +23,10 @@ import android.text.InputType;
 import android.util.SparseArray;
 
 import com.hades.hKtweaks.R;
+import com.hades.hKtweaks.activities.NavigationActivity;
+import com.hades.hKtweaks.activities.tools.profile.ProfileActivity;
 import com.hades.hKtweaks.fragments.ApplyOnBootFragment;
 import com.hades.hKtweaks.fragments.BaseFragment;
-import com.hades.hKtweaks.fragments.DescriptionFragment;
 import com.hades.hKtweaks.fragments.recyclerview.RecyclerViewFragment;
 import com.hades.hKtweaks.utils.Device;
 import com.hades.hKtweaks.utils.Utils;
@@ -34,7 +35,9 @@ import com.hades.hKtweaks.utils.kernel.cpu.CPUBoost;
 import com.hades.hKtweaks.utils.kernel.cpu.CPUFreq;
 import com.hades.hKtweaks.utils.kernel.cpu.Misc;
 import com.hades.hKtweaks.views.dialog.Dialog;
+import com.hades.hKtweaks.views.recyclerview.ApplyOnBootFView;
 import com.hades.hKtweaks.views.recyclerview.CardView;
+import com.hades.hKtweaks.views.recyclerview.DescriptionFView;
 import com.hades.hKtweaks.views.recyclerview.DescriptionView;
 import com.hades.hKtweaks.views.recyclerview.GenericSelectView2;
 import com.hades.hKtweaks.views.recyclerview.RecyclerViewItem;
@@ -52,35 +55,44 @@ import java.util.List;
  */
 public class CPUFragment extends RecyclerViewFragment {
 
+    private final SparseArray<SwitchView> mCoresBig = new SparseArray<>();
+    private final SparseArray<SwitchView> mCoresMid = new SparseArray<>();
+    private final SparseArray<SwitchView> mCoresLITTLE = new SparseArray<>();
+    private final List<GenericSelectView2> mInput = new ArrayList<>();
     private CPUFreq mCPUFreq;
     private CPUBoost mCPUBoost;
-
     private XYGraphView mCPUUsageBig;
     private SelectView mCPUMaxBig;
     private SelectView mCPUMinBig;
     private SelectView mCPUMaxScreenOffBig;
     private SelectView mCPUGovernorBig;
-
     private XYGraphView mCPUUsageMid;
     private SelectView mCPUMaxMid;
     private SelectView mCPUMinMid;
     private SelectView mCPUMaxScreenOffMid;
     private SelectView mCPUGovernorMid;
-
     private XYGraphView mCPUUsageLITTLE;
     private SelectView mCPUMaxLITTLE;
     private SelectView mCPUMinLITTLE;
     private SelectView mCPUMaxScreenOffLITTLE;
     private SelectView mCPUGovernorLITTLE;
-
-    private SparseArray<SwitchView> mCoresBig = new SparseArray<>();
-    private SparseArray<SwitchView> mCoresMid = new SparseArray<>();
-    private SparseArray<SwitchView> mCoresLITTLE = new SparseArray<>();
-
     private PathReaderFragment mGovernorTunableFragment;
     private Dialog mGovernorTunableErrorDialog;
-
-    private List<GenericSelectView2> mInput = new ArrayList<>();
+    private float[] mCPUUsages;
+    private boolean[] mCPUStates;
+    private int[] mCPUFreqs;
+    private int mCPUMaxFreqBig;
+    private int mCPUMinFreqBig;
+    private int mCPUMaxScreenOffFreqBig;
+    private String mCPUGovernorStrBig;
+    private int mCPUMaxFreqMid;
+    private int mCPUMinFreqMid;
+    private int mCPUMaxScreenOffFreqMid;
+    private String mCPUGovernorStrMid;
+    private int mCPUMaxFreqLITTLE;
+    private int mCPUMinFreqLITTLE;
+    private int mCPUMaxScreenOffFreqLITTLE;
+    private String mCPUGovernorStrLITTLE;
 
     @Override
     protected BaseFragment getForegroundFragment() {
@@ -93,17 +105,22 @@ public class CPUFragment extends RecyclerViewFragment {
 
         mCPUFreq = CPUFreq.getInstance(getActivity());
         mCPUBoost = CPUBoost.getInstance();
-        addViewPagerFragment(ApplyOnBootFragment.newInstance(this));
-        addViewPagerFragment(DescriptionFragment.newInstance(getString(mCPUFreq.getCpuCount() > 1 ?
-                R.string.cores : R.string.cores_singular, mCPUFreq.getCpuCount()), Device.getBoard()));
 
         if (mGovernorTunableErrorDialog != null) {
             mGovernorTunableErrorDialog.show();
         }
+
+        if (getActivity() instanceof NavigationActivity)
+            setToolbarTitle(getString(mCPUFreq.getCpuCount() > 1 ? R.string.cores : R.string.cores_singular, mCPUFreq.getCpuCount()), Device.getBoard());
     }
 
     @Override
     protected void addItems(List<RecyclerViewItem> items) {
+        if (!(getActivity() instanceof ProfileActivity))
+            items.add(new ApplyOnBootFView(getActivity(), this));
+        if (!(getActivity() instanceof NavigationActivity))
+            items.add(new DescriptionFView(getActivity(), getString(mCPUFreq.getCpuCount() > 1 ? R.string.cores : R.string.cores_singular, mCPUFreq.getCpuCount()), Device.getBoard()));
+
         mInput.clear();
 
         freqInit(items);
@@ -179,7 +196,7 @@ public class CPUFragment extends RecyclerViewFragment {
                 bigCores.get(bigCores.size() - 1), getActivity()));
         bigFrequenciesCard.addItem(mCPUMinBig);
 
-        if(mCPUFreq.hasBigAllCoresMaxFreq()) {
+        if (mCPUFreq.hasBigAllCoresMaxFreq()) {
             SwitchView bigAll = new SwitchView();
             bigAll.setTitle(getString(R.string.big_cores_max_title));
             bigAll.setSummary(getString(R.string.big_cores_max_summary));
@@ -432,7 +449,7 @@ public class CPUFragment extends RecyclerViewFragment {
     }
 
     private void cpuFingerprintBoostInit(List<RecyclerViewItem> items) {
-        CardView fpbCard= new CardView(getActivity());
+        CardView fpbCard = new CardView(getActivity());
         fpbCard.setTitle(getString(R.string.fingerprint_boost));
 
         DescriptionView fpbDesc = new DescriptionView();
@@ -704,22 +721,6 @@ public class CPUFragment extends RecyclerViewFragment {
 
         items.add(touchBoost);
     }
-
-    private float[] mCPUUsages;
-    private boolean[] mCPUStates;
-    private int[] mCPUFreqs;
-    private int mCPUMaxFreqBig;
-    private int mCPUMinFreqBig;
-    private int mCPUMaxScreenOffFreqBig;
-    private String mCPUGovernorStrBig;
-    private int mCPUMaxFreqMid;
-    private int mCPUMinFreqMid;
-    private int mCPUMaxScreenOffFreqMid;
-    private String mCPUGovernorStrMid;
-    private int mCPUMaxFreqLITTLE;
-    private int mCPUMinFreqLITTLE;
-    private int mCPUMaxScreenOffFreqLITTLE;
-    private String mCPUGovernorStrLITTLE;
 
     @Override
     protected void refreshThread() {

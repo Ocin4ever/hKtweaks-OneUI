@@ -24,16 +24,16 @@ import android.content.DialogInterface;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.util.TypedValue;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+
+import androidx.appcompat.widget.AppCompatEditText;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.appcompat.widget.AppCompatEditText;
-import android.util.TypedValue;
-import android.view.Gravity;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 
 import com.bumptech.glide.Glide;
 import com.hades.hKtweaks.R;
@@ -43,12 +43,6 @@ import com.hades.hKtweaks.views.dialog.Dialog;
  * Created by willi on 16.04.16.
  */
 public class ViewUtils {
-
-    public static int getTextSecondaryColor(Context context) {
-        TypedValue value = new TypedValue();
-        context.getTheme().resolveAttribute(android.R.attr.textColorSecondary, value, true);
-        return value.data;
-    }
 
     public static Drawable getSelectableBackground(Context context) {
         TypedArray typedArray = context.obtainStyledAttributes(new int[]{R.attr.selectableItemBackground});
@@ -92,23 +86,6 @@ public class ViewUtils {
         TypedValue value = new TypedValue();
         context.getTheme().resolveAttribute(R.attr.colorAccent, value, true);
         return value.data;
-    }
-
-    public interface OnDialogEditTextListener {
-        void onClick(String text);
-    }
-
-    public interface onDialogEditTextsListener {
-        void onClick(String text, String text2);
-    }
-
-    public static Dialog dialogDonate(final Context context) {
-        return new Dialog(context).setTitle(context.getString(R.string.donate))
-                .setMessage(context.getString(R.string.donate_summary))
-                .setNegativeButton(context.getString(R.string.donate_nope), (dialog, which) -> {
-                })
-                .setPositiveButton(context.getString(R.string.donate_yes), (dialog, which)
-                        -> Utils.launchUrl("https://play.google.com/store/apps/details?id=com.grarak.kerneladiutordonate", context));
     }
 
     public static Dialog dialogEditTexts(String text, String text2, String hint, String hint2,
@@ -177,7 +154,6 @@ public class ViewUtils {
         layout.setPadding(padding, padding, padding, padding);
 
         final AppCompatEditText editText = new AppCompatEditText(context);
-        editText.setGravity(Gravity.CENTER);
         editText.setLayoutParams(new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         if (text != null) {
@@ -248,6 +224,14 @@ public class ViewUtils {
 
     private static Bitmap resizeBitmap(Bitmap bitmap, int newWidth, int newHeight) {
         return Bitmap.createScaledBitmap(bitmap, newWidth, newHeight, false);
+    }
+
+    public interface OnDialogEditTextListener {
+        void onClick(String text);
+    }
+
+    public interface onDialogEditTextsListener {
+        void onClick(String text, String text2);
     }
 
 }

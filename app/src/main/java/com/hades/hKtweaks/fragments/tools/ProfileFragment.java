@@ -20,27 +20,26 @@
 package com.hades.hKtweaks.fragments.tools;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Environment;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import com.google.android.material.snackbar.Snackbar;
-import androidx.core.content.ContextCompat;
-import androidx.core.graphics.drawable.DrawableCompat;
-import androidx.appcompat.widget.SwitchCompat;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.view.menu.MenuBuilder;
+
+import com.google.android.material.snackbar.Snackbar;
 import com.hades.hKtweaks.R;
 import com.hades.hKtweaks.activities.FilePickerActivity;
 import com.hades.hKtweaks.activities.NavigationActivity;
@@ -51,9 +50,7 @@ import com.hades.hKtweaks.database.tools.profiles.ExportProfile;
 import com.hades.hKtweaks.database.tools.profiles.ImportProfile;
 import com.hades.hKtweaks.database.tools.profiles.Profiles;
 import com.hades.hKtweaks.fragments.BaseFragment;
-import com.hades.hKtweaks.fragments.DescriptionFragment;
 import com.hades.hKtweaks.fragments.recyclerview.RecyclerViewFragment;
-import com.hades.hKtweaks.fragments.SwitcherFragment;
 import com.hades.hKtweaks.services.boot.ApplyOnBoot;
 import com.hades.hKtweaks.services.profile.Tile;
 import com.hades.hKtweaks.services.profile.Widget;
@@ -65,8 +62,10 @@ import com.hades.hKtweaks.utils.root.Control;
 import com.hades.hKtweaks.utils.root.RootUtils;
 import com.hades.hKtweaks.views.dialog.Dialog;
 import com.hades.hKtweaks.views.recyclerview.CardView;
+import com.hades.hKtweaks.views.recyclerview.DescriptionFView;
 import com.hades.hKtweaks.views.recyclerview.DescriptionView;
 import com.hades.hKtweaks.views.recyclerview.RecyclerViewItem;
+import com.hades.hKtweaks.views.recyclerview.SwitcherFView;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -78,18 +77,8 @@ import java.util.List;
 public class ProfileFragment extends RecyclerViewFragment {
 
     private static final String TASKER_KEY = "tasker";
-
-    public static ProfileFragment newInstance(boolean tasker) {
-        Bundle args = new Bundle();
-        args.putBoolean(TASKER_KEY, tasker);
-        ProfileFragment fragment = new ProfileFragment();
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     private boolean mTaskerMode;
     private Profiles mProfiles;
-
     private LinkedHashMap<String, String> mCommands;
     private Dialog mDeleteDialog;
     private Dialog mApplyDialog;
@@ -98,8 +87,15 @@ public class ProfileFragment extends RecyclerViewFragment {
     private Dialog mDonateDialog;
     private ImportProfile mImportProfile;
     private Dialog mSelectDialog;
-
     private DetailsFragment mDetailsFragment;
+
+    public static ProfileFragment newInstance(boolean tasker) {
+        Bundle args = new Bundle();
+        args.putBoolean(TASKER_KEY, tasker);
+        ProfileFragment fragment = new ProfileFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -110,26 +106,8 @@ public class ProfileFragment extends RecyclerViewFragment {
     }
 
     @Override
-    protected boolean showViewPager() {
-        return true;
-    }
-
-    @Override
-    protected boolean showTopFab() {
-        return !mTaskerMode;
-    }
-
-    @Override
     protected BaseFragment getForegroundFragment() {
         return mTaskerMode ? null : (mDetailsFragment = new DetailsFragment());
-    }
-
-    @Override
-    protected Drawable getTopFabDrawable() {
-        Drawable drawable = DrawableCompat.wrap(
-                ContextCompat.getDrawable(getActivity(), R.drawable.ic_add));
-        DrawableCompat.setTint(drawable, Color.WHITE);
-        return drawable;
     }
 
     @Override
@@ -146,22 +124,26 @@ public class ProfileFragment extends RecyclerViewFragment {
     @Override
     protected void init() {
         super.init();
-
-        if (mTaskerMode) {
-            addViewPagerFragment(new TaskerToastFragment());
-        } else {
-            addViewPagerFragment(DescriptionFragment.newInstance(getString(R.string.profile_tasker),
-                    getString(R.string.profile_tasker_summary)));
-            if (Utils.hasCMSDK()) {
-                addViewPagerFragment(SwitcherFragment.newInstance(getString(R.string.profile_tile),
-                        getString(R.string.profile_tile_summary),
-                        AppSettings.isProfileTile(getActivity()),
-                        (compoundButton, b) -> {
-                            AppSettings.saveProfileTile(b, getActivity());
-                            Tile.publishProfileTile(mProfiles.getAllProfiles(), getActivity());
-                        }));
-            }
-        }
+        if (!mTaskerMode) showToolbarActionButton(item -> {
+            mOptionsDialog = new Dialog(getActivity()).setItems(
+                    getResources().getStringArray(R.array.profile_options),
+                    (dialogInterface, i) -> {
+                        switch (i) {
+                            case 0:
+                                startActivityForResult(createProfileActivityIntent(), 0);
+                                break;
+                            case 1:
+                                Intent intent = new Intent(getActivity(), FilePickerActivity.class);
+                                intent.putExtra(FilePickerActivity.PATH_INTENT,
+                                        Environment.getExternalStorageDirectory().toString());
+                                intent.putExtra(FilePickerActivity.EXTENSION_INTENT, ".json");
+                                startActivityForResult(intent, 1);
+                                break;
+                        }
+                    })
+                    .setOnDismissListener(dialogInterface -> mOptionsDialog = null);
+            mOptionsDialog.show();
+        }, R.id.menu_add);
 
         if (mCommands != null) {
             create(mCommands);
@@ -202,6 +184,23 @@ public class ProfileFragment extends RecyclerViewFragment {
     protected void load(List<RecyclerViewItem> items) {
         super.load(items);
 
+        if (mTaskerMode) {
+            items.add(new SwitcherFView("", getString(R.string.profile_tasker_toast), AppSettings.isShowTaskerToast(getActivity()), (buttonView, isChecked) -> AppSettings.saveShowTaskerToast(isChecked, getActivity())));
+        } else {
+            items.add(new DescriptionFView(getActivity(), getString(R.string.profile_tasker),
+                    getString(R.string.profile_tasker_summary)));
+
+            if (Utils.hasCMSDK()) {
+                items.add(new SwitcherFView(getString(R.string.profile_tile),
+                        getString(R.string.profile_tile_summary),
+                        AppSettings.isProfileTile(getActivity()),
+                        (compoundButton, b) -> {
+                            AppSettings.saveProfileTile(b, getActivity());
+                            Tile.publishProfileTile(mProfiles.getAllProfiles(), getActivity());
+                        }));
+            }
+        }
+
         mProfiles = new Profiles(getActivity());
         List<Profiles.ProfileItem> profileItems = mProfiles.getAllProfiles();
         if (mTaskerMode && profileItems.size() == 0) {
@@ -212,14 +211,19 @@ public class ProfileFragment extends RecyclerViewFragment {
             final int position = i;
             final CardView cardView = new CardView(getActivity());
             cardView.setOnMenuListener((cardView1, popupMenu) -> {
-                Menu menu = popupMenu.getMenu();
+
+                @SuppressLint("RestrictedApi") Menu menu = new MenuBuilder(getContext());
                 menu.add(Menu.NONE, 0, Menu.NONE, getString(R.string.append));
                 menu.add(Menu.NONE, 1, Menu.NONE, getString(R.string.edit));
                 menu.add(Menu.NONE, 2, Menu.NONE, getString(R.string.details));
-                final MenuItem onBoot = menu.add(Menu.NONE, 3, Menu.NONE, getString(R.string.on_boot)).setCheckable(true);
-                onBoot.setChecked(mProfiles.getAllProfiles().get(position).isOnBootEnabled());
+                final MenuItem onBoot = menu.add(Menu.NONE, 3, Menu.NONE, getString(R.string.on_boot) + ": " + mProfiles.getAllProfiles().get(position).isOnBootEnabled());
+                onBoot.setCheckable(true).setChecked(mProfiles.getAllProfiles().get(position).isOnBootEnabled());
                 menu.add(Menu.NONE, 4, Menu.NONE, getString(R.string.export));
                 menu.add(Menu.NONE, 5, Menu.NONE, getString(R.string.delete));
+
+                ArrayList<MenuItem> menuItems = new ArrayList<>();
+                for (int j = 0; j < menu.size(); j++) menuItems.add(menu.getItem(j));
+                popupMenu.inflate(menuItems);
 
                 popupMenu.setOnMenuItemClickListener(item -> {
                     List<Profiles.ProfileItem> items1 = mProfiles.getAllProfiles();
@@ -249,6 +253,11 @@ public class ProfileFragment extends RecyclerViewFragment {
                         case 3:
                             onBoot.setChecked(!onBoot.isChecked());
                             items1.get(position).enableOnBoot(onBoot.isChecked());
+
+                            //todo: new popupmenu
+                            onBoot.setTitle(getString(R.string.on_boot) + ": " + onBoot.isChecked());
+                            Toast.makeText(getContext(), getString(R.string.on_boot) + ": " + onBoot.isChecked(), Toast.LENGTH_SHORT).show();
+
                             mProfiles.commit();
                             break;
                         case 4:
@@ -268,7 +277,7 @@ public class ProfileFragment extends RecyclerViewFragment {
                             mDeleteDialog.show();
                             break;
                     }
-                    return false;
+                    popupMenu.dismiss();
                 });
             });
 
@@ -330,30 +339,6 @@ public class ProfileFragment extends RecyclerViewFragment {
             appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.profile_list);
             Tile.publishProfileTile(profileItems, getActivity());
         }
-    }
-
-    @Override
-    protected void onTopFabClick() {
-        super.onTopFabClick();
-
-        mOptionsDialog = new Dialog(getActivity()).setItems(
-                getResources().getStringArray(R.array.profile_options),
-                (dialogInterface, i) -> {
-                    switch (i) {
-                        case 0:
-                            startActivityForResult(createProfileActivityIntent(), 0);
-                            break;
-                        case 1:
-                            Intent intent = new Intent(getActivity(), FilePickerActivity.class);
-                            intent.putExtra(FilePickerActivity.PATH_INTENT,
-                                    Environment.getExternalStorageDirectory().toString());
-                            intent.putExtra(FilePickerActivity.EXTENSION_INTENT, ".json");
-                            startActivityForResult(intent, 1);
-                            break;
-                    }
-                })
-                .setOnDismissListener(dialogInterface -> mOptionsDialog = null);
-        mOptionsDialog.show();
     }
 
     private Intent createProfileActivityIntent() {
@@ -553,23 +538,6 @@ public class ProfileFragment extends RecyclerViewFragment {
             if (mCodeText != null) {
                 mCodeText.setText(commandsText.toString());
             }
-        }
-    }
-
-    public static class TaskerToastFragment extends BaseFragment {
-        @Nullable
-        @Override
-        public View onCreateView(@NonNull LayoutInflater inflater,
-                                 @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_apply_on_boot, container, false);
-
-            ((TextView) rootView.findViewById(R.id.title)).setText(getString(R.string.profile_tasker_toast));
-            SwitchCompat switchCompat = rootView.findViewById(R.id.switcher);
-            switchCompat.setChecked(AppSettings.isShowTaskerToast(getActivity()));
-            switchCompat.setOnCheckedChangeListener((compoundButton, b)
-                    -> AppSettings.saveShowTaskerToast(b, getActivity()));
-
-            return rootView;
         }
     }
 }

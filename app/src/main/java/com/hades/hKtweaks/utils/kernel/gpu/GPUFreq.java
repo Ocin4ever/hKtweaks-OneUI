@@ -37,28 +37,16 @@ import java.util.List;
  */
 public class GPUFreq {
 
-    private static GPUFreq sIOInstance;
-
-    public static GPUFreq getInstance() {
-        if (sIOInstance == null) {
-            sIOInstance = new GPUFreq();
-        }
-        return sIOInstance;
-    }
-
     private static final String GENERIC_GOVERNORS = "performance powersave ondemand simple conservative";
-
     private static final String CUR_KGSL2D0_QCOM_FREQ = "/sys/devices/platform/kgsl-2d0.0/kgsl/kgsl-2d0/gpuclk";
     private static final String MAX_KGSL2D0_QCOM_FREQ = "/sys/devices/platform/kgsl-2d0.0/kgsl/kgsl-2d0/max_gpuclk";
     private static final String AVAILABLE_KGSL2D0_QCOM_FREQS = "/sys/devices/platform/kgsl-2d0.0/kgsl/kgsl-2d0/gpu_available_frequencies";
     private static final String SCALING_KGSL2D0_QCOM_GOVERNOR = "/sys/devices/platform/kgsl-2d0.0/kgsl/kgsl-2d0/pwrscale/trustzone/governor";
-
     private static final String KGSL3D0_GPUBUSY = "/sys/devices/platform/kgsl-3d0.0/kgsl/kgsl-3d0/gpubusy";
     private static final String CUR_KGSL3D0_FREQ = "/sys/devices/platform/kgsl-3d0.0/kgsl/kgsl-3d0/gpuclk";
     private static final String MAX_KGSL3D0_FREQ = "/sys/devices/platform/kgsl-3d0.0/kgsl/kgsl-3d0/max_gpuclk";
     private static final String AVAILABLE_KGSL3D0_FREQS = "/sys/devices/platform/kgsl-3d0.0/kgsl/kgsl-3d0/gpu_available_frequencies";
     private static final String SCALING_KGSL3D0_GOVERNOR = "/sys/class/kgsl/kgsl-3d0/pwrscale/trustzone/governor";
-
     private static final String KGSL3D0_DEVFREQ_GPUBUSY = "/sys/class/kgsl/kgsl-3d0/gpubusy";
     private static final String CUR_KGSL3D0_DEVFREQ_FREQ = "/sys/class/kgsl/kgsl-3d0/gpuclk";
     private static final String MAX_KGSL3D0_DEVFREQ_FREQ = "/sys/class/kgsl/kgsl-3d0/max_gpuclk";
@@ -66,26 +54,23 @@ public class GPUFreq {
     private static final String AVAILABLE_KGSL3D0_DEVFREQ_FREQS = "/sys/class/kgsl/kgsl-3d0/gpu_available_frequencies";
     private static final String SCALING_KGSL3D0_DEVFREQ_GOVERNOR = "/sys/class/kgsl/kgsl-3d0/devfreq/governor";
     private static final String AVAILABLE_KGSL3D0_DEVFREQ_GOVERNORS = "/sys/class/kgsl/kgsl-3d0/devfreq/available_governors";
-
     private static final String CUR_OMAP_FREQ = "/sys/devices/platform/omap/pvrsrvkm.0/sgxfreq/frequency";
     private static final String MAX_OMAP_FREQ = "/sys/devices/platform/omap/pvrsrvkm.0/sgxfreq/frequency_limit";
     private static final String AVAILABLE_OMAP_FREQS = "/sys/devices/platform/omap/pvrsrvkm.0/sgxfreq/frequency_list";
     private static final String SCALING_OMAP_GOVERNOR = "/sys/devices/platform/omap/pvrsrvkm.0/sgxfreq/governor";
     private static final String AVAILABLE_OMAP_GOVERNORS = "/sys/devices/platform/omap/pvrsrvkm.0/sgxfreq/governor_list";
     private static final String TUNABLES_OMAP = "/sys/devices/platform/omap/pvrsrvkm.0/sgxfreq/%s";
-
     private static final String CUR_TEGRA_FREQ = "/sys/kernel/tegra_gpu/gpu_rate";
     private static final String MAX_TEGRA_FREQ = "/sys/kernel/tegra_gpu/gpu_cap_rate";
     private static final String MIN_TEGRA_FREQ = "/sys/kernel/tegra_gpu/gpu_floor_rate";
     private static final String AVAILABLE_TEGRA_FREQS = "/sys/kernel/tegra_gpu/gpu_available_rates";
-
     private static final String CUR_POWERVR_FREQ = "/sys/devices/platform/dfrgx/devfreq/dfrgx/cur_freq";
     private static final String MAX_POWERVR_FREQ = "/sys/devices/platform/dfrgx/devfreq/dfrgx/max_freq";
     private static final String MIN_POWERVR_FREQ = "/sys/devices/platform/dfrgx/devfreq/dfrgx/min_freq";
     private static final String AVAILABLE_POWERVR_FREQS = "/sys/devices/platform/dfrgx/devfreq/dfrgx/available_frequencies";
     private static final String SCALING_POWERVR_GOVERNOR = "/sys/devices/platform/dfrgx/devfreq/dfrgx/governor";
     private static final String AVAILABLE_POWERVR_GOVERNORS = "/sys/devices/platform/dfrgx/devfreq/dfrgx/available_governors";
-
+    private static GPUFreq sIOInstance;
     private final List<String> mGpuBusys = new ArrayList<>();
     private final HashMap<String, Integer> mCurrentFreqs = new HashMap<>();
     private final HashMap<String, Integer> mMaxFreqs = new HashMap<>();
@@ -94,6 +79,19 @@ public class GPUFreq {
     private final List<String> mScalingGovernors = new ArrayList<>();
     private final List<String> mAvailableGovernors = new ArrayList<>();
     private final List<String> mTunables = new ArrayList<>();
+    private String BUSY;
+    private String CUR_FREQ;
+    private int CUR_FREQ_OFFSET;
+    private List<Integer> AVAILABLE_FREQS;
+    private String MAX_FREQ;
+    private int MAX_FREQ_OFFSET;
+    private String MIN_FREQ;
+    private int MIN_FREQ_OFFSET;
+    private String GOVERNOR;
+    private String[] AVAILABLE_GOVERNORS;
+    private int AVAILABLE_GOVERNORS_OFFSET;
+    private String TUNABLES;
+    private Integer[] AVAILABLE_2D_FREQS;
 
     {
         mGpuBusys.add(KGSL3D0_GPUBUSY);
@@ -132,21 +130,6 @@ public class GPUFreq {
 
         mTunables.add(TUNABLES_OMAP);
     }
-
-    private String BUSY;
-    private String CUR_FREQ;
-    private int CUR_FREQ_OFFSET;
-    private List<Integer> AVAILABLE_FREQS;
-    private String MAX_FREQ;
-    private int MAX_FREQ_OFFSET;
-    private String MIN_FREQ;
-    private int MIN_FREQ_OFFSET;
-    private String GOVERNOR;
-    private String[] AVAILABLE_GOVERNORS;
-    private int AVAILABLE_GOVERNORS_OFFSET;
-    private String TUNABLES;
-
-    private Integer[] AVAILABLE_2D_FREQS;
 
     private GPUFreq() {
         for (String file : mGpuBusys) {
@@ -218,6 +201,13 @@ public class GPUFreq {
                 break;
             }
         }
+    }
+
+    public static GPUFreq getInstance() {
+        if (sIOInstance == null) {
+            sIOInstance = new GPUFreq();
+        }
+        return sIOInstance;
     }
 
     public String getTunables(String governor) {

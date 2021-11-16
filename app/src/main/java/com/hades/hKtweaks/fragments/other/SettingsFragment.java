@@ -20,75 +20,63 @@
 package com.hades.hKtweaks.fragments.other;
 
 import android.annotation.SuppressLint;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Messenger;
-import androidx.fragment.app.Fragment;
-import androidx.core.content.ContextCompat;
-import androidx.core.hardware.fingerprint.FingerprintManagerCompat;
-import androidx.appcompat.app.AlertDialog;
-import androidx.preference.Preference;
-import androidx.preference.PreferenceCategory;
-import androidx.preference.PreferenceFragmentCompat;
-import androidx.preference.PreferenceGroupAdapter;
-import androidx.preference.PreferenceScreen;
-import androidx.preference.PreferenceViewHolder;
-import androidx.preference.SwitchPreferenceCompat;
-import androidx.appcompat.view.ContextThemeWrapper;
-import androidx.appcompat.widget.AppCompatEditText;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.text.InputType;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.util.SeslMisc;
+import androidx.appcompat.widget.AppCompatEditText;
+import androidx.core.hardware.fingerprint.FingerprintManagerCompat;
+import androidx.fragment.app.Fragment;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.hades.hKtweaks.R;
-import com.hades.hKtweaks.activities.BannerResizerActivity;
-import com.hades.hKtweaks.activities.MainActivity;
 import com.hades.hKtweaks.activities.NavigationActivity;
+import com.hades.hKtweaks.activities.SplashActivity;
 import com.hades.hKtweaks.services.boot.ApplyOnBootService;
 import com.hades.hKtweaks.utils.AppSettings;
-import com.hades.hKtweaks.utils.Themes;
-import com.hades.hKtweaks.utils.AppUpdaterTask;
 import com.hades.hKtweaks.utils.Utils;
-import com.hades.hKtweaks.utils.ViewUtils;
 import com.hades.hKtweaks.utils.root.RootUtils;
-import com.hades.hKtweaks.views.BorderCircleView;
 import com.hades.hKtweaks.views.dialog.Dialog;
 
 import java.util.ArrayList;
-import java.util.List;
+
+import de.dlyt.yanndroid.oneui.dialog.AlertDialog;
+import de.dlyt.yanndroid.oneui.dialog.ProgressDialog;
+import de.dlyt.yanndroid.oneui.layout.PreferenceFragment;
+import de.dlyt.yanndroid.oneui.preference.ColorPickerPreference;
+import de.dlyt.yanndroid.oneui.preference.HorizontalRadioPreference;
+import de.dlyt.yanndroid.oneui.preference.Preference;
+import de.dlyt.yanndroid.oneui.preference.PreferenceCategory;
+import de.dlyt.yanndroid.oneui.preference.PreferenceGroupAdapter;
+import de.dlyt.yanndroid.oneui.preference.PreferenceScreen;
+import de.dlyt.yanndroid.oneui.preference.PreferenceViewHolder;
+import de.dlyt.yanndroid.oneui.preference.SwitchPreference;
+import de.dlyt.yanndroid.oneui.utils.ThemeUtil;
+import de.dlyt.yanndroid.oneui.view.RecyclerView;
 
 /**
  * Created by willi on 13.08.16.
  */
 
-public class SettingsFragment extends PreferenceFragmentCompat implements
+public class SettingsFragment extends PreferenceFragment implements
         Preference.OnPreferenceChangeListener, Preference.OnPreferenceClickListener {
 
     private static final String KEY_RESET_DATA = "reset_data";
-    private static final String KEY_UPDATE_NOTIFICATION = "app_update_notif";
-    private static final String KEY_CHECK_UPDATE = "check_update";
     private static final String KEY_FORCE_ENGLISH = "forceenglish";
-    //private static final String KEY_USER_INTERFACE = "user_interface";
-    private static final String KEY_DARK_THEME = "darktheme";
-    private static final String KEY_DARK_THEME_MODE = "darkthememode";
-    //private static final String KEY_MATERIAL_ICON = "materialicon";
-    private static final String KEY_BANNER_RESIZER = "banner_resizer";
-    private static final String KEY_HIDE_BANNER = "hide_banner";
-    private static final String KEY_PRIMARY_COLOR = "primary_color";
-    private static final String KEY_ACCENT_COLOR = "accent_color";
-    private static final String KEY_SECTIONS_ICON = "section_icons";
     private static final String KEY_APPLY_ON_BOOT_TEST = "applyonboottest";
     private static final String KEY_DEBUGGING_CATEGORY = "debugging_category";
     private static final String KEY_LOGCAT = "logcat";
@@ -104,7 +92,6 @@ public class SettingsFragment extends PreferenceFragmentCompat implements
 
     private String mOldPassword;
     private String mDeletePassword;
-    private int mColorSelection;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -113,12 +100,9 @@ public class SettingsFragment extends PreferenceFragmentCompat implements
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = super.onCreateView(inflater, container, savedInstanceState);
-        rootView.setPadding(rootView.getPaddingLeft(),
-                Math.round(ViewUtils.getActionBarSize(getActivity())),
-                rootView.getPaddingRight(), rootView.getPaddingBottom());
-        return rootView;
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        getView().setBackgroundColor(getResources().getColor(R.color.item_background_color));
     }
 
     @Override
@@ -132,34 +116,19 @@ public class SettingsFragment extends PreferenceFragmentCompat implements
         }
     }
 
+    @SuppressLint("RestrictedApi")
     @Override
     public void onCreatePreferences(Bundle bundle, String s) {
         addPreferencesFromResource(R.xml.settings);
 
-        SwitchPreferenceCompat forceEnglish = (SwitchPreferenceCompat) findPreference(KEY_FORCE_ENGLISH);
+        SwitchPreference forceEnglish = (SwitchPreference) findPreference(KEY_FORCE_ENGLISH);
         if (Resources.getSystem().getConfiguration().locale.getLanguage().startsWith("en")) {
             getPreferenceScreen().removePreference(forceEnglish);
         } else {
             forceEnglish.setOnPreferenceChangeListener(this);
         }
-/*
-        if (Utils.hideStartActivity()) {
-            ((PreferenceCategory) findPreference(KEY_USER_INTERFACE))
-                    .removePreference(findPreference(KEY_MATERIAL_ICON));
-        } else {
-            findPreference(KEY_MATERIAL_ICON).setOnPreferenceChangeListener(this);
-        }
-*/
+
         findPreference(KEY_RESET_DATA).setOnPreferenceClickListener(this);
-        findPreference(KEY_UPDATE_NOTIFICATION).setOnPreferenceChangeListener(this);
-        findPreference(KEY_CHECK_UPDATE).setOnPreferenceClickListener(this);
-        findPreference(KEY_DARK_THEME).setOnPreferenceChangeListener(this);
-        findPreference(KEY_DARK_THEME_MODE).setOnPreferenceChangeListener(this);
-        findPreference(KEY_BANNER_RESIZER).setOnPreferenceClickListener(this);
-        findPreference(KEY_HIDE_BANNER).setOnPreferenceChangeListener(this);
-        findPreference(KEY_PRIMARY_COLOR).setOnPreferenceClickListener(this);
-        findPreference(KEY_ACCENT_COLOR).setOnPreferenceClickListener(this);
-        findPreference(KEY_SECTIONS_ICON).setOnPreferenceChangeListener(this);
         findPreference(KEY_APPLY_ON_BOOT_TEST).setOnPreferenceClickListener(this);
         findPreference(KEY_LOGCAT).setOnPreferenceClickListener(this);
 
@@ -173,6 +142,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements
         findPreference(KEY_DMESG).setOnPreferenceClickListener(this);
         findPreference(KEY_SET_PASSWORD).setOnPreferenceClickListener(this);
         findPreference(KEY_DELETE_PASSWORD).setOnPreferenceClickListener(this);
+        findPreference(KEY_DELETE_PASSWORD).setEnabled(!AppSettings.getPassword(getActivity()).isEmpty());
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M
                 || !FingerprintManagerCompat.from(getActivity()).isHardwareDetected()) {
@@ -190,80 +160,85 @@ public class SettingsFragment extends PreferenceFragmentCompat implements
             int id = navigationFragment.mId;
 
             if (fragmentClass != null && fragmentClass != SettingsFragment.class) {
-                SwitchPreferenceCompat switchPreference = new SwitchPreferenceCompat(
-                        new ContextThemeWrapper(getActivity(), R.style.Preference_SwitchPreferenceCompat_Material));
-                switchPreference.setSummary(getString(id));
-                switchPreference.setKey(fragmentClass.getSimpleName() + "_enabled");
+                SwitchPreference switchPreference = new SwitchPreference(getContext());
+
+                switchPreference.setTitle(getString(id));
                 switchPreference.setChecked(AppSettings.isFragmentEnabled(fragmentClass, getActivity()));
-                switchPreference.setOnPreferenceChangeListener(this);
-                switchPreference.setPersistent(true);
+                switchPreference.setOnPreferenceChangeListener((var1, var2) -> {
+                    AppSettings.saveBoolean(String.format("%s_enabled", fragmentClass.getSimpleName()), !((SwitchPreference) var1).isChecked(), getContext());
+                    ((NavigationActivity) getActivity()).appendFragments();
+                    return true;
+                });
                 sectionsCategory.addPreference(switchPreference);
             }
         }
+
+
+        int darkMode = ThemeUtil.getDarkMode(getContext());
+
+        HorizontalRadioPreference darkModePref = (HorizontalRadioPreference) findPreference("dark_mode");
+        darkModePref.setOnPreferenceChangeListener(this);
+        darkModePref.setDividerEnabled(false);
+        darkModePref.setTouchEffectEnabled(false);
+        darkModePref.setEnabled(darkMode != ThemeUtil.DARK_MODE_AUTO);
+        darkModePref.setValue(SeslMisc.isLightTheme(getContext()) ? "0" : "1");
+
+        SwitchPreference autoDarkModePref = (SwitchPreference) findPreference("dark_mode_auto");
+        autoDarkModePref.setOnPreferenceChangeListener(this);
+        autoDarkModePref.setChecked(darkMode == ThemeUtil.DARK_MODE_AUTO);
+
+        initThemeColorPicker();
+
     }
+
+    private void initThemeColorPicker() {
+        ColorPickerPreference themeColorPickerPref = (ColorPickerPreference) findPreference("theme_color");
+        ArrayList<Integer> recent_colors = new Gson().fromJson(AppSettings.getString("recent_theme_colors", new Gson().toJson(new int[]{getResources().getColor(R.color.primary_color, getContext().getTheme())}), getContext()), new TypeToken<ArrayList<Integer>>() {
+        }.getType());
+        for (Integer recent_color : recent_colors)
+            themeColorPickerPref.onColorChanged(recent_color);
+
+        themeColorPickerPref.setOnPreferenceChangeListener((var1, var2) -> {
+            Color color = Color.valueOf((Integer) var2);
+
+            recent_colors.add((Integer) var2);
+            AppSettings.saveString("recent_theme_colors", new Gson().toJson(recent_colors), getContext());
+
+            ThemeUtil.setColor((AppCompatActivity) getActivity(), color.red(), color.green(), color.blue());
+            return true;
+        });
+    }
+
 
     @Override
     public boolean onPreferenceChange(Preference preference, Object o) {
         String key = preference.getKey();
         switch (key) {
-            case KEY_UPDATE_NOTIFICATION:
-                if (o instanceof Boolean){
-                    boolean checked = (boolean) o;
-                    AppSettings.saveBoolean("show_update_notif", checked, getActivity());
-                }
-                return true;
             case KEY_FORCE_ENGLISH:
-            case KEY_DARK_THEME:
                 getActivity().finish();
-                Intent intent = new Intent(getActivity(), MainActivity.class);
+                Intent intent = new Intent(getActivity(), SplashActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 intent.putExtra(NavigationActivity.INTENT_SECTION,
                         SettingsFragment.class.getCanonicalName());
                 startActivity(intent);
                 return true;
-            case KEY_DARK_THEME_MODE:
-                getActivity().finish();
-                Intent intent2 = new Intent(getActivity(), MainActivity.class);
-                intent2.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                intent2.putExtra(NavigationActivity.INTENT_SECTION,
-                        SettingsFragment.class.getCanonicalName());
-                startActivity(intent2);
-                return true;
-/*
-            case KEY_MATERIAL_ICON:
-                Utils.setStartActivity(checked, getActivity());
-                return true;
-*/
-            case KEY_HIDE_BANNER:
-                return true;
-            case KEY_SECTIONS_ICON:
-                ((NavigationActivity) getActivity()).appendFragments();
-                return true;
-            default:
-                if (key.endsWith("_enabled")) {
-                    ((NavigationActivity) getActivity()).appendFragments();
-                    return true;
+            case "dark_mode":
+                String currentDarkMode = String.valueOf(ThemeUtil.getDarkMode(getContext()));
+                if (currentDarkMode != o) {
+                    ThemeUtil.setDarkMode((AppCompatActivity) getActivity(), ((String) o).equals("0") ? ThemeUtil.DARK_MODE_DISABLED : ThemeUtil.DARK_MODE_ENABLED);
                 }
-                break;
+                return true;
+            case "dark_mode_auto":
+                HorizontalRadioPreference darkModePref = (HorizontalRadioPreference) findPreference("dark_mode");
+                if ((boolean) o) {
+                    darkModePref.setEnabled(false);
+                    ThemeUtil.setDarkMode((AppCompatActivity) getActivity(), ThemeUtil.DARK_MODE_AUTO);
+                } else {
+                    darkModePref.setEnabled(true);
+                }
+                return true;
         }
         return false;
-    }
-
-    private static class MessengerHandler extends Handler {
-
-        private final Context mContext;
-
-        private MessengerHandler(Context context) {
-            mContext = context;
-        }
-
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            if (msg.arg1 == 1 && mContext != null) {
-                Utils.toast(R.string.nothing_apply, mContext);
-            }
-        }
     }
 
     @Override
@@ -272,20 +247,6 @@ public class SettingsFragment extends PreferenceFragmentCompat implements
         switch (key) {
             case KEY_RESET_DATA:
                 resetDataDialog();
-                return true;
-            case KEY_CHECK_UPDATE:
-                AppUpdaterTask.appCheckDialogAllways(getActivity());
-                return true;
-            case KEY_BANNER_RESIZER:
-                Intent intent = new Intent(getActivity(), BannerResizerActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
-                return true;
-            case KEY_PRIMARY_COLOR:
-                colorDialog(true);
-                return true;
-            case KEY_ACCENT_COLOR:
-                colorDialog(false);
                 return true;
             case KEY_APPLY_ON_BOOT_TEST:
                 if (Utils.isServiceRunning(ApplyOnBootService.class, getActivity())) {
@@ -319,43 +280,15 @@ public class SettingsFragment extends PreferenceFragmentCompat implements
         return false;
     }
 
-    private static class Execute extends AsyncTask<String, Void, Void> {
-        private ProgressDialog mProgressDialog;
-
-        private Execute(Context context) {
-            mProgressDialog = new ProgressDialog(context);
-            mProgressDialog.setMessage(context.getString(R.string.executing));
-            mProgressDialog.setCancelable(false);
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            mProgressDialog.show();
-        }
-
-        @Override
-        protected Void doInBackground(String... params) {
-            RootUtils.runCommand(params[0]);
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            mProgressDialog.dismiss();
-        }
-    }
-
-    private void resetDataDialog(){
-        AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+    private void resetDataDialog() {
+        AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
         alert.setTitle(getString(R.string.reset_data_title));
         alert.setMessage(getString(R.string.reset_data_dialog1));
         alert.setNegativeButton(getString(R.string.cancel), (dialogInterface, i) -> {
         });
         alert.setPositiveButton(getString(R.string.ok), (dialog, id) -> {
-                RootUtils.runCommand("rm -rf /data/.hKtweaks");
-                RootUtils.runCommand("pm clear com.hades.hKtweaks");
+            RootUtils.runCommand("rm -rf /data/.hKtweaks");
+            RootUtils.runCommand("pm clear com.hades.hKtweaks");
         });
         alert.show();
     }
@@ -383,8 +316,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements
         linearLayout.addView(newPassword);
 
         final AppCompatEditText confirmNewPassword = new AppCompatEditText(getActivity());
-        confirmNewPassword.setInputType(InputType.TYPE_CLASS_TEXT
-                | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        confirmNewPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
         confirmNewPassword.setHint(getString(R.string.confirm_new_password));
         linearLayout.addView(confirmNewPassword);
 
@@ -419,6 +351,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements
                     if (mFingerprint != null) {
                         mFingerprint.setEnabled(true);
                     }
+                    findPreference(KEY_DELETE_PASSWORD).setEnabled(true);
                 })
                 .setOnDismissListener(dialogInterface -> mOldPassword = null).show();
     }
@@ -453,121 +386,67 @@ public class SettingsFragment extends PreferenceFragmentCompat implements
                     if (mFingerprint != null) {
                         mFingerprint.setEnabled(false);
                     }
+                    findPreference(KEY_DELETE_PASSWORD).setEnabled(false);
                 })
                 .setOnDismissListener(dialogInterface -> mDeletePassword = null).show();
     }
 
-    private void colorDialog(boolean primaryColor) {
-        mColorSelection = -1;
-        List<String> colors = new ArrayList<>(primaryColor ?
-                Themes.sPrimaryColors : Themes.sAccentColors);
-        String counterPartColor = primaryColor ?
-                Themes.getAccentColor(getActivity()) : Themes.getPrimaryColor(getActivity());
-        String counterPartColorName = counterPartColor.replaceAll("[A-Z].+", "");
-        for (int i = 0; i < colors.size(); i++) {
-            if (colors.get(i).contains(counterPartColorName)) {
-                colors.remove(i);
-                break;
-            }
-        }
-
-        int selection = colors.indexOf(primaryColor ?
-                Themes.getPrimaryColor(getActivity()) : Themes.getAccentColor(getActivity()));
-        LinearLayout linearLayout = new LinearLayout(getActivity());
-        linearLayout.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT));
-        linearLayout.setOrientation(LinearLayout.VERTICAL);
-        int padding = (int) getResources().getDimension(R.dimen.dialog_padding);
-        linearLayout.setPadding(padding, padding, padding, padding);
-
-        final List<BorderCircleView> circles = new ArrayList<>();
-
-        LinearLayout subView = null;
-        for (int i = 0; i < colors.size(); i++) {
-            if (subView == null || i % 5 == 0) {
-                subView = new LinearLayout(getActivity());
-                subView.setLayoutParams(new ViewGroup.LayoutParams(
-                        ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                linearLayout.addView(subView);
-            }
-
-            BorderCircleView circle = new BorderCircleView(getActivity());
-            circle.setChecked(i == selection);
-            circle.setCircleColor(ContextCompat.getColor(getActivity(),
-                    Themes.getColor(colors.get(i), getActivity())));
-            circle.setBorderColor(ContextCompat.getColor(getActivity(),
-                    Themes.getColor(counterPartColor, getActivity())));
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1);
-            int margin = (int) getResources().getDimension(R.dimen.color_dialog_margin);
-            params.setMargins(margin, margin, margin, margin);
-            circle.setLayoutParams(params);
-            circle.setOnClickListener(v -> {
-                for (BorderCircleView borderCircleView : circles) {
-                    if (v == borderCircleView) {
-                        borderCircleView.setChecked(true);
-                        mColorSelection = circles.indexOf(borderCircleView);
-                    } else {
-                        borderCircleView.setChecked(false);
-                    }
-                }
-            });
-
-            circles.add(circle);
-            subView.addView(circle);
-        }
-
-        new Dialog(getActivity()).setView(linearLayout)
-                .setNegativeButton(getString(R.string.cancel), (dialog, which) -> {
-                })
-                .setPositiveButton(getString(R.string.ok), (dialog, which) -> {
-                    if (mColorSelection >= 0) {
-                        if (primaryColor) {
-                            Themes.savePrimaryColor(colors.get(mColorSelection), getActivity());
-                        } else {
-                            Themes.saveAccentColor(colors.get(mColorSelection), getActivity());
-                        }
-                    }
-                    getActivity().finish();
-                    Intent intent = new Intent(getActivity(), MainActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    intent.putExtra(NavigationActivity.INTENT_SECTION,
-                            SettingsFragment.class.getCanonicalName());
-                    startActivity(intent);
-                })
-                .setOnDismissListener(dialog -> mColorSelection = -1).show();
-    }
-
+    @SuppressLint("RestrictedApi")
     @Override
-    protected RecyclerView.Adapter onCreateAdapter(PreferenceScreen preferenceScreen) {
+    public RecyclerView.Adapter onCreateAdapter(PreferenceScreen preferenceScreen) {
         return new PreferenceGroupAdapter(preferenceScreen) {
-            @SuppressLint("RestrictedApi")
             @Override
             public void onBindViewHolder(PreferenceViewHolder holder, int position) {
                 super.onBindViewHolder(holder, position);
-                Preference preference = getItem(position);
-                if (preference instanceof PreferenceCategory)
-                    setZeroPaddingToLayoutChildren(holder.itemView);
-                else {
-                    View iconFrame = holder.itemView.findViewById(R.id.icon_frame);
-                    if (iconFrame != null) {
-                        iconFrame.setVisibility(preference.getIcon() == null ? View.GONE : View.VISIBLE);
-                    }
-                }
+                View icon_frame = holder.itemView.findViewById(R.id.icon_frame);
+                if (icon_frame != null) icon_frame.setVisibility(View.GONE);
             }
         };
     }
-    private void setZeroPaddingToLayoutChildren(View view) {
-        if (!(view instanceof ViewGroup))
-            return;
-        ViewGroup viewGroup = (ViewGroup) view;
-        int childCount = viewGroup.getChildCount();
-        for (int i = 0; i < childCount; i++) {
-            setZeroPaddingToLayoutChildren(viewGroup.getChildAt(i));
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1)
-                viewGroup.setPaddingRelative(0, viewGroup.getPaddingTop(), viewGroup.getPaddingEnd(), viewGroup.getPaddingBottom());
-            else
-                viewGroup.setPadding(0, viewGroup.getPaddingTop(), viewGroup.getPaddingRight(), viewGroup.getPaddingBottom());
+
+    private static class MessengerHandler extends Handler {
+
+        private final Context mContext;
+
+        private MessengerHandler(Context context) {
+            mContext = context;
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if (msg.arg1 == 1 && mContext != null) {
+                Utils.toast(R.string.nothing_apply, mContext);
+            }
+        }
+    }
+
+    private static class Execute extends AsyncTask<String, Void, Void> {
+        private ProgressDialog mProgressDialog;
+
+        private Execute(Context context) {
+            mProgressDialog = new ProgressDialog(context);
+            mProgressDialog.setMessage(context.getString(R.string.executing));
+            mProgressDialog.setCancelable(false);
+            mProgressDialog.getWindow().setGravity(Gravity.CENTER);
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            mProgressDialog.show();
+        }
+
+        @Override
+        protected Void doInBackground(String... params) {
+            RootUtils.runCommand(params[0]);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            mProgressDialog.dismiss();
         }
     }
 

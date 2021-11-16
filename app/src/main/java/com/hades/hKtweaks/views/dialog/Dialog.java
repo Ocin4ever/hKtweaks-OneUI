@@ -19,12 +19,13 @@
  */
 package com.hades.hKtweaks.views.dialog;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.database.Cursor;
 import android.view.View;
 import android.view.WindowManager;
+
+import de.dlyt.yanndroid.oneui.dialog.AlertDialog;
 
 /**
  * Created by willi on 07.11.16.
@@ -99,18 +100,18 @@ public class Dialog extends AlertDialog.Builder {
     }
 
     @Override
-    public Dialog setMultiChoiceItems(int itemsId, boolean[] checkedItems, DialogInterface.OnMultiChoiceClickListener listener){
+    public Dialog setMultiChoiceItems(int itemsId, boolean[] checkedItems, DialogInterface.OnMultiChoiceClickListener listener) {
         return (Dialog) super.setMultiChoiceItems(itemsId, checkedItems, listener);
     }
 
     @Override
-    public Dialog setMultiChoiceItems(Cursor cursor, String isCheckedColumn, String labelColumn, DialogInterface.OnMultiChoiceClickListener listener){
+    public Dialog setMultiChoiceItems(Cursor cursor, String isCheckedColumn, String labelColumn, DialogInterface.OnMultiChoiceClickListener listener) {
         return (Dialog) super.setMultiChoiceItems(cursor, isCheckedColumn, labelColumn, listener);
     }
 
     @Override
     public Dialog
-    setMultiChoiceItems(CharSequence[] items, boolean[] checkedItems, DialogInterface.OnMultiChoiceClickListener listener){
+    setMultiChoiceItems(CharSequence[] items, boolean[] checkedItems, DialogInterface.OnMultiChoiceClickListener listener) {
         return (Dialog) super.setMultiChoiceItems(items, checkedItems, listener);
     }
 

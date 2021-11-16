@@ -37,20 +37,19 @@ import java.util.List;
 public class VM {
 
     private static final String PATH = "/proc/sys/vm";
-    private static List<String> list;
     private static final List<String> COMMON_VM = Arrays.asList("swappiness", "dirty_ratio", "dirty_background_ratio",
             "dirty_expire_centisecs", "dirty_writeback_centisecs", "min_free_kbytes", "oom_kill_allocating_task",
             "overcommit_ratio", "vfs_cache_pressure", "laptop_mode", "extra_free_kbytes");
     private static final List<String> REMOVED_VM = Collections.singletonList("swappiness");
     private static final List<String> ALL_VM = getAllSupportedVm();
-
+    private static List<String> list;
 
     private static List<String> getAllSupportedVm() {
         List<String> listVm = new ArrayList<>();
         listVm.add("swappiness");
 
         File f = new File(PATH);
-        if (f.exists()){
+        if (f.exists()) {
             File[] ficheros = f.listFiles();
             for (File fichero : ficheros) {
                 boolean blocked = false;

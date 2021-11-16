@@ -22,14 +22,15 @@ package com.hades.hKtweaks.views.recyclerview.downloads;
 import android.app.Activity;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import androidx.core.content.ContextCompat;
-import androidx.core.graphics.drawable.DrawableCompat;
 import android.text.method.LinkMovementMethod;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.core.content.ContextCompat;
+import androidx.core.graphics.drawable.DrawableCompat;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.hades.hKtweaks.R;
 import com.hades.hKtweaks.utils.DownloadTask;
 import com.hades.hKtweaks.utils.Utils;
@@ -83,11 +84,11 @@ public class DownloadKernelView extends RecyclerViewItem {
         super.onCreateView(view);
 
         if (mDownloadDrawable == null) {
-            mDownloadDrawable = ContextCompat.getDrawable(view.getContext(), R.drawable.ic_download);
+            mDownloadDrawable = ContextCompat.getDrawable(view.getContext(), R.drawable.ic_samsung_download);
             DrawableCompat.setTint(mDownloadDrawable, Color.WHITE);
         }
         if (mCancelDrawable == null) {
-            mCancelDrawable = ContextCompat.getDrawable(view.getContext(), R.drawable.ic_cancel);
+            mCancelDrawable = ContextCompat.getDrawable(view.getContext(), R.drawable.ic_samsung_close);
             DrawableCompat.setTint(mCancelDrawable, Color.WHITE);
         }
 
@@ -286,10 +287,5 @@ public class DownloadKernelView extends RecyclerViewItem {
         if (mDownloadTask != null) {
             mDownloadTask.cancel();
         }
-    }
-
-    @Override
-    protected boolean cardCompatible() {
-        return false;
     }
 }

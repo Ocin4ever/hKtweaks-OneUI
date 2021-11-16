@@ -33,27 +33,9 @@ import java.util.List;
  */
 public class CPUBoost {
 
-    private static CPUBoost sInstance;
-
-    public static CPUBoost getInstance() {
-        if (sInstance == null) {
-            sInstance = new CPUBoost();
-        }
-        return sInstance;
-    }
-
     private static final String CPU_BOOST = "/sys/module/cpu_boost/parameters";
     private static final String CPU_BOOST_EXYNOS = "/sys/kernel/cpu_input_boost";
-
     private static final List<String> sEnable = new ArrayList<>();
-
-    static {
-        sEnable.add(CPU_BOOST + "/cpu_boost");
-        sEnable.add(CPU_BOOST + "/cpuboost_enable");
-        sEnable.add(CPU_BOOST + "/input_boost_enabled");
-        sEnable.add(CPU_BOOST_EXYNOS + "/enabled");
-    }
-
     private static final String CPU_BOOST_DEBUG_MASK = CPU_BOOST + "/debug_mask";
     private static final String CPU_BOOST_MS = CPU_BOOST + "/boost_ms";
     private static final String CPU_BOOST_SYNC_THRESHOLD = CPU_BOOST + "/sync_threshold";
@@ -63,6 +45,14 @@ public class CPUBoost {
     private static final String CPU_BOOST_HOTPLUG = CPU_BOOST + "/hotplug_boost";
     private static final String CPU_BOOST_EXYNOS_INPUT_MS = CPU_BOOST_EXYNOS + "/ib_duration_ms";
     private static final String CPU_BOOST_EXYNOS_BOOST_FREQ = CPU_BOOST_EXYNOS + "/ib_freqs";
+    private static CPUBoost sInstance;
+
+    static {
+        sEnable.add(CPU_BOOST + "/cpu_boost");
+        sEnable.add(CPU_BOOST + "/cpuboost_enable");
+        sEnable.add(CPU_BOOST + "/input_boost_enabled");
+        sEnable.add(CPU_BOOST_EXYNOS + "/enabled");
+    }
 
     private String ENABLE;
 
@@ -73,6 +63,13 @@ public class CPUBoost {
                 break;
             }
         }
+    }
+
+    public static CPUBoost getInstance() {
+        if (sInstance == null) {
+            sInstance = new CPUBoost();
+        }
+        return sInstance;
     }
 
     public void setCpuBoostExynosInputFreq(String value1, String value2, Context context) {

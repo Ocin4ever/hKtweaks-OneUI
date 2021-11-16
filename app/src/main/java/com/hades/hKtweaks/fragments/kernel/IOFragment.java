@@ -22,10 +22,12 @@ package com.hades.hKtweaks.fragments.kernel;
 import android.text.InputType;
 
 import com.hades.hKtweaks.R;
+import com.hades.hKtweaks.activities.tools.profile.ProfileActivity;
 import com.hades.hKtweaks.fragments.ApplyOnBootFragment;
 import com.hades.hKtweaks.fragments.BaseFragment;
 import com.hades.hKtweaks.fragments.recyclerview.RecyclerViewFragment;
 import com.hades.hKtweaks.utils.kernel.io.IO;
+import com.hades.hKtweaks.views.recyclerview.ApplyOnBootFView;
 import com.hades.hKtweaks.views.recyclerview.CardView;
 import com.hades.hKtweaks.views.recyclerview.DescriptionView;
 import com.hades.hKtweaks.views.recyclerview.GenericSelectView2;
@@ -54,11 +56,13 @@ public class IOFragment extends RecyclerViewFragment {
         super.init();
 
         mIO = IO.getInstance();
-        addViewPagerFragment(ApplyOnBootFragment.newInstance(this));
     }
 
     @Override
     protected void addItems(List<RecyclerViewItem> items) {
+        if (!(getActivity() instanceof ProfileActivity))
+            items.add(new ApplyOnBootFView(getActivity(), this));
+
         storageInit(IO.Storage.Internal, items);
         if (mIO.hasExternal()) {
             storageInit(IO.Storage.External, items);

@@ -20,13 +20,14 @@
 package com.hades.hKtweaks.fragments.statistics;
 
 import com.hades.hKtweaks.R;
-import com.hades.hKtweaks.fragments.DescriptionFragment;
+import com.hades.hKtweaks.activities.NavigationActivity;
 import com.hades.hKtweaks.fragments.recyclerview.RecyclerViewFragment;
 import com.hades.hKtweaks.utils.AppSettings;
-import com.hades.hKtweaks.utils.kernel.battery.Battery;
 import com.hades.hKtweaks.utils.Device;
+import com.hades.hKtweaks.utils.kernel.battery.Battery;
 import com.hades.hKtweaks.utils.kernel.gpu.GPUFreqExynos;
 import com.hades.hKtweaks.views.recyclerview.CardView;
+import com.hades.hKtweaks.views.recyclerview.DescriptionFView;
 import com.hades.hKtweaks.views.recyclerview.DescriptionView;
 import com.hades.hKtweaks.views.recyclerview.RecyclerViewItem;
 
@@ -40,16 +41,21 @@ public class DeviceFragment extends RecyclerViewFragment {
     @Override
     protected void init() {
         super.init();
-
-        String vendor = Device.getVendor();
-        vendor = vendor.substring(0, 1).toUpperCase() + vendor.substring(1);
-
-        addViewPagerFragment(DescriptionFragment.newInstance(vendor + " " + Device.getModel(),
-                Device.getBoard().toUpperCase()));
+        if (getActivity() instanceof NavigationActivity) {
+            String vendor = Device.getVendor();
+            vendor = vendor.substring(0, 1).toUpperCase() + vendor.substring(1);
+            setToolbarTitle(vendor + " " + Device.getModel(), Device.getBoard().toUpperCase());
+        }
     }
 
     @Override
     protected void addItems(List<RecyclerViewItem> items) {
+        if (!(getActivity() instanceof NavigationActivity)) {
+            String vendor = Device.getVendor();
+            vendor = vendor.substring(0, 1).toUpperCase() + vendor.substring(1);
+            items.add(new DescriptionFView(getActivity(), vendor + " " + Device.getModel(), Device.getBoard().toUpperCase()));
+        }
+
         String[][] swInfo = {
                 {getString(R.string.android_version), Device.getVersion()},
                 {getString(R.string.android_api_level), String.valueOf(Device.getSDK())},

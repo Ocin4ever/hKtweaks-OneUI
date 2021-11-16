@@ -21,6 +21,7 @@ package com.hades.hKtweaks.activities.tools.profile;
 
 import android.content.Intent;
 import android.os.Bundle;
+
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
@@ -33,6 +34,8 @@ import com.hades.hKtweaks.services.profile.Tasker;
 
 import java.util.List;
 
+import de.dlyt.yanndroid.oneui.layout.ToolbarLayout;
+
 /**
  * Created by willi on 21.07.16.
  */
@@ -43,9 +46,10 @@ public class ProfileTaskerActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fragments);
 
-        initToolBar();
+        ToolbarLayout toolbarLayout = getToolBarLayout();
+        toolbarLayout.setTitle(getString(R.string.profile_select));
+        toolbarLayout.setNavigationButtonOnClickListener(v -> onBackPressed());
 
-        getSupportActionBar().setTitle(getString(R.string.profile_select));
         getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, getFragment(),
                 "profile_fragment").commit();
     }

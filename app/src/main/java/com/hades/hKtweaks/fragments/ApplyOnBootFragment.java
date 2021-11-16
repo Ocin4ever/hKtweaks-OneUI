@@ -20,13 +20,13 @@
 package com.hades.hKtweaks.fragments;
 
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.widget.SwitchCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.hades.hKtweaks.R;
 import com.hades.hKtweaks.activities.tools.profile.ProfileActivity;
@@ -40,33 +40,32 @@ import com.hades.hKtweaks.fragments.kernel.CPUFragment;
 import com.hades.hKtweaks.fragments.kernel.CPUHotplugFragment;
 import com.hades.hKtweaks.fragments.kernel.CPUVoltageCl0Fragment;
 import com.hades.hKtweaks.fragments.kernel.CPUVoltageCl1Fragment;
+import com.hades.hKtweaks.fragments.kernel.DvfsFragment;
 import com.hades.hKtweaks.fragments.kernel.EntropyFragment;
 import com.hades.hKtweaks.fragments.kernel.GPUFragment;
-import com.hades.hKtweaks.fragments.kernel.DvfsFragment;
 import com.hades.hKtweaks.fragments.kernel.HmpFragment;
 import com.hades.hKtweaks.fragments.kernel.IOFragment;
 import com.hades.hKtweaks.fragments.kernel.KSMFragment;
 import com.hades.hKtweaks.fragments.kernel.LEDFragment;
 import com.hades.hKtweaks.fragments.kernel.LMKFragment;
-import com.hades.hKtweaks.fragments.kernel.WakelockFragment;
 import com.hades.hKtweaks.fragments.kernel.MiscFragment;
 import com.hades.hKtweaks.fragments.kernel.ScreenFragment;
 import com.hades.hKtweaks.fragments.kernel.SoundFragment;
 import com.hades.hKtweaks.fragments.kernel.ThermalFragment;
 import com.hades.hKtweaks.fragments.kernel.VMFragment;
 import com.hades.hKtweaks.fragments.kernel.WakeFragment;
+import com.hades.hKtweaks.fragments.kernel.WakelockFragment;
 import com.hades.hKtweaks.fragments.recyclerview.RecyclerViewFragment;
 import com.hades.hKtweaks.utils.AppSettings;
 
 import java.util.HashMap;
 
+import de.dlyt.yanndroid.oneui.view.SwitchBar;
+
 /**
  * Created by willi on 03.05.16.
  */
 public class ApplyOnBootFragment extends BaseFragment {
-
-    private static final String PACKAGE = ApplyOnBootFragment.class.getCanonicalName();
-    private static final String INTENT_CATEGORY = PACKAGE + ".INTENT.CATEGORY";
 
     public static final String CPU = "cpu_onboot";
     public static final String CPU_CL0_VOLTAGE = "cpucl0voltage_onboot";
@@ -93,7 +92,8 @@ public class ApplyOnBootFragment extends BaseFragment {
     public static final String VM = "vm_onboot";
     public static final String ENTROPY = "entropy_onboot";
     public static final String MISC = "misc_onboot";
-
+    private static final String PACKAGE = ApplyOnBootFragment.class.getCanonicalName();
+    private static final String INTENT_CATEGORY = PACKAGE + ".INTENT.CATEGORY";
     private static final HashMap<Class, String> sAssignments = new HashMap<>();
 
     static {
@@ -157,10 +157,10 @@ public class ApplyOnBootFragment extends BaseFragment {
             View rootView = inflater.inflate(R.layout.fragment_apply_on_boot, container, false);
 
             final String category = getArguments().getString(INTENT_CATEGORY);
-            SwitchCompat switcher = rootView.findViewById(R.id.switcher);
+            SwitchBar switcher = rootView.findViewById(R.id.switcher);
+            switcher.setSwitchBarText(R.string.apply_on_boot, R.string.apply_on_boot);
             switcher.setChecked(AppSettings.getBoolean(category, false, getActivity()));
-            switcher.setOnCheckedChangeListener((buttonView, isChecked) ->
-                    AppSettings.saveBoolean(category, isChecked, getActivity()));
+            switcher.addOnSwitchChangeListener((switchCompat, z) -> AppSettings.saveBoolean(category, z, getActivity()));
             return rootView;
         }
     }

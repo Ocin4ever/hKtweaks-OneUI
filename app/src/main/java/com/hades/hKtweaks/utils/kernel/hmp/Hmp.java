@@ -12,6 +12,8 @@ import com.hades.hKtweaks.utils.root.Control;
 
 public class Hmp {
 
+    private static final String UP_THRESHOLD = "/sys/kernel/hmp/up_threshold";
+    private static final String DOWN_THRESHOLD = "/sys/kernel/hmp/down_threshold";
     private static Hmp sInstance;
 
     public static Hmp getInstance() {
@@ -21,11 +23,7 @@ public class Hmp {
         return sInstance;
     }
 
-    private static final String UP_THRESHOLD = "/sys/kernel/hmp/up_threshold";
-    private static final String DOWN_THRESHOLD = "/sys/kernel/hmp/down_threshold";
-
-
-    public void setHmpProfile(String value, Context context){
+    public void setHmpProfile(String value, Context context) {
         String hmp[] = value.split(" ");
         int up = Utils.strToInt(hmp[0]);
         int down = Utils.strToInt(hmp[1]);
@@ -33,11 +31,11 @@ public class Hmp {
         setDownThreshold(down, context);
     }
 
-    public String getUpThreshold(){
+    public String getUpThreshold() {
         return Utils.readFile(UP_THRESHOLD);
     }
 
-    public void setUpThreshold(int value, Context context){
+    public void setUpThreshold(int value, Context context) {
         run(Control.write(String.valueOf(value), UP_THRESHOLD), UP_THRESHOLD, context);
     }
 
@@ -45,11 +43,11 @@ public class Hmp {
         return Utils.existFile(UP_THRESHOLD);
     }
 
-    public String getDownThreshold(){
+    public String getDownThreshold() {
         return Utils.readFile(DOWN_THRESHOLD);
     }
 
-    public void setDownThreshold(int value, Context context){
+    public void setDownThreshold(int value, Context context) {
         run(Control.write(String.valueOf(value), DOWN_THRESHOLD), DOWN_THRESHOLD, context);
     }
 

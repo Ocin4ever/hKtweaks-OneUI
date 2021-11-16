@@ -32,19 +32,18 @@
 
             <LinearLayout
                 android:id="@+id/value_parent"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="5dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="5dp"
                 android:layout_weight="1"
-                android:orientation="horizontal"
-                android:gravity="end|center_vertical">
+                android:gravity="end|center_vertical"
+                android:orientation="horizontal">
 
                 <ImageView
                     android:layout_width="18dp"
                     android:layout_height="18dp"
-                    android:tint="?android:attr/textColorSecondary"
-                    app:srcCompat="@drawable/ic_arrow_right" />
+                    app:srcCompat="@drawable/ic_samsung_arrow_right" />
 
                 <TextView
                     android:id="@+id/value"
@@ -53,8 +52,9 @@
                     android:gravity="center_vertical"
                     android:visibility="gone" />
 
-                <ProgressBar
+                <de.dlyt.yanndroid.oneui.view.ProgressBar
                     android:id="@+id/progress"
+                    style="@style/ProgressBarStyle"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_gravity="end" />

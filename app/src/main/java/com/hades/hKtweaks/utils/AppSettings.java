@@ -20,9 +20,8 @@
 package com.hades.hKtweaks.utils;
 
 import android.content.Context;
-import androidx.fragment.app.Fragment;
 
-import com.hades.hKtweaks.R;
+import androidx.fragment.app.Fragment;
 
 /**
  * Created by willi on 11.03.18.
@@ -34,9 +33,6 @@ public class AppSettings {
     private static final String PASSWORD = "password";
     private static final String FRAGMENT_ENABLED_POSTFIX = "%s_enabled";
     private static final String CPUSPY_OFFSETS_PREFIX = "offsets%d";
-    private static final String BANNER_SIZE = "banner_size";
-    private static final String HIDE_BANNER = "hide_banner";
-    private static final String FORCE_CARDS = "forcecards";
     private static final String GH_AD_SHOWN_POSTFIX = "%s_shown";
     private static final String CORE_CTL_MIN_CPUS_BIG = "core_ctl_min_cpus_big";
     private static final String INITD_ONBOOT = "initd_onboot";
@@ -47,7 +43,6 @@ public class AppSettings {
     private static final String GAMMA_CONTROL_PROFILE = "gamma_control_profile";
     private static final String DSI_PANEL_PROFILE = "dsi_panel_profile";
     private static final String DATA_SHARING = "data_sharing";
-    private static final String SECTION_ICONS = "section_icons";
     private static final String FRAGMENT_OPENED_POSTFIX = "%s_opened";
     private static final String FINGERPRINT = "fingerprint";
     private static final String APPLY_ON_BOOT_DELAY = "applyonbootdelay";
@@ -84,23 +79,23 @@ public class AppSettings {
         Prefs.saveString(key, value, context);
     }
 
-    public static void remove (String name, Context context){
+    public static void remove(String name, Context context) {
         Prefs.remove(name, context);
     }
 
-    public static int getCpuGlobalOffsetCl0(Context context){
+    public static int getCpuGlobalOffsetCl0(Context context) {
         return Prefs.getInt(CPU_GLOBAL_OFFSET_CL0, 0, context);
     }
 
-    public static void saveCpuGlobalOffsetCl0(int value, Context context){
+    public static void saveCpuGlobalOffsetCl0(int value, Context context) {
         Prefs.saveInt(CPU_GLOBAL_OFFSET_CL0, value, context);
     }
 
-    public static int getCpuGlobalOffsetCl1(Context context){
+    public static int getCpuGlobalOffsetCl1(Context context) {
         return Prefs.getInt(CPU_GLOBAL_OFFSET_CL1, 0, context);
     }
 
-    public static void saveCpuGlobalOffsetCl1(int value, Context context){
+    public static void saveCpuGlobalOffsetCl1(int value, Context context) {
         Prefs.saveInt(CPU_GLOBAL_OFFSET_CL1, value, context);
     }
 
@@ -133,35 +128,6 @@ public class AppSettings {
 
     public static void saveCpuSpyOffsets(String offsets, int core, Context context) {
         Prefs.saveString(String.format(CPUSPY_OFFSETS_PREFIX, core), offsets, context);
-    }
-
-    public static int getBannerSize(Context context) {
-        int min = Math.round(context.getResources().getDimension(R.dimen.banner_min_height));
-        int max = Math.round(context.getResources().getDimension(R.dimen.banner_max_height));
-
-        int height = Prefs.getInt(BANNER_SIZE, Math.round(context.getResources().getDimension(
-                R.dimen.banner_default_height)), context);
-        if (height > max) {
-            height = max;
-            Prefs.saveInt("banner_size", max, context);
-        } else if (height < min) {
-            height = min;
-            Prefs.saveInt("banner_size", min, context);
-        }
-
-        return height;
-    }
-
-    public static void saveBannerSize(int height, Context context) {
-        Prefs.saveInt(BANNER_SIZE, height, context);
-    }
-
-    public static boolean isHideBanner(Context context) {
-        return Prefs.getBoolean(HIDE_BANNER, false, context);
-    }
-
-    public static boolean isForceCards(Context context) {
-        return Prefs.getBoolean(FORCE_CARDS, false, context);
     }
 
     public static int getGHAdShown(String name, Context context) {
@@ -248,10 +214,6 @@ public class AppSettings {
         Prefs.saveBoolean(DATA_SHARING, enabled, context);
     }
 
-    public static boolean isSectionIcons(Context context) {
-        return (Prefs.getBoolean(SECTION_ICONS, true, context));
-    }
-
     public static int getFragmentOpened(Class<? extends Fragment> fragmentClass,
                                         Context context) {
         return Prefs.getInt(String.format(FRAGMENT_OPENED_POSTFIX,
@@ -293,11 +255,11 @@ public class AppSettings {
         return Prefs.getString(PREVIEW_PICTURE, null, context);
     }
 
-    public static Boolean isPreviewPictureEmpty(Context context){
+    public static Boolean isPreviewPictureEmpty(Context context) {
         return Prefs.getBoolean(PREVIEW_PICTURE_EMPTY, false, context);
     }
 
-    public static void setPreviewPictureEmpty(boolean isEmpty, Context context){
+    public static void setPreviewPictureEmpty(boolean isEmpty, Context context) {
         Prefs.saveBoolean(PREVIEW_PICTURE_EMPTY, isEmpty, context);
     }
 

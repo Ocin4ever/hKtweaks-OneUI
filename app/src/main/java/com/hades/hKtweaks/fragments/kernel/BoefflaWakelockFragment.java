@@ -1,27 +1,27 @@
 package com.hades.hKtweaks.fragments.kernel;
 
-import androidx.appcompat.app.AlertDialog;
 import android.view.View;
 import android.widget.CheckBox;
 
 import com.hades.hKtweaks.R;
-import com.hades.hKtweaks.fragments.ApplyOnBootFragment;
+import com.hades.hKtweaks.activities.tools.profile.ProfileActivity;
 import com.hades.hKtweaks.fragments.recyclerview.RecyclerViewFragment;
 import com.hades.hKtweaks.utils.AppSettings;
 import com.hades.hKtweaks.utils.Utils;
 import com.hades.hKtweaks.utils.kernel.boefflawakelock.BoefflaWakelock;
 import com.hades.hKtweaks.utils.kernel.boefflawakelock.WakeLockInfo;
+import com.hades.hKtweaks.views.recyclerview.ApplyOnBootFView;
 import com.hades.hKtweaks.views.recyclerview.CardView;
 import com.hades.hKtweaks.views.recyclerview.DescriptionView;
 import com.hades.hKtweaks.views.recyclerview.RecyclerViewItem;
 import com.hades.hKtweaks.views.recyclerview.SelectView;
 import com.hades.hKtweaks.views.recyclerview.SwitchView;
-import com.hades.hKtweaks.views.recyclerview.TitleView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
+
+import de.dlyt.yanndroid.oneui.dialog.AlertDialog;
 
 /**
  * Created by MoroGoku on 10/11/2017.
@@ -29,35 +29,28 @@ import java.util.Objects;
 
 public class BoefflaWakelockFragment extends RecyclerViewFragment {
 
-    private List<CardView> mWakeCard = new ArrayList<>();
+    private final List<CardView> mWakeCard = new ArrayList<>();
     boolean mAlertCheckbox = true;
 
     @Override
-    protected void init() {
-        super.init();
-
-        addViewPagerFragment(ApplyOnBootFragment.newInstance(this));
-    }
-
-    @Override
     protected void addItems(List<RecyclerViewItem> items) {
+        if (!(getActivity() instanceof ProfileActivity))
+            items.add(new ApplyOnBootFView(getActivity(), this));
 
-        if (BoefflaWakelock.supported()){
+        if (BoefflaWakelock.supported()) {
             boefflaWakelockInit(items);
         }
     }
 
-    private void boefflaWakelockInit(List<RecyclerViewItem> items){
+    private void boefflaWakelockInit(List<RecyclerViewItem> items) {
         mWakeCard.clear();
 
-        TitleView bwbT = new TitleView();
-        bwbT.setText(getString(R.string.boeffla_wakelock) + " v" + BoefflaWakelock.getVersion());
-        bwbT.setFullSpan(true);
-        items.add(bwbT);
+        CardView bwbT = new CardView(getActivity());
+        bwbT.setTitle(getString(R.string.boeffla_wakelock) + " v" + BoefflaWakelock.getVersion());
 
         DescriptionView bwbD = new DescriptionView();
         bwbD.setSummary(getString(R.string.boeffla_wakelock_summary));
-        items.add(bwbD);
+        bwbT.addItem(bwbD);
 
         SelectView bwOrder = new SelectView();
         bwOrder.setTitle(getString(R.string.wkl_order));
@@ -69,7 +62,9 @@ public class BoefflaWakelockFragment extends RecyclerViewFragment {
             bwCardReload();
         });
         bwOrder.setFullSpan(true);
-        items.add(bwOrder);
+        bwbT.addItem(bwOrder);
+
+        items.add(bwbT);
 
 
         List<WakeLockInfo> wakelocksinfo = BoefflaWakelock.getWakelockInfo();
@@ -88,13 +83,13 @@ public class BoefflaWakelockFragment extends RecyclerViewFragment {
     }
 
 
-    private void grxbwCardInit(CardView card, String title, List<WakeLockInfo> wakelocksinfo, Boolean state){
+    private void grxbwCardInit(CardView card, String title, List<WakeLockInfo> wakelocksinfo, Boolean state) {
         card.clearItems();
         card.setTitle(title);
 
-        for(WakeLockInfo wakeLockInfo : wakelocksinfo){
+        for (WakeLockInfo wakeLockInfo : wakelocksinfo) {
 
-            if(wakeLockInfo.wState == state) {
+            if (wakeLockInfo.wState == state) {
 
                 final String name = wakeLockInfo.wName;
                 String wakeup = String.valueOf(wakeLockInfo.wWakeups);
@@ -141,24 +136,22 @@ public class BoefflaWakelockFragment extends RecyclerViewFragment {
         checkBox.setOnCheckedChangeListener((buttonView, isChecked)
                 -> mAlertCheckbox = isChecked);
 
-
-        AlertDialog.Builder alert = new AlertDialog.Builder(Objects.requireNonNull(getActivity()));
-        alert.setTitle(getString(R.string.wkl_alert_title));
-        alert.setMessage(getString(R.string.wkl_alert_message));
-        alert.setView(checkBoxView);
-        alert.setPositiveButton("OK", (dialog, id)
-                -> AppSettings.saveBoolean("show_wakelock_dialog", mAlertCheckbox, getActivity()));
-
-        alert.show();
+        new AlertDialog.Builder(getContext())
+                .setTitle(R.string.wkl_alert_title)
+                .setMessage(R.string.wkl_alert_message)
+                .setView(checkBoxView)
+                .setPositiveButton(R.string.ok, (dialog, id)
+                        -> AppSettings.saveBoolean("show_wakelock_dialog", mAlertCheckbox, getActivity()))
+                .show();
     }
 
     @Override
-    public void onStart(){
+    public void onStart() {
         super.onStart();
 
         boolean showDialog = AppSettings.getBoolean("show_wakelock_dialog", true, getActivity());
 
-        if(showDialog) warningDialog();
+        if (showDialog) warningDialog();
 
     }
 }

@@ -33,12 +33,11 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1" />
 
-            <android.widget.CheckBox
+            <CheckBox
                 android:id="@+id/chbox"
                 android:layout_width="40dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical|end"
-                android:background="@null"
                 android:clickable="false"
                 android:focusable="false" />
 

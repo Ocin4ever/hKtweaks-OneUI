@@ -20,11 +20,12 @@
 package com.hades.hKtweaks.fragments.kernel;
 
 import com.hades.hKtweaks.R;
-import com.hades.hKtweaks.fragments.ApplyOnBootFragment;
+import com.hades.hKtweaks.activities.tools.profile.ProfileActivity;
 import com.hades.hKtweaks.fragments.recyclerview.RecyclerViewFragment;
 import com.hades.hKtweaks.utils.AppSettings;
 import com.hades.hKtweaks.utils.Utils;
 import com.hades.hKtweaks.utils.kernel.bus.VoltageCam;
+import com.hades.hKtweaks.views.recyclerview.ApplyOnBootFView;
 import com.hades.hKtweaks.views.recyclerview.CardView;
 import com.hades.hKtweaks.views.recyclerview.DescriptionView;
 import com.hades.hKtweaks.views.recyclerview.RecyclerViewItem;
@@ -41,23 +42,18 @@ import java.util.Objects;
  */
 public class BusCamFragment extends RecyclerViewFragment {
 
-    private List<SeekBarView> mVoltages = new ArrayList<>();
-    private SeekBarView mSeekbarProf = new SeekBarView();
-
-    private static float mVoltMinValue = -100000f;
-    private static float mVoltMaxValue = 25000f;
-    private static int mVoltStep = 6250;
+    private static final float mVoltMinValue = -100000f;
+    private static final float mVoltMaxValue = 25000f;
+    private static final int mVoltStep = 6250;
     public static int mDefZeroPosition = (Math.round(mVoltMaxValue - mVoltMinValue) / mVoltStep) - (Math.round(mVoltMaxValue) / mVoltStep);
-
-    @Override
-    protected void init() {
-        super.init();
-
-        addViewPagerFragment(ApplyOnBootFragment.newInstance(this));
-    }
+    private final List<SeekBarView> mVoltages = new ArrayList<>();
+    private final SeekBarView mSeekbarProf = new SeekBarView();
 
     @Override
     protected void addItems(List<RecyclerViewItem> items) {
+        if (!(getActivity() instanceof ProfileActivity))
+            items.add(new ApplyOnBootFView(getActivity(), this));
+
         mVoltages.clear();
 
         final List<String> freqs = VoltageCam.getFreqs();
@@ -130,7 +126,7 @@ public class BusCamFragment extends RecyclerViewFragment {
 
         int value = 0;
         for (int i = 0; i < progress.size(); i++) {
-            if (i == global){
+            if (i == global) {
                 value = i;
                 break;
             }
@@ -142,7 +138,7 @@ public class BusCamFragment extends RecyclerViewFragment {
         seekbar.setItems(progress);
         seekbar.setProgress(value);
         seekbar.setEnabled(enableSeekbar);
-        if(!enableSeekbar) seekbar.setAlpha(0.4f);
+        if (!enableSeekbar) seekbar.setAlpha(0.4f);
         else seekbar.setAlpha(1f);
         seekbar.setOnSeekBarListener(new SeekBarView.OnSeekBarListener() {
             @Override
@@ -155,6 +151,7 @@ public class BusCamFragment extends RecyclerViewFragment {
                 }
                 getHandler().postDelayed(BusCamFragment.this::reload, 200);
             }
+
             @Override
             public void onMove(SeekBarView seekBarView, int position, String value) {
             }
@@ -165,21 +162,21 @@ public class BusCamFragment extends RecyclerViewFragment {
                              String voltageStock) {
 
         int mOffset = VoltageCam.getOffset();
-        float mMin = (Utils.strToFloat(voltageStock) - (- mVoltMinValue / 1000)) * mOffset;
+        float mMin = (Utils.strToFloat(voltageStock) - (-mVoltMinValue / 1000)) * mOffset;
         float mMax = ((Utils.strToFloat(voltageStock) + (mVoltMaxValue / 1000)) * mOffset) + mVoltStep;
 
         List<String> progress = new ArrayList<>();
-        for(float i = mMin ; i < mMax; i += mVoltStep){
+        for (float i = mMin; i < mMax; i += mVoltStep) {
             String string = String.valueOf(i / mOffset);
             progress.add(string);
         }
 
         int value = 0;
         for (int i = 0; i < progress.size(); i++) {
-           if (Objects.equals(progress.get(i), voltage)){
+            if (Objects.equals(progress.get(i), voltage)) {
                 value = i;
                 break;
-           }
+            }
         }
 
         Boolean enableSeekbar = AppSettings.getBoolean("busCam_individual_volts", false, getActivity());
@@ -190,7 +187,7 @@ public class BusCamFragment extends RecyclerViewFragment {
         seekbar.setItems(progress);
         seekbar.setProgress(value);
         seekbar.setEnabled(enableSeekbar);
-        if(!enableSeekbar) seekbar.setAlpha(0.4f);
+        if (!enableSeekbar) seekbar.setAlpha(0.4f);
         else seekbar.setAlpha(1f);
         seekbar.setOnSeekBarListener(new SeekBarView.OnSeekBarListener() {
 

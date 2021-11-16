@@ -35,23 +35,15 @@ import java.util.List;
  */
 public class S2s {
 
-    private static S2s sInstance;
-
-    public static S2s getInstance() {
-        if (sInstance == null) {
-            sInstance = new S2s();
-        }
-        return sInstance;
-    }
-
     private static final String S2S = "/sys/android_touch/sweep2sleep";
     private static final String S2S_2 = "/sys/android_touch2/sweep2sleep";
     private static final String S2S_3 = "/sys/sweep2sleep/sweep2sleep";
-
+    private static S2s sInstance;
     private final HashMap<String, List<Integer>> mFiles = new HashMap<>();
     private final List<Integer> mS2s2Menu = new ArrayList<>();
     private final List<Integer> mS2s3Menu = new ArrayList<>();
     private final List<Integer> mGenericMenu = new ArrayList<>();
+    private String FILE;
 
     {
         mS2s2Menu.add(R.string.s2s_right);
@@ -71,8 +63,6 @@ public class S2s {
         mFiles.put(S2S_3, mS2s3Menu);
     }
 
-    private String FILE;
-
     private S2s() {
         for (String file : mFiles.keySet()) {
             if (Utils.existFile(file)) {
@@ -80,6 +70,13 @@ public class S2s {
                 break;
             }
         }
+    }
+
+    public static S2s getInstance() {
+        if (sInstance == null) {
+            sInstance = new S2s();
+        }
+        return sInstance;
     }
 
     public void set(int value, Context context) {

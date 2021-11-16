@@ -20,6 +20,7 @@
 package com.hades.hKtweaks.utils.kernel.battery;
 
 import android.content.Context;
+
 import androidx.annotation.NonNull;
 
 import com.hades.hKtweaks.R;
@@ -36,18 +37,9 @@ import java.lang.reflect.Method;
  */
 public class Battery {
 
+    public static String BATTERY_NODE;
     private static Battery sInstance;
     private static int mCapacity;
-
-    public static Battery getInstance(@NonNull Context context) {
-        if (sInstance == null) {
-            setValues();
-            sInstance = new Battery(context);
-        }
-        return sInstance;
-    }
-
-    public static String BATTERY_NODE;
     private static String UNSTABLE_CHARGE;
     private static String HV_INPUT;
     private static String HV_CHARGE;
@@ -64,42 +56,6 @@ public class Battery {
     private static String CHARGE_SOURCE;
     private static String HEALTH;
     private static String FG_FULLCAPNOM;
-	
-    public static void setValues() {
-        for (String file : new String[] {
-                // Add on this list needed values for battery sysfs nodes
-                // TODO: Make sys nodes of battery device be auto detected as on gpu/cpu temps
-                "/sys/devices/battery",
-                "/sys/devices/battery.30",
-                "/sys/devices/battery.53",
-                "/sys/devices/battery.54",
-                "/sys/devices/battery.55",
-                "/sys/devices/platform/battery",
-                "/sys/devices/platform/samsung_mobile_device/samsung_mobile_device:battery"}
-                ) {
-            if (Utils.existFile(file)) {
-                BATTERY_NODE = file;
-                UNSTABLE_CHARGE = BATTERY_NODE + "/unstable_power_detection";
-                HV_INPUT = BATTERY_NODE + "/hv_input";
-                HV_CHARGE = BATTERY_NODE + "/hv_charge";
-                AC_INPUT = BATTERY_NODE + "/ac_input";
-                AC_CHARGE = BATTERY_NODE + "/ac_charge";
-                AC_INPUT_SCREEN = BATTERY_NODE + "/so_limit_input";
-                AC_CHARGE_SCREEN = BATTERY_NODE + "/so_limit_charge";
-                USB_INPUT = BATTERY_NODE + "/sdp_input";
-                USB_CHARGE = BATTERY_NODE + "/sdp_charge";
-                WC_INPUT = BATTERY_NODE + "/wc_input";
-                WC_CHARGE = BATTERY_NODE + "/wc_charge";
-                CAR_INPUT = BATTERY_NODE + "/car_input";
-                CAR_CHARGE = BATTERY_NODE + "/car_charge";
-                CHARGE_SOURCE = BATTERY_NODE + "/power_supply/battery/batt_charging_source";
-                HEALTH = BATTERY_NODE + "/power_supply/battery/health";
-                FG_FULLCAPNOM = BATTERY_NODE + "/power_supply/battery/fg_fullcapnom";
-                break;
-            }
-        }
-    }
-
     private static String FORCE_FAST_CHARGE = "/sys/kernel/fast_charge/force_fast_charge";
     private static String ADAPTIVE_FAST_CHARGE = "/sys/class/sec/switch/afc_disable";
     private static String BLX = "/sys/devices/virtual/misc/batterylifeextender/charging_limit";
@@ -128,9 +84,52 @@ public class Battery {
         }
     }
 
+    public static Battery getInstance(@NonNull Context context) {
+        if (sInstance == null) {
+            setValues();
+            sInstance = new Battery(context);
+        }
+        return sInstance;
+    }
+
+    public static void setValues() {
+        for (String file : new String[]{
+                // Add on this list needed values for battery sysfs nodes
+                // TODO: Make sys nodes of battery device be auto detected as on gpu/cpu temps
+                "/sys/devices/battery",
+                "/sys/devices/battery.30",
+                "/sys/devices/battery.53",
+                "/sys/devices/battery.54",
+                "/sys/devices/battery.55",
+                "/sys/devices/platform/battery",
+                "/sys/devices/platform/samsung_mobile_device/samsung_mobile_device:battery"}
+        ) {
+            if (Utils.existFile(file)) {
+                BATTERY_NODE = file;
+                UNSTABLE_CHARGE = BATTERY_NODE + "/unstable_power_detection";
+                HV_INPUT = BATTERY_NODE + "/hv_input";
+                HV_CHARGE = BATTERY_NODE + "/hv_charge";
+                AC_INPUT = BATTERY_NODE + "/ac_input";
+                AC_CHARGE = BATTERY_NODE + "/ac_charge";
+                AC_INPUT_SCREEN = BATTERY_NODE + "/so_limit_input";
+                AC_CHARGE_SCREEN = BATTERY_NODE + "/so_limit_charge";
+                USB_INPUT = BATTERY_NODE + "/sdp_input";
+                USB_CHARGE = BATTERY_NODE + "/sdp_charge";
+                WC_INPUT = BATTERY_NODE + "/wc_input";
+                WC_CHARGE = BATTERY_NODE + "/wc_charge";
+                CAR_INPUT = BATTERY_NODE + "/car_input";
+                CAR_CHARGE = BATTERY_NODE + "/car_charge";
+                CHARGE_SOURCE = BATTERY_NODE + "/power_supply/battery/batt_charging_source";
+                HEALTH = BATTERY_NODE + "/power_supply/battery/health";
+                FG_FULLCAPNOM = BATTERY_NODE + "/power_supply/battery/fg_fullcapnom";
+                break;
+            }
+        }
+    }
+
     public static String getHealthValue() {
         String state = Utils.readFile(HEALTH);
-        if (state == null){
+        if (state == null) {
             return null;
         } else {
             float cap = Utils.strToInt(Utils.readFile(FG_FULLCAPNOM));
@@ -138,11 +137,106 @@ public class Battery {
                 float value = ((cap * 2) / getCapacity()) * 100;
                 value = (value > 100) ? (value / 2) : value;
                 value = (value > 100) ? 100 : value;
-                return state + " / " +String.format("%.2f", value)+"%";
+                return state + " / " + String.format("%.2f", value) + "%";
             } else {
                 return state;
             }
         }
+    }
+
+    public static int getCapacity() {
+        return mCapacity;
+    }
+
+    public static String getChargeSource(Context context) {
+        String value = Utils.readFile(CHARGE_SOURCE);
+        switch (value) {
+            case "0":
+                return context.getResources().getString(R.string.cs_unknown);
+            case "1":
+                return context.getResources().getString(R.string.cs_battery);
+            case "2":
+                return context.getResources().getString(R.string.cs_ups);
+            case "3":
+                return context.getResources().getString(R.string.cs_main_ac);
+            case "4":
+                return context.getResources().getString(R.string.cs_usb);
+            case "5":
+                return context.getResources().getString(R.string.cs_usb_dedeicated);
+            case "6":
+                return context.getResources().getString(R.string.cs_usb_charging);
+            case "7":
+                return context.getResources().getString(R.string.cs_usb_accesory);
+            case "8":
+                return context.getResources().getString(R.string.cs_battery_monitor);
+            case "9":
+                return context.getResources().getString(R.string.cs_misc);
+            case "10":
+                return context.getResources().getString(R.string.cs_wireless);
+            case "11":
+                return context.getResources().getString(R.string.cs_hv_wireless);
+            case "12":
+                return context.getResources().getString(R.string.cs_pma_wireless);
+            case "13":
+                return context.getResources().getString(R.string.cs_car);
+            case "14":
+                return context.getResources().getString(R.string.cs_uart_off);
+            case "15":
+                return context.getResources().getString(R.string.cs_otg);
+            case "16":
+                return context.getResources().getString(R.string.cs_lan);
+            case "17":
+                return context.getResources().getString(R.string.cs_mhl_500);
+            case "18":
+                return context.getResources().getString(R.string.cs_mhl_900);
+            case "19":
+                return context.getResources().getString(R.string.cs_mhl_1500);
+            case "20":
+                return context.getResources().getString(R.string.cs_mhl_usb);
+            case "21":
+                return context.getResources().getString(R.string.cs_smart_otg);
+            case "22":
+                return context.getResources().getString(R.string.cs_smart_notg);
+            case "23":
+                return context.getResources().getString(R.string.cs_power_sharing);
+            case "24":
+                return context.getResources().getString(R.string.cs_hv_mains);
+            case "25":
+                return context.getResources().getString(R.string.cs_hv_mains_12);
+            case "26":
+                return context.getResources().getString(R.string.cs_hv_prepare);
+            case "27":
+                return context.getResources().getString(R.string.cs_hv_error);
+            case "28":
+                return context.getResources().getString(R.string.cs_mhl_100);
+            case "29":
+                return context.getResources().getString(R.string.cs_mhl_2000);
+            case "30":
+                return context.getResources().getString(R.string.cs_hv_unknown);
+            case "31":
+                return context.getResources().getString(R.string.cs_mdock);
+            case "32":
+                return context.getResources().getString(R.string.cs_hmt_conected);
+            case "33":
+                return context.getResources().getString(R.string.cs_hmt_charge);
+            case "34":
+                return context.getResources().getString(R.string.cs_wireless_pack);
+            case "35":
+                return context.getResources().getString(R.string.cs_wireless_pack_ta);
+            case "36":
+                return context.getResources().getString(R.string.cs_wireless_stand);
+            case "37":
+                return context.getResources().getString(R.string.cs_wireless_hv_stand);
+            case "38":
+                return context.getResources().getString(R.string.cs_pdic);
+            case "39":
+                return context.getResources().getString(R.string.cs_hv_mains);
+            case "40":
+                return context.getResources().getString(R.string.cs_qc20);
+            case "41":
+                return context.getResources().getString(R.string.cs_qc30);
+        }
+        return "Unknown source";
     }
 
     public void saveStockValues(Context context) {
@@ -210,33 +304,32 @@ public class Battery {
         AppSettings.saveBoolean("battery_saved", true, context);
     }
 
-
-    public boolean hasStoreMode(){
+    public boolean hasStoreMode() {
         return (Utils.existFile(STORE_MODE) && Utils.existFile(STORE_MODE_MAX)
                 && Utils.existFile(STORE_MODE_MIN));
     }
 
-    public boolean isStoreModeEnabled(){
+    public boolean isStoreModeEnabled() {
         return Utils.readFile(STORE_MODE).equals("1");
     }
 
-    public void enableStoreMode(boolean enable, Context context){
+    public void enableStoreMode(boolean enable, Context context) {
         run(Control.write(enable ? "1" : "0", STORE_MODE), STORE_MODE, context);
     }
 
-    public String getStoreModeMax(){
+    public String getStoreModeMax() {
         return Utils.readFile(STORE_MODE_MAX);
     }
 
-    public void setStoreModeMax(int value, Context context){
+    public void setStoreModeMax(int value, Context context) {
         run(Control.write(String.valueOf(value), STORE_MODE_MAX), STORE_MODE_MAX, context);
     }
 
-    public String getStoreModeMin(){
+    public String getStoreModeMin() {
         return Utils.readFile(STORE_MODE_MIN);
     }
 
-    public void setStoreModeMin(int value, Context context){
+    public void setStoreModeMin(int value, Context context) {
         run(Control.write(String.valueOf(value), STORE_MODE_MIN), STORE_MODE_MIN, context);
     }
 
@@ -301,10 +394,6 @@ public class Battery {
         return Utils.existFile(ADAPTIVE_FAST_CHARGE);
     }
 
-    public static int getCapacity() {
-        return mCapacity;
-    }
-
     public boolean hasCapacity() {
         return getCapacity() != 0;
     }
@@ -313,11 +402,11 @@ public class Battery {
         return hasCapacity();
     }
 
+    /* Init Battery */
+
     private void run(String command, String id, Context context) {
         Control.runSetting(command, ApplyOnBootFragment.BATTERY, id, context);
     }
-
-    /* Init Battery */
 
     public boolean hasHvInput() {
         return Utils.existFile(HV_INPUT);
@@ -461,97 +550,6 @@ public class Battery {
 
     public String getCarInput() {
         return Utils.readFile(CAR_INPUT);
-    }
-
-    public static String getChargeSource(Context context) {
-        String value = Utils.readFile(CHARGE_SOURCE);
-        switch (value){
-            case "0" :
-                return context.getResources().getString(R.string.cs_unknown);
-            case "1" :
-                return context.getResources().getString(R.string.cs_battery);
-            case "2" :
-                return context.getResources().getString(R.string.cs_ups);
-            case "3" :
-                return context.getResources().getString(R.string.cs_main_ac);
-            case "4" :
-                return context.getResources().getString(R.string.cs_usb);
-            case "5" :
-                return context.getResources().getString(R.string.cs_usb_dedeicated);
-            case "6" :
-                return context.getResources().getString(R.string.cs_usb_charging);
-            case "7" :
-                return context.getResources().getString(R.string.cs_usb_accesory);
-            case "8" :
-                return context.getResources().getString(R.string.cs_battery_monitor);
-            case "9" :
-                return context.getResources().getString(R.string.cs_misc);
-            case "10" :
-                return context.getResources().getString(R.string.cs_wireless);
-            case "11" :
-                return context.getResources().getString(R.string.cs_hv_wireless);
-            case "12" :
-                return context.getResources().getString(R.string.cs_pma_wireless);
-            case "13" :
-                return context.getResources().getString(R.string.cs_car);
-            case "14" :
-                return context.getResources().getString(R.string.cs_uart_off);
-            case "15" :
-                return context.getResources().getString(R.string.cs_otg);
-            case "16" :
-                return context.getResources().getString(R.string.cs_lan);
-            case "17" :
-                return context.getResources().getString(R.string.cs_mhl_500);
-            case "18" :
-                return context.getResources().getString(R.string.cs_mhl_900);
-            case "19" :
-                return context.getResources().getString(R.string.cs_mhl_1500);
-            case "20" :
-                return context.getResources().getString(R.string.cs_mhl_usb);
-            case "21" :
-                return context.getResources().getString(R.string.cs_smart_otg);
-            case "22" :
-                return context.getResources().getString(R.string.cs_smart_notg);
-            case "23" :
-                return context.getResources().getString(R.string.cs_power_sharing);
-            case "24" :
-                return context.getResources().getString(R.string.cs_hv_mains);
-            case "25" :
-                return context.getResources().getString(R.string.cs_hv_mains_12);
-            case "26" :
-                return context.getResources().getString(R.string.cs_hv_prepare);
-            case "27" :
-                return context.getResources().getString(R.string.cs_hv_error);
-            case "28" :
-                return context.getResources().getString(R.string.cs_mhl_100);
-            case "29" :
-                return context.getResources().getString(R.string.cs_mhl_2000);
-            case "30" :
-                return context.getResources().getString(R.string.cs_hv_unknown);
-            case "31" :
-                return context.getResources().getString(R.string.cs_mdock);
-            case "32" :
-                return context.getResources().getString(R.string.cs_hmt_conected);
-            case "33" :
-                return context.getResources().getString(R.string.cs_hmt_charge);
-            case "34" :
-                return context.getResources().getString(R.string.cs_wireless_pack);
-            case "35" :
-                return context.getResources().getString(R.string.cs_wireless_pack_ta);
-            case "36" :
-                return context.getResources().getString(R.string.cs_wireless_stand);
-            case "37" :
-                return context.getResources().getString(R.string.cs_wireless_hv_stand);
-            case "38" :
-                return context.getResources().getString(R.string.cs_pdic);
-            case "39" :
-                return context.getResources().getString(R.string.cs_hv_mains);
-            case "40" :
-                return context.getResources().getString(R.string.cs_qc20);
-            case "41" :
-                return context.getResources().getString(R.string.cs_qc30);
-        }
-        return "Unknown source";
     }
 
     public boolean hasCharge() {

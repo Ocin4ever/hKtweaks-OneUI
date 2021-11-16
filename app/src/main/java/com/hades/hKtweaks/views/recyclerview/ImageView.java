@@ -1,9 +1,10 @@
 package com.hades.hKtweaks.views.recyclerview;
 
 import android.graphics.drawable.Drawable;
-import androidx.appcompat.widget.AppCompatImageView;
 import android.view.View;
 import android.widget.LinearLayout;
+
+import androidx.appcompat.widget.AppCompatImageView;
 
 import com.hades.hKtweaks.R;
 
@@ -38,7 +39,7 @@ public class ImageView extends RecyclerViewItem {
 
     }
 
-    public void setBackgroundColor (int color){
+    public void setBackgroundColor(int color) {
         mBackgroundColor = color;
         refresh();
     }
@@ -48,12 +49,12 @@ public class ImageView extends RecyclerViewItem {
         refresh();
     }
 
-    public void setGravity(int gravity){
+    public void setGravity(int gravity) {
         mGravity = gravity;
         refresh();
     }
 
-    public void setLayoutParams(int width, int height){
+    public void setLayoutParams(int width, int height) {
         mLp = new LinearLayout.LayoutParams(width, height);
         refresh();
     }
@@ -67,11 +68,11 @@ public class ImageView extends RecyclerViewItem {
             if (mLp != null) {
                 mImageView.setLayoutParams(mLp);
             }
-            if (mLayoutView != null){
+            if (mLayoutView != null) {
                 if (mGravity != 0) {
                     mLayoutView.setGravity(mGravity);
                 }
-                if (mBackgroundColor != 0){
+                if (mBackgroundColor != 0) {
                     mLayoutView.setBackgroundColor(mBackgroundColor);
                 }
             }

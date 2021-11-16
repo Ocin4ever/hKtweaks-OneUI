@@ -119,12 +119,12 @@ public class RootUtils {
      */
     public static class SU {
 
+        private final boolean mRoot;
+        public boolean mDenied;
         private Process mProcess;
         private BufferedWriter mWriter;
         private BufferedReader mReader;
-        private final boolean mRoot;
         private boolean mClosed;
-        public boolean mDenied;
         private boolean mFirstTry;
         private boolean mLog;
 

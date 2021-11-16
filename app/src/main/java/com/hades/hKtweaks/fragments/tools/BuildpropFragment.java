@@ -19,26 +19,19 @@
  */
 package com.hades.hKtweaks.fragments.tools;
 
-import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.core.content.ContextCompat;
-import androidx.core.graphics.drawable.DrawableCompat;
-import androidx.appcompat.widget.AppCompatEditText;
 import android.text.Editable;
-import android.text.TextWatcher;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.Nullable;
+
 import com.hades.hKtweaks.R;
-import com.hades.hKtweaks.fragments.BaseFragment;
+import com.hades.hKtweaks.activities.BaseActivity;
 import com.hades.hKtweaks.fragments.recyclerview.RecyclerViewFragment;
 import com.hades.hKtweaks.utils.Utils;
 import com.hades.hKtweaks.utils.ViewUtils;
@@ -51,16 +44,17 @@ import com.hades.hKtweaks.views.recyclerview.RecyclerViewItem;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import de.dlyt.yanndroid.oneui.layout.ToolbarLayout;
+import de.dlyt.yanndroid.oneui.view.RecyclerView;
+
 /**
  * Created by willi on 10.07.16.
  */
 public class BuildpropFragment extends RecyclerViewFragment {
 
     private LinkedHashMap<String, String> mProps;
-    private String mKeyText;
-    private String mValueText;
+    private String mSearchText;
 
-    private SearchFragment mSearchFragment;
     private Dialog mAddDialog;
     private Dialog mItemOptionsDialog;
     private Dialog mDeleteDialog;
@@ -68,24 +62,82 @@ public class BuildpropFragment extends RecyclerViewFragment {
     private String mKey;
     private String mValue;
 
-    @Override
-    protected Drawable getBottomFabDrawable() {
-        Drawable drawable = DrawableCompat.wrap(
-                ContextCompat.getDrawable(getActivity(), R.drawable.ic_add));
-        DrawableCompat.setTint(drawable, Color.WHITE);
-        return drawable;
-    }
+    private ToolbarLayout toolbarLayout;
+    private ActivityResultLauncher<Intent> activityResultLauncher;
 
     @Override
-    protected boolean showBottomFab() {
-        return true;
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        toolbarLayout = ((BaseActivity) getActivity()).getToolBarLayout();
+        activityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> toolbarLayout.onSearchModeVoiceInputResult(result));
     }
 
     @Override
     protected void init() {
         super.init();
+        RecyclerView recyclerView = getRecyclerView();
+        recyclerView.setBackgroundResource(R.color.item_background_color);
+        recyclerView.setVerticalScrollBarEnabled(true);
+        recyclerView.seslSetFastScrollerEnabled(true);
+        recyclerView.seslSetGoToTopEnabled(true);
 
-        addViewPagerFragment(mSearchFragment = new SearchFragment());
+        showToolbarActionButton(item -> {
+            switch (item.getItemId()) {
+                case R.id.menu_search:
+                    toolbarLayout.showSearchMode();
+                    toolbarLayout.setSearchModeListener(new ToolbarLayout.SearchModeListener() {
+                        @Override
+                        public void onSearchOpened(EditText search_edittext) {
+                        }
+
+                        @Override
+                        public void onSearchDismissed(EditText search_edittext) {
+                            search_edittext.setText(null);
+                        }
+
+                        @Override
+                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                        }
+
+                        @Override
+                        public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        }
+
+                        @Override
+                        public void afterTextChanged(Editable s) {
+                            mSearchText = s.toString();
+                            reload(false);
+                        }
+
+                        @Override
+                        public void onKeyboardSearchClick(CharSequence s) {
+                        }
+
+                        @Override
+                        public void onVoiceInputClick(Intent intent) {
+                            activityResultLauncher.launch(intent);
+                        }
+                    });
+                    break;
+                case R.id.menu_add:
+                    mAddDialog = new Dialog(getActivity()).setItems(getResources().getStringArray(
+                            R.array.build_prop_add_options),
+                            (dialog, which) -> {
+                                switch (which) {
+                                    case 0:
+                                        modify(null, null);
+                                        break;
+                                    case 1:
+                                        Buildprop.backup();
+                                        Utils.toast(getString(R.string.backup_item, Buildprop.BUILD_PROP,
+                                                Utils.getInternalDataStorage()), getActivity(), Toast.LENGTH_LONG);
+                                        break;
+                                }
+                            }).setOnDismissListener(dialog -> mAddDialog = null);
+                    mAddDialog.show();
+                    break;
+            }
+        }, R.id.menu_search, R.id.menu_add);
 
         if (mAddDialog != null) {
             mAddDialog.show();
@@ -114,22 +166,6 @@ public class BuildpropFragment extends RecyclerViewFragment {
         }, 250);
     }
 
-    private static class ReloadHandler extends RecyclerViewFragment.ReloadHandler<BuildpropFragment> {
-        private boolean mRead;
-
-        private ReloadHandler(boolean read) {
-            mRead = read;
-        }
-
-        @Override
-        public List<RecyclerViewItem> doInBackground(BuildpropFragment fragment) {
-            if (mRead) {
-                fragment.mProps = Buildprop.getProps();
-            }
-            return super.doInBackground(fragment);
-        }
-    }
-
     @Override
     protected void load(List<RecyclerViewItem> items) {
         super.load(items);
@@ -139,8 +175,7 @@ public class BuildpropFragment extends RecyclerViewFragment {
         for (int i = 0; i < mProps.size(); i++) {
             final String title = titles[i];
             final String value = mProps.values().toArray(new String[mProps.size()])[i];
-            if ((mKeyText != null && !title.contains(mKeyText)
-                    || (mValueText != null && !value.contains(mValueText)))) {
+            if (mSearchText != null && !title.contains(mSearchText) && !value.contains(mSearchText)) {
                 continue;
             }
 
@@ -151,18 +186,14 @@ public class BuildpropFragment extends RecyclerViewFragment {
                     + Integer.toHexString(Color.blue(color));
 
             DescriptionView descriptionView = new DescriptionView();
-            if (mKeyText != null && !mKeyText.isEmpty()) {
-                descriptionView.setTitle(Utils.htmlFrom(title.replace(mKeyText,
-                        "<b><font color=\"" + colorCode + "\">" + mKeyText + "</font></b>")));
+            if (mSearchText != null && !mSearchText.isEmpty()) {
+                descriptionView.setTitle(Utils.htmlFrom(title.replace(mSearchText, "<b><font color=\"" + colorCode + "\">" + mSearchText + "</font></b>")));
+                descriptionView.setSummary(Utils.htmlFrom(value.replace(mSearchText, "<b><font color=\"" + colorCode + "\">" + mSearchText + "</font></b>")));
             } else {
                 descriptionView.setTitle(title);
-            }
-            if (mValueText != null && !mValueText.isEmpty()) {
-                descriptionView.setSummary(Utils.htmlFrom(value.replace(mValueText,
-                        "<b><font color=\"" + colorCode + "\">" + mValueText + "</font></b>")));
-            } else {
                 descriptionView.setSummary(value);
             }
+
             descriptionView.setOnItemClickListener(item -> {
                 mItemOptionsDialog = new Dialog(getActivity()).setItems(
                         getResources().getStringArray(R.array.build_prop_item_options),
@@ -181,20 +212,6 @@ public class BuildpropFragment extends RecyclerViewFragment {
             });
 
             items.add(descriptionView);
-        }
-
-        Activity activity;
-        if (mSearchFragment != null && (activity = getActivity()) != null) {
-            activity.runOnUiThread(() -> {
-                if (isAdded()) {
-                    for (int i = 0; i < childFragmentCount(); i++) {
-                        Fragment fragment = getChildFragment(i);
-                        if (fragment instanceof SearchFragment) {
-                            ((SearchFragment) fragment).setCount(items.size());
-                        }
-                    }
-                }
-            });
         }
     }
 
@@ -244,104 +261,26 @@ public class BuildpropFragment extends RecyclerViewFragment {
     }
 
     @Override
-    protected void onBottomFabClick() {
-        super.onBottomFabClick();
-        mAddDialog = new Dialog(getActivity()).setItems(getResources().getStringArray(
-                R.array.build_prop_add_options),
-                (dialog, which) -> {
-                    switch (which) {
-                        case 0:
-                            modify(null, null);
-                            break;
-                        case 1:
-                            Buildprop.backup();
-                            Utils.toast(getString(R.string.backup_item, Buildprop.BUILD_PROP,
-                                    Utils.getInternalDataStorage()), getActivity(), Toast.LENGTH_LONG);
-                            break;
-                    }
-                }).setOnDismissListener(dialog -> mAddDialog = null);
-        mAddDialog.show();
-    }
-
-    @Override
     public void onDestroy() {
         super.onDestroy();
         RootUtils.mount(false, "/system");
-        mKeyText = null;
-        mValueText = null;
+        mSearchText = null;
     }
 
-    public static class SearchFragment extends BaseFragment {
+    private static class ReloadHandler extends RecyclerViewFragment.ReloadHandler<BuildpropFragment> {
+        private boolean mRead;
 
-        private TextView mItemsText;
-        private int mItemsCount;
+        private ReloadHandler(boolean read) {
+            mRead = read;
+        }
 
-        @Nullable
         @Override
-        public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-                                 @Nullable Bundle savedInstanceState) {
-            Fragment fragment = getParentFragment();
-            if (!(fragment instanceof BuildpropFragment)) {
-                fragment = fragment.getParentFragment();
+        public List<RecyclerViewItem> doInBackground(BuildpropFragment fragment) {
+            if (mRead) {
+                fragment.mProps = Buildprop.getProps();
             }
-            final BuildpropFragment buildpropFragment = (BuildpropFragment) fragment;
-
-            View rootView = inflater.inflate(R.layout.fragment_buildprop_search, container, false);
-
-            AppCompatEditText keyEdit = rootView.findViewById(R.id.key_edittext);
-            AppCompatEditText valueEdit = rootView.findViewById(R.id.value_edittext);
-
-            keyEdit.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                }
-
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-                }
-
-                @Override
-                public void afterTextChanged(Editable s) {
-                    buildpropFragment.mKeyText = s.toString();
-                    buildpropFragment.reload(false);
-                }
-            });
-            valueEdit.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                }
-
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-                }
-
-                @Override
-                public void afterTextChanged(Editable s) {
-                    buildpropFragment.mValueText = s.toString();
-                    buildpropFragment.reload(false);
-                }
-            });
-
-            if (buildpropFragment.mKeyText != null) {
-                keyEdit.append(buildpropFragment.mKeyText);
-            }
-            if (buildpropFragment.mKeyText != null) {
-                valueEdit.append(buildpropFragment.mKeyText);
-            }
-
-            mItemsText = rootView.findViewById(R.id.found_text);
-            setCount(mItemsCount);
-
-            return rootView;
+            return super.doInBackground(fragment);
         }
-
-        public void setCount(int count) {
-            mItemsCount = count;
-            if (mItemsText != null && isAdded()) {
-                mItemsText.setText(getString(count == 1 ? R.string.item_count : R.string.items_count, count));
-            }
-        }
-
     }
 
 }

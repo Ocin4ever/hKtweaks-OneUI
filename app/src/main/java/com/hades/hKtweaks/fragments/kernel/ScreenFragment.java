@@ -19,16 +19,11 @@
  */
 package com.hades.hKtweaks.fragments.kernel;
 
-import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.hades.hKtweaks.R;
-import com.hades.hKtweaks.fragments.ApplyOnBootFragment;
-import com.hades.hKtweaks.fragments.BaseFragment;
+import com.hades.hKtweaks.activities.tools.profile.ProfileActivity;
 import com.hades.hKtweaks.fragments.recyclerview.RecyclerViewFragment;
 import com.hades.hKtweaks.utils.AppSettings;
 import com.hades.hKtweaks.utils.Utils;
@@ -37,6 +32,7 @@ import com.hades.hKtweaks.utils.kernel.screen.Gamma;
 import com.hades.hKtweaks.utils.kernel.screen.GammaProfiles;
 import com.hades.hKtweaks.utils.kernel.screen.Misc;
 import com.hades.hKtweaks.views.ColorTable;
+import com.hades.hKtweaks.views.recyclerview.ApplyOnBootFView;
 import com.hades.hKtweaks.views.recyclerview.CardView;
 import com.hades.hKtweaks.views.recyclerview.DropDownView;
 import com.hades.hKtweaks.views.recyclerview.GenericSelectView;
@@ -91,12 +87,14 @@ public class ScreenFragment extends RecyclerViewFragment {
 
         mCalibration = Calibration.getInstance();
         mMisc = Misc.getInstance();
-        addViewPagerFragment(ApplyOnBootFragment.newInstance(this));
-        addViewPagerFragment(new ColorTableFragment());
     }
 
     @Override
     protected void addItems(List<RecyclerViewItem> items) {
+        if (!(getActivity() instanceof ProfileActivity))
+            items.add(new ApplyOnBootFView(getActivity(), this));
+        items.add(new ColorTableFView());
+
         screenColorInit(items);
         List<RecyclerViewItem> gammas = new ArrayList<>();
         if (Gamma.hasKGamma()) {
@@ -999,12 +997,19 @@ public class ScreenFragment extends RecyclerViewFragment {
         items.add(glove);
     }
 
-    public static class ColorTableFragment extends BaseFragment {
-        @Nullable
+    class ColorTableFView extends RecyclerViewItem {
+
         @Override
-        public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-                                 @Nullable Bundle savedInstanceState) {
-            return new ColorTable(getActivity());
+        public int getLayoutRes() {
+            return R.layout.fragment_linear_layout;
+        }
+
+        @Override
+        public void onCreateView(View view) {
+            super.onCreateView(view);
+            int padding = getResources().getDimensionPixelSize(R.dimen.ten_dp);
+            view.setPadding(padding, padding, padding, padding);
+            ((LinearLayout) view).addView(new ColorTable(getActivity()));
         }
     }
 

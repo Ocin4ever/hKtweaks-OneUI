@@ -32,19 +32,13 @@ import java.util.HashMap;
  */
 public class Vibration {
 
-    private static Vibration sInstance;
-
-    public static Vibration getInstance() {
-        if (sInstance == null) {
-            sInstance = new Vibration();
-        }
-        return sInstance;
-    }
-
     private static final String VIB_LIGHT = "/sys/devices/virtual/timed_output/vibrator/vmax_mv_light";
     private static final String VIB_ENABLE = "/sys/devices/i2c-3/3-0033/vibrator/vib0/vib_enable";
-
+    private static Vibration sInstance;
     private final HashMap<String, MinMax> mVibrations = new HashMap<>();
+    private String FILE;
+    private Integer MIN;
+    private Integer MAX;
 
     {
         mVibrations.put("/sys/class/timed_output/vibrator/amp", new MinMax(0, 100));
@@ -62,10 +56,6 @@ public class Vibration {
         mVibrations.put("/sys/kernel/thunderquake_engine/level", new MinMax(0, 7));
     }
 
-    private String FILE;
-    private Integer MIN;
-    private Integer MAX;
-
     private Vibration() {
         for (String file : mVibrations.keySet()) {
             if (Utils.existFile(file)) {
@@ -77,6 +67,13 @@ public class Vibration {
         if (FILE == null) return;
         MIN = mVibrations.get(FILE).getMin();
         MAX = mVibrations.get(FILE).getMax();
+    }
+
+    public static Vibration getInstance() {
+        if (sInstance == null) {
+            sInstance = new Vibration();
+        }
+        return sInstance;
     }
 
     public void setVibration(int value, Context context) {

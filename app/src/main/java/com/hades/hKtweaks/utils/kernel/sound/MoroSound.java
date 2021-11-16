@@ -33,7 +33,6 @@ public class MoroSound {
     //private static final String HEADPHONE_LIMITS = MORO_SOUND + "headphone_limits";
 
 
-
     private static final String VERSION = MORO_SOUND + "version";
 
     private static final List<String> sEqGains = new ArrayList<>();
@@ -62,115 +61,116 @@ public class MoroSound {
 
 
     // VERSION
-    public static boolean hasVersion(){
+    public static boolean hasVersion() {
         return Utils.existFile(VERSION);
     }
 
-    public static String getVersion(){
+    public static String getVersion() {
         return Utils.readFile(VERSION);
     }
 
 
     // HEADPHONE
-    public static boolean hasHeadphone(){
+    public static boolean hasHeadphone() {
         return Utils.existFile(HEADPHONE_GAIN);
     }
 
-    public static void setHeadphone(String value, Context context){
+    public static void setHeadphone(String value, Context context) {
         run(Control.write(value + " " + value, HEADPHONE_GAIN), HEADPHONE_GAIN, context);
     }
 
     // Grx
-    public static void setHeadPhoneValues(String value_left, String value_right, Context context){
+    public static void setHeadPhoneValues(String value_left, String value_right, Context context) {
         run(Control.write(value_left + " " + value_right, HEADPHONE_GAIN), HEADPHONE_GAIN, context);
     }
-/*
-    public static String getHeadphoneLimits(){
-        return Utils.readFile(HEADPHONE_LIMITS);
-    }
-*/
-    public static String getHeadphoneL(){
+
+    /*
+        public static String getHeadphoneLimits(){
+            return Utils.readFile(HEADPHONE_LIMITS);
+        }
+    */
+    public static String getHeadphoneL() {
         String[] value = Utils.readFile(HEADPHONE_GAIN).split(" ");
         return value[0];
     }
 
-    public static void setHeadphoneL(String value, Context context){
+    public static void setHeadphoneL(String value, Context context) {
         String right = getHeadphoneR();
-        run(Control.write(value + " " + right, HEADPHONE_GAIN),HEADPHONE_GAIN, context);
+        run(Control.write(value + " " + right, HEADPHONE_GAIN), HEADPHONE_GAIN, context);
     }
 
-    public static String getHeadphoneR(){
+    public static String getHeadphoneR() {
         String[] value = Utils.readFile(HEADPHONE_GAIN).split(" ");
         return value[1];
     }
-    
-    public static void setHeadphoneR(String value, Context context){
+
+    public static void setHeadphoneR(String value, Context context) {
         String left = getHeadphoneL();
         run(Control.write(left + " " + value, HEADPHONE_GAIN), HEADPHONE_GAIN, context);
     }
 
 
     // SPEAKER
-    public static boolean hasSpeaker(){
+    public static boolean hasSpeaker() {
         return Utils.existFile(SPEAKER_GAIN);
     }
 
-    public static String getSpeaker(){
+    public static String getSpeaker() {
         return Utils.readFile(SPEAKER_GAIN);
     }
 
-    public static void setSpeaker(String value, Context context){
+    public static void setSpeaker(String value, Context context) {
         run(Control.write(value, SPEAKER_GAIN), SPEAKER_GAIN, context);
     }
 
 
     // EARPIECE
-    public static boolean hasEarpiece(){
+    public static boolean hasEarpiece() {
         return Utils.existFile(EARPIECE_GAIN);
     }
 
-    public static String getEarpiece(){
+    public static String getEarpiece() {
         return Utils.readFile(EARPIECE_GAIN);
     }
 
-    public static void setEarpiece(String value, Context context){
+    public static void setEarpiece(String value, Context context) {
         run(Control.write(value, EARPIECE_GAIN), EARPIECE_GAIN, context);
     }
 
 
     // ENABLE SOUND SWITCH
-    public static boolean hasSoundSw(){
+    public static boolean hasSoundSw() {
         return Utils.existFile(MAIN_SW);
     }
 
-    public static Boolean isSoundSwEnabled(){
+    public static Boolean isSoundSwEnabled() {
         return Utils.readFile(MAIN_SW).equals("1");
     }
 
-    public static void enableSoundSw(Boolean enable, Context context){
+    public static void enableSoundSw(Boolean enable, Context context) {
         run(Control.write(enable ? "1" : "0", MAIN_SW), MAIN_SW, context);
     }
 
 
     // EQ
-    public static boolean hasEqSw(){
+    public static boolean hasEqSw() {
         return Utils.existFile(EQ_SW);
     }
 
-    public static Boolean isEqSwEnabled(){
+    public static Boolean isEqSwEnabled() {
         return Utils.readFile(EQ_SW).equals("1");
     }
 
-    public static void enableEqSw(Boolean enable, Context context){
+    public static void enableEqSw(Boolean enable, Context context) {
         run(Control.write(enable ? "1" : "0", EQ_SW), EQ_SW, context);
     }
 
-    public static List<String> getEqProfileList(){
+    public static List<String> getEqProfileList() {
         return new ArrayList<>(sEqProfiles.keySet());
     }
 
-    public static List<String> getEqProfileValues(String item){
-        String [] list = Objects.requireNonNull(sEqProfiles.get(item)).split(",");
+    public static List<String> getEqProfileValues(String item) {
+        String[] list = Objects.requireNonNull(sEqProfiles.get(item)).split(",");
         return Arrays.asList(list);
     }
 
@@ -195,20 +195,19 @@ public class MoroSound {
     }
 
     // Grx
-    public static String getCurrentProfileString(){
-        String value="";
+    public static String getCurrentProfileString() {
+        String value = "";
         int size = sEqGains.size();
-        for(int i = 0 ; i< size ; i++) {
-            value+=Utils.readFile(sEqGains.get(i));
-            if(i<size-1) value+=",";
+        for (int i = 0; i < size; i++) {
+            value += Utils.readFile(sEqGains.get(i));
+            if (i < size - 1) value += ",";
         }
         return value;
     }
 
-    public static String getEqValue(int id){
+    public static String getEqValue(int id) {
         return Utils.readFile(sEqGains.get(id));
     }
-
 
 
     public static boolean supported() {
@@ -218,12 +217,6 @@ public class MoroSound {
     private static void run(String command, String id, Context context) {
         Control.runSetting(command, ApplyOnBootFragment.SOUND, id, context);
     }
-
-
-
-
-
-
 
 
     //

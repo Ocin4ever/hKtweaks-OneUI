@@ -62,17 +62,17 @@ public class BluPlug {
         return Utils.existFile(HOTPLUG_BLU_PLUG_DOWN_TIMER_CNT);
     }
 
-// added by @nalas
-	public static void setBluPlugPlugThreshold(int value, Context context) {
+    // added by @nalas
+    public static void setBluPlugPlugThreshold(int value, Context context) {
         // run(Control.write(String.valueOf(value), HOTPLUG_BLU_PLUG_PLUG_THRESHOLD),
-		run(Control.write(String.valueOf(value), HOTPLUG_BLU_PLUG_PLUG_THRESHOLD),
+        run(Control.write(String.valueOf(value), HOTPLUG_BLU_PLUG_PLUG_THRESHOLD),
                 HOTPLUG_BLU_PLUG_PLUG_THRESHOLD, context);
     }
 
     public static int getBluPlugPlugThreshold() {
         return Utils.strToInt(Utils.readFile(HOTPLUG_BLU_PLUG_PLUG_THRESHOLD));
     }
-	
+
     public static boolean hasBluPlugPlugThreshold() {
         return Utils.existFile(HOTPLUG_BLU_PLUG_PLUG_THRESHOLD);
     }

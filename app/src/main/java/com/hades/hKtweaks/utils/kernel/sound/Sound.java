@@ -29,21 +29,10 @@ import com.hades.hKtweaks.utils.root.RootUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-import okhttp3.internal.Util;
-
 /**
  * Created by willi on 25.06.16.
  */
 public class Sound {
-
-    private static Sound sInstance;
-
-    public static Sound getInstance() {
-        if (sInstance == null) {
-            sInstance = new Sound();
-        }
-        return sInstance;
-    }
 
     private static final String SOUND_CONTROL_ENABLE = "/sys/module/snd_soc_wcd9320/parameters/enable_fs";
     private static final String HIGHPERF_MODE_ENABLE = "/sys/devices/virtual/misc/soundcontrol/highperf_enabled";
@@ -52,34 +41,29 @@ public class Sound {
     private static final String CAM_MICROPHONE_GAIN = "/sys/kernel/sound_control_3/gpl_cam_mic_gain";
     private static final String SPEAKER_BOOST = "/sys/devices/virtual/misc/soundcontrol/speaker_boost";
     private static final String HEADPHONE_POWERAMP_GAIN = "/sys/kernel/sound_control_3/gpl_headphone_pa_gain";
-
     private static final String TPA6165_REGISTERS_LIST = "/sys/kernel/debug/tpa6165/registers";
     private static final String TPA6165_SET_REG = "/sys/kernel/debug/tpa6165/set_reg";
-
     private static final String SPEAKER_GAIN = "/sys/kernel/sound_control_3/gpl_speaker_gain";
     private static final String LOCK_OUTPUT_GAIN = "/sys/kernel/sound_control_3/gpl_sound_control_locked";
     private static final String LOCK_MIC_GAIN = "/sys/kernel/sound_control_3/gpl_sound_control_rec_locked";
-
     private static final String MIC_BOOST = "/sys/devices/virtual/misc/soundcontrol/mic_boost";
     private static final String VOLUME_BOOST = "/sys/devices/virtual/misc/soundcontrol/volume_boost";
-
     private static final String HEADPHONE_FLAR = "/sys/kernel/sound_control/headphone_gain";
     private static final String MICROPHONE_FLAR = "/sys/kernel/sound_control/mic_gain";
     private static final String SPEAKER_FLAR = "/sys/kernel/sound_control/speaker_gain";
-
     private static final String HEADPHONE_MORO = "/sys/kernel/moro_sound_control/headphone_gain";
     //private static final String MICROPHONE_MORO = "/sys/kernel/moro_sound_control/mic_gain";
     private static final String EARPIECE_MORO = "/sys/kernel/moro_sound_control/earpiece_gain";
     private static final String SPEAKER_MORO = "/sys/kernel/moro_sound_control/speaker_gain";
-
+    private static Sound sInstance;
     private final List<String> mSpeakerGainFiles = new ArrayList<>();
-
     private final List<String> mFauxLimits = new ArrayList<>();
     private final List<String> mFrancoLimits = new ArrayList<>();
     private final List<String> mFlarLimits = new ArrayList<>();
     private final List<String> mFlarHpLimits = new ArrayList<>();
     private final List<String> mMoroHPLimits = new ArrayList<>();
     private final List<String> mMoroSPKLimits = new ArrayList<>();
+    private String SPEAKER_GAIN_FILE;
 
     {
         mSpeakerGainFiles.add(SPEAKER_GAIN);
@@ -113,8 +97,6 @@ public class Sound {
         }
     }
 
-    private String SPEAKER_GAIN_FILE;
-
     private Sound() {
         for (String file : mSpeakerGainFiles) {
             if (Utils.existFile(file)) {
@@ -122,6 +104,13 @@ public class Sound {
                 break;
             }
         }
+    }
+
+    public static Sound getInstance() {
+        if (sInstance == null) {
+            sInstance = new Sound();
+        }
+        return sInstance;
     }
 
     public void setVolumeGain(String value, Context context) {
@@ -299,7 +288,7 @@ public class Sound {
         }
     }
 
-    public boolean hasMoroSpeakerGain(){
+    public boolean hasMoroSpeakerGain() {
         return Utils.existFile(SPEAKER_MORO);
     }
 

@@ -21,6 +21,7 @@ package com.hades.hKtweaks.activities.tools.profile;
 
 import android.content.Intent;
 import android.os.Bundle;
+
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
@@ -35,6 +36,8 @@ import com.hades.hKtweaks.views.recyclerview.DescriptionView;
 import com.hades.hKtweaks.views.recyclerview.RecyclerViewItem;
 
 import java.util.List;
+
+import de.dlyt.yanndroid.oneui.layout.ToolbarLayout;
 
 /**
  * Created by willi on 15.08.16.
@@ -55,9 +58,10 @@ public class ProfileEditActivity extends BaseActivity {
         mPosition = getIntent().getIntExtra(POSITION_INTENT, 0);
 
         setContentView(R.layout.activity_fragments);
-        initToolBar();
 
-        getSupportActionBar().setTitle(getString(R.string.edit));
+        ToolbarLayout toolbarLayout = getToolBarLayout();
+        toolbarLayout.setTitle(getString(R.string.edit));
+        toolbarLayout.setNavigationButtonOnClickListener(v -> onBackPressed());
 
         getSupportFragmentManager().beginTransaction().replace(R.id.content_frame,
                 getFragment(), "fragment").commit();
@@ -82,6 +86,10 @@ public class ProfileEditActivity extends BaseActivity {
 
     public static class ProfileEditFragment extends RecyclerViewFragment {
 
+        private Profiles mProfiles;
+        private Profiles.ProfileItem mItem;
+        private Dialog mDeleteDialog;
+
         public static ProfileEditFragment newInstance(int position) {
             Bundle args = new Bundle();
             args.putInt(POSITION_INTENT, position);
@@ -90,19 +98,10 @@ public class ProfileEditActivity extends BaseActivity {
             return fragment;
         }
 
-        private Profiles mProfiles;
-        private Profiles.ProfileItem mItem;
-
-        private Dialog mDeleteDialog;
-
-        @Override
-        protected boolean showViewPager() {
-            return false;
-        }
-
         @Override
         protected void init() {
             super.init();
+            getRecyclerView().setBackgroundResource(R.color.item_background_color);
 
             if (mDeleteDialog != null) {
                 mDeleteDialog.show();

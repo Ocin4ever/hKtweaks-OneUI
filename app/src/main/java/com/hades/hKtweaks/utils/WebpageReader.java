@@ -35,13 +35,6 @@ import javax.net.ssl.HttpsURLConnection;
  */
 public class WebpageReader {
 
-    public interface WebpageListener {
-
-        void onSuccess(String url, String raw, CharSequence html);
-
-        void onFailure(String url);
-    }
-
     private Activity mActivity;
     private HttpURLConnection mConnection;
     private WebpageListener mWebpageListener;
@@ -103,6 +96,13 @@ public class WebpageReader {
                 mConnection.disconnect();
             }
         }).start();
+    }
+
+    public interface WebpageListener {
+
+        void onSuccess(String url, String raw, CharSequence html);
+
+        void onFailure(String url);
     }
 
 }

@@ -34,17 +34,12 @@ import java.util.List;
  */
 public class FeaturesFragment extends RecyclerViewFragment {
 
+    private List<SupportedDownloads.KernelContent.Feature> mFeatures;
+
     public static FeaturesFragment newInstance(List<SupportedDownloads.KernelContent.Feature> features) {
         FeaturesFragment fragment = new FeaturesFragment();
         fragment.mFeatures = features;
         return fragment;
-    }
-
-    private List<SupportedDownloads.KernelContent.Feature> mFeatures;
-
-    @Override
-    protected boolean showViewPager() {
-        return false;
     }
 
     @Override

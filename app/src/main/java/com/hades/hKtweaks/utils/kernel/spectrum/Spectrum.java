@@ -13,12 +13,12 @@ import com.hades.hKtweaks.utils.root.RootUtils;
 
 public class Spectrum {
 
-    public static int getSuProfile(){
+    public static int getSuProfile() {
         return Utils.strToInt(RootUtils.runCommand("getprop persist.spectrum.profile"));
     }
 
-    static int getProfile(Context context){
-        return AppSettings.getInt("spectrum_profile", 0 , context);
+    static int getProfile(Context context) {
+        return AppSettings.getInt("spectrum_profile", 0, context);
     }
 
     // Method that interprets a profile and sets it
@@ -41,11 +41,11 @@ public class Spectrum {
         }.execute();
     }
 
-    public static boolean suSupported(){
+    public static boolean suSupported() {
         return RootUtils.runCommand("getprop spectrum.support").equals("1");
     }
 
-    public static boolean supported(Context context){
+    public static boolean supported(Context context) {
         return AppSettings.getBoolean("spectrum_supported", false, context);
     }
 }

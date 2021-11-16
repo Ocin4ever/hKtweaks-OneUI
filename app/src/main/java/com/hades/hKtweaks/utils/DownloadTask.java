@@ -37,16 +37,6 @@ import javax.net.ssl.HttpsURLConnection;
  */
 public class DownloadTask {
 
-    public interface OnDownloadListener {
-        void onUpdate(String url, int currentSize, int totalSize);
-
-        void onSuccess(String url, String path);
-
-        void onCancel(String url);
-
-        void onFailure(String url);
-    }
-
     private final Activity mActivity;
     private final OnDownloadListener onDownloadListener;
     private PowerManager.WakeLock mWakelock;
@@ -152,6 +142,16 @@ public class DownloadTask {
 
     private void releaseWakelock() {
         mWakelock.release();
+    }
+
+    public interface OnDownloadListener {
+        void onUpdate(String url, int currentSize, int totalSize);
+
+        void onSuccess(String url, String path);
+
+        void onCancel(String url);
+
+        void onFailure(String url);
     }
 
 }

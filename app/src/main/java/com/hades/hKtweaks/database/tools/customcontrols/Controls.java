@@ -112,16 +112,16 @@ public class Controls extends Provider {
             return getString("arguments");
         }
 
-        public void enableOnBoot(boolean enable) {
+        public void setArguments(String arguments) {
             try {
-                getItem().put("onboot", enable);
+                getItem().put("arguments", arguments);
             } catch (JSONException ignored) {
             }
         }
 
-        public void setArguments(String arguments) {
+        public void enableOnBoot(boolean enable) {
             try {
-                getItem().put("arguments", arguments);
+                getItem().put("onboot", enable);
             } catch (JSONException ignored) {
             }
         }

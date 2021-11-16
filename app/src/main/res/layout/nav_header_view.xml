@@ -2,35 +2,28 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_marginTop = "30dp"
-    android:layout_height="@dimen/nav_header_height">
+    android:layout_height="@dimen/nav_header_height"
+    android:layout_marginTop="30dp">
 
-    <io.codetail.widget.RevealFrameLayout
+    <ImageView
+        android:id="@+id/nav_header_pic"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:contentDescription="@string/app_name"
+        android:scaleType="fitCenter"
+        android:src="@drawable/hades_adaptive_logo" />
 
-        <ImageView
-            android:id="@+id/nav_header_pic"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="?attr/colorSecondary"
-            android:contentDescription="@string/app_name"
-            android:scaleType="centerCrop"
-            android:src="@drawable/logo" />
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/nav_header_fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="top|end"
-            android:layout_marginStart="@dimen/nav_header_fab_margin_left"
-            android:layout_marginTop="@dimen/nav_header_fab_margin_top"
-            android:layout_marginEnd="@dimen/nav_header_fab_margin_right"
-            android:layout_marginBottom="@dimen/nav_header_fab_margin_bottom"
-            app:backgroundTint="?colorPrimary"
-            app:tint="?colorSecondary"
-            app:fabSize="mini"
-            app:srcCompat="@drawable/ic_gallery" />
-    </io.codetail.widget.RevealFrameLayout>
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/nav_header_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|end"
+        android:layout_marginStart="@dimen/nav_header_fab_margin_left"
+        android:layout_marginTop="@dimen/nav_header_fab_margin_top"
+        android:layout_marginEnd="@dimen/nav_header_fab_margin_right"
+        android:layout_marginBottom="@dimen/nav_header_fab_margin_bottom"
+        app:backgroundTint="?colorPrimary"
+        app:fabSize="mini"
+        app:srcCompat="@drawable/ic_samsung_image" />
 
 </FrameLayout>

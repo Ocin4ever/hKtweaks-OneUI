@@ -31,18 +31,17 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
+
 import androidx.annotation.Nullable;
 
 import com.hades.hKtweaks.R;
 import com.hades.hKtweaks.utils.AppSettings;
-import com.hades.hKtweaks.utils.AppUpdaterTask;
 import com.hades.hKtweaks.utils.Device;
 import com.hades.hKtweaks.utils.NotificationId;
-import com.hades.hKtweaks.utils.Utils;
+import com.hades.hKtweaks.utils.kernel.boefflawakelock.BoefflaWakelock;
 import com.hades.hKtweaks.utils.kernel.cpuvoltage.VoltageCl0;
 import com.hades.hKtweaks.utils.kernel.cpuvoltage.VoltageCl1;
 import com.hades.hKtweaks.utils.kernel.gpu.GPUFreqExynos;
-import com.hades.hKtweaks.utils.kernel.boefflawakelock.BoefflaWakelock;
 import com.hades.hKtweaks.utils.kernel.spectrum.Spectrum;
 import com.hades.hKtweaks.utils.root.RootUtils;
 
@@ -74,19 +73,15 @@ public class ApplyOnBootService extends Service {
             Notification.Builder builder = new Notification.Builder(
                     this, CHANNEL_ID);
             builder.setContentTitle(getString(R.string.apply_on_boot))
-                    .setSmallIcon(R.mipmap.ic_launcher);
+                    .setSmallIcon(R.drawable.ic_launcher);
             startForeground(NotificationId.APPLY_ON_BOOT, builder.build());
         }
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-
-        //Initialize AppUpdate check
-        AppUpdaterTask.appCheckNotification(this);
-
         //Initialize Boeffla Wakelock Blocker Files
-        if(BoefflaWakelock.supported()) {
+        if (BoefflaWakelock.supported()) {
             BoefflaWakelock.CopyWakelockBlockerDefault();
         }
 
@@ -123,10 +118,6 @@ public class ApplyOnBootService extends Service {
             if (extras != null) {
                 messenger = (Messenger) extras.get("messenger");
             }
-        }
-
-        if (messenger == null) {
-            Utils.setupStartActivity(this);
         }
 
         boolean applyOnBoot = ApplyOnBoot.apply(this, this::stopSelf);

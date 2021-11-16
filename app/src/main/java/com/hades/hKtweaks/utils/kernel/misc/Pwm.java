@@ -1,10 +1,10 @@
 package com.hades.hKtweaks.utils.kernel.misc;
 
-        import android.content.Context;
+import android.content.Context;
 
-        import com.hades.hKtweaks.fragments.ApplyOnBootFragment;
-        import com.hades.hKtweaks.utils.Utils;
-        import com.hades.hKtweaks.utils.root.Control;
+import com.hades.hKtweaks.fragments.ApplyOnBootFragment;
+import com.hades.hKtweaks.utils.Utils;
+import com.hades.hKtweaks.utils.root.Control;
 
 /**
  * Created by Morogoku on 25/04/2017.

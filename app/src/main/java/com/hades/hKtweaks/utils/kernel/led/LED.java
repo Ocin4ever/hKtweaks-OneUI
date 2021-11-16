@@ -36,24 +36,15 @@ import java.util.List;
  */
 public class LED {
 
-    private static LED sInstance;
-
-    public static LED getInstance() {
-        if (sInstance == null) {
-            sInstance = new LED();
-        }
-        return sInstance;
-    }
-
     private static final String RED_FADE = "/sys/class/leds/red/led_fade";
     private static final String RED_INTENSITY = "/sys/class/leds/red/led_intensity";
     private static final String RED_SPEED = "/sys/class/leds/red/led_speed";
     private static final String GREEN_RATE = "/sys/class/leds/green/rate";
-
+    private static LED sInstance;
     private final LinkedHashMap<Integer, Boolean> mRedSpeed = new LinkedHashMap<>();
     private final LinkedHashMap<Integer, Boolean> mGreenRate = new LinkedHashMap<>();
-
     private final HashMap<String, LinkedHashMap<Integer, Boolean>> mSpeeds = new HashMap<>();
+    private String SPEED;
 
     {
         mRedSpeed.put(R.string.stock, true);
@@ -70,8 +61,6 @@ public class LED {
         mSpeeds.put(GREEN_RATE, mGreenRate);
     }
 
-    private String SPEED;
-
     private LED() {
         for (String file : mSpeeds.keySet()) {
             if (Utils.existFile(file)) {
@@ -79,6 +68,13 @@ public class LED {
                 break;
             }
         }
+    }
+
+    public static LED getInstance() {
+        if (sInstance == null) {
+            sInstance = new LED();
+        }
+        return sInstance;
     }
 
     public void setSpeed(int value, Context context) {

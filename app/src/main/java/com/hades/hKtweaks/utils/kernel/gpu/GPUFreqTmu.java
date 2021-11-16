@@ -33,57 +33,49 @@ import java.util.List;
  */
 public class GPUFreqTmu {
 
-    private static GPUFreqTmu sIOInstance;
-
-    public static GPUFreqTmu getInstance() {
-        if (sIOInstance == null) {
-            sIOInstance = new GPUFreqTmu();
-        }
-        return sIOInstance;
-    }
-
     private static final String TMU_7885 = "/sys/devices/platform/11500000.mali/tmu";
     private static final String THROTTLING1_7885 = "/sys/devices/platform/11500000.mali/throttling1";
     private static final String THROTTLING2_7885 = "/sys/devices/platform/11500000.mali/throttling2";
     private static final String THROTTLING3_7885 = "/sys/devices/platform/11500000.mali/throttling3";
     private static final String THROTTLING4_7885 = "/sys/devices/platform/11500000.mali/throttling4";
     private static final String TRIPPING_7885 = "/sys/devices/platform/11500000.mali/tripping";
-
     private static final String TMU_78x0 = "/sys/devices/11400000.mali/tmu";
     private static final String THROTTLING1_78x0 = "/sys/devices/11400000.mali/throttling1";
     private static final String THROTTLING2_78x0 = "/sys/devices/11400000.mali/throttling2";
     private static final String THROTTLING3_78x0 = "/sys/devices/11400000.mali/throttling3";
     private static final String THROTTLING4_78x0 = "/sys/devices/11400000.mali/throttling4";
     private static final String TRIPPING_78x0 = "/sys/devices/11400000.mali/tripping";
-
     private static final String TMU_S7 = "/sys/devices/14ac0000.mali/tmu";
     private static final String THROTTLING1_S7 = "/sys/devices/14ac0000.mali/throttling1";
     private static final String THROTTLING2_S7 = "/sys/devices/14ac0000.mali/throttling2";
     private static final String THROTTLING3_S7 = "/sys/devices/14ac0000.mali/throttling3";
     private static final String THROTTLING4_S7 = "/sys/devices/14ac0000.mali/throttling4";
     private static final String TRIPPING_S7 = "/sys/devices/14ac0000.mali/tripping";
-
     private static final String TMU_S8 = "/sys/devices/platform/13900000.mali/tmu";
     private static final String THROTTLING1_S8 = "/sys/devices/platform/13900000.mali/throttling1";
     private static final String THROTTLING2_S8 = "/sys/devices/platform/13900000.mali/throttling2";
     private static final String THROTTLING3_S8 = "/sys/devices/platform/13900000.mali/throttling3";
     private static final String THROTTLING4_S8 = "/sys/devices/platform/13900000.mali/throttling4";
     private static final String TRIPPING_S8 = "/sys/devices/platform/13900000.mali/tripping";
-
     private static final String TMU_S9 = "/sys/devices/platform/17500000.mali/tmu";
     private static final String THROTTLING1_S9 = "/sys/devices/platform/17500000.mali/throttling1";
     private static final String THROTTLING2_S9 = "/sys/devices/platform/17500000.mali/throttling2";
     private static final String THROTTLING3_S9 = "/sys/devices/platform/17500000.mali/throttling3";
     private static final String THROTTLING4_S9 = "/sys/devices/platform/17500000.mali/throttling4";
     private static final String TRIPPING_S9 = "/sys/devices/platform/17500000.mali/tripping";
-
+    private static GPUFreqTmu sIOInstance;
     private final List<String> mTmu = new ArrayList<>();
     private final List<String> mThrottling1 = new ArrayList<>();
     private final List<String> mThrottling2 = new ArrayList<>();
     private final List<String> mThrottling3 = new ArrayList<>();
     private final List<String> mThrottling4 = new ArrayList<>();
     private final List<String> mTripping = new ArrayList<>();
-
+    private String TMU;
+    private String THROTTLING1;
+    private String THROTTLING2;
+    private String THROTTLING3;
+    private String THROTTLING4;
+    private String TRIPPING;
 
     {
         mTmu.add(TMU_7885);
@@ -122,13 +114,6 @@ public class GPUFreqTmu {
         mTripping.add(TRIPPING_S8);
         mTripping.add(TRIPPING_S9);
     }
-
-    private String TMU;
-    private String THROTTLING1;
-    private String THROTTLING2;
-    private String THROTTLING3;
-    private String THROTTLING4;
-    private String TRIPPING;
 
     private GPUFreqTmu() {
         for (String file : mTmu) {
@@ -172,6 +157,13 @@ public class GPUFreqTmu {
                 break;
             }
         }
+    }
+
+    public static GPUFreqTmu getInstance() {
+        if (sIOInstance == null) {
+            sIOInstance = new GPUFreqTmu();
+        }
+        return sIOInstance;
     }
 
     public void enableTmu(boolean enable, Context context) {

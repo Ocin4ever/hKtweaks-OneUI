@@ -13,7 +13,7 @@ public class AdrenoBoost {
 
     public static String getAdrenoBoost(Context context) {
         int mode = Utils.strToInt(Utils.readFile(ADRENOBOOST));
-        switch (mode){
+        switch (mode) {
             case 0:
                 return context.getString(R.string.gpu_adreno_boost_off);
             case 1:

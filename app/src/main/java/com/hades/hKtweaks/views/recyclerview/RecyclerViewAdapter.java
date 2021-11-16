@@ -19,28 +19,22 @@
  */
 package com.hades.hKtweaks.views.recyclerview;
 
-import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.hades.hKtweaks.R;
-import com.hades.hKtweaks.utils.AppSettings;
+import androidx.annotation.NonNull;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import de.dlyt.yanndroid.oneui.view.RecyclerView;
+
 /**
  * Created by willi on 17.04.16.
  */
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-
-    public interface OnViewChangedListener {
-        void viewChanged();
-    }
 
     private final List<RecyclerViewItem> mItems;
     private final Map<RecyclerViewItem, View> mViews = new HashMap<>();
@@ -87,16 +81,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         if (viewGroup != null) {
             viewGroup.removeView(view);
         }
-        if (item.cardCompatible() && AppSettings.isForceCards(parent.getContext())) {
-            CardView cardView =
-                    new CardView(view.getContext());
-            cardView.setRadius(view.getResources().getDimension(R.dimen.cardview_radius));
-            cardView.setCardElevation(view.getResources().getDimension(R.dimen.cardview_elevation));
-            cardView.setUseCompatPadding(true);
-            cardView.setFocusable(false);
-            cardView.addView(view);
-            view = cardView;
-        }
         if (position == 0) {
             mFirstItem = view;
         }
@@ -114,6 +98,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     public View getFirstItem() {
         return mFirstItem;
+    }
+
+    public interface OnViewChangedListener {
+        void viewChanged();
     }
 
 }

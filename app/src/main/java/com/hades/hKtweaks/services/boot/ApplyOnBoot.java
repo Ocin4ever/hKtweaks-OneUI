@@ -27,10 +27,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Handler;
+
 import androidx.core.app.NotificationCompat;
 
 import com.hades.hKtweaks.R;
-import com.hades.hKtweaks.activities.MainActivity;
+import com.hades.hKtweaks.activities.SplashActivity;
 import com.hades.hKtweaks.database.Settings;
 import com.hades.hKtweaks.database.tools.customcontrols.Controls;
 import com.hades.hKtweaks.database.tools.profiles.Profiles;
@@ -59,10 +60,6 @@ import java.util.List;
 public class ApplyOnBoot {
 
     private static boolean sCancel;
-
-    public interface ApplyOnBootListener {
-        void onFinish();
-    }
 
     public static boolean apply(ApplyOnBootService service, final ApplyOnBootListener listener) {
         if (!AppSettings.getBoolean(ApplyOnBootFragment
@@ -120,7 +117,7 @@ public class ApplyOnBoot {
         PendingIntent cancelIntent = PendingIntent.getBroadcast(service, 1,
                 new Intent(service, CancelReceiver.class), PendingIntent.FLAG_UPDATE_CURRENT);
 
-        Intent launchIntent = new Intent(service, MainActivity.class);
+        Intent launchIntent = new Intent(service, SplashActivity.class);
         PendingIntent contentIntent = PendingIntent.getActivity(service, 0, launchIntent, 0);
 
         final NotificationCompat.Builder builder =
@@ -129,7 +126,7 @@ public class ApplyOnBoot {
         if (!hideNotification) {
             builder.setContentTitle(service.getString(R.string.app_name))
                     .setContentText(service.getString(R.string.apply_on_boot_text, seconds))
-                    .setSmallIcon(R.mipmap.ic_launcher)
+                    .setSmallIcon(R.drawable.ic_launcher)
                     .addAction(0, service.getString(R.string.cancel), cancelIntent)
                     .setOngoing(true)
                     .setWhen(0);
@@ -142,7 +139,7 @@ public class ApplyOnBoot {
                 new NotificationCompat.Builder(service, ApplyOnBootService.CHANNEL_ID);
         if (!hideNotification) {
             builderComplete.setContentTitle(service.getString(R.string.app_name))
-                    .setSmallIcon(R.mipmap.ic_launcher)
+                    .setSmallIcon(R.drawable.ic_launcher)
                     .setContentIntent(contentIntent)
                     .setAutoCancel(true);
         }
@@ -345,6 +342,10 @@ public class ApplyOnBoot {
             commands.add(Control.write("1", CPUFreq.CPU_LOCK_FREQ));
         }
         return commands;
+    }
+
+    public interface ApplyOnBootListener {
+        void onFinish();
     }
 
     public static class CancelReceiver extends BroadcastReceiver {

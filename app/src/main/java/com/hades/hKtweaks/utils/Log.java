@@ -19,8 +19,6 @@
  */
 package com.hades.hKtweaks.utils;
 
-import com.hades.hKtweaks.BuildConfig;
-
 /**
  * Created by willi on 22.03.18.
  */

@@ -35,15 +35,6 @@ import java.util.List;
  */
 public class IntelliPlug {
 
-    private static IntelliPlug sInstance;
-
-    public static IntelliPlug getInstance() {
-        if (sInstance == null) {
-            sInstance = new IntelliPlug();
-        }
-        return sInstance;
-    }
-
     private static final String HOTPLUG_INTELLI_PLUG = "/sys/module/intelli_plug/parameters";
     private static final String HOTPLUG_INTELLI_PLUG_ENABLE = HOTPLUG_INTELLI_PLUG + "/intelli_plug_active";
     private static final String HOTPLUG_INTELLI_PLUG_INSANITY = HOTPLUG_INTELLI_PLUG + "/is_insanity";
@@ -54,7 +45,6 @@ public class IntelliPlug {
     private static final String HOTPLUG_INTELLI_PLUG_THRESHOLD = HOTPLUG_INTELLI_PLUG + "/cpu_nr_run_threshold";
     private static final String HOTPLUG_INTELLI_PLUG_SCREEN_OFF_MAX = HOTPLUG_INTELLI_PLUG + "/screen_off_max";
     private static final String MIN_ONLINE_CPUS = HOTPLUG_INTELLI_PLUG + "/min_online_cpus";
-
     private static final String HOTPLUG_INTELLI_PLUG_5 = "/sys/kernel/intelli_plug";
     private static final String HOTPLUG_INTELLI_PLUG_5_ENABLE = HOTPLUG_INTELLI_PLUG_5 + "/intelli_plug_active";
     private static final String HOTPLUG_INTELLI_PLUG_5_DEBUG = HOTPLUG_INTELLI_PLUG_5 + "/debug_intelli_plug";
@@ -72,9 +62,8 @@ public class IntelliPlug {
     private static final String HOTPLUG_INTELLI_PLUG_5_THRESHOLD = HOTPLUG_INTELLI_PLUG_5 + "/cpu_nr_run_threshold";
     private static final String HOTPLUG_INTELLI_PLUG_5_FSHIFT = HOTPLUG_INTELLI_PLUG_5 + "/nr_fshift";
     private static final String HOTPLUG_INTELLI_PLUG_5_SCREEN_OFF_MAX = HOTPLUG_INTELLI_PLUG_5 + "/screen_off_max";
-
     private static final String STATE_NOTIFIER = "/sys/module/state_notifier/parameters/enabled";
-
+    private static IntelliPlug sInstance;
     private Boolean mUseVersion5;
     private boolean mHasInsanity;
 
@@ -84,6 +73,13 @@ public class IntelliPlug {
         if (mUseVersion5 != null) {
             mHasInsanity = Utils.existFile(HOTPLUG_INTELLI_PLUG_INSANITY);
         }
+    }
+
+    public static IntelliPlug getInstance() {
+        if (sInstance == null) {
+            sInstance = new IntelliPlug();
+        }
+        return sInstance;
     }
 
     public void enableStateNotifier(boolean enable, Context context) {

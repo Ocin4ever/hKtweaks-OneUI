@@ -155,6 +155,7 @@ public class Misc {
     public static boolean isCpuFingerprintBoostEnabled() {
         return Utils.readFile(CPU_FINGERPRINT_BOOST).equals("1");
     }
+
     public static boolean hasCpuFingerprintBoost() {
         return Utils.existFile(CPU_FINGERPRINT_BOOST);
     }

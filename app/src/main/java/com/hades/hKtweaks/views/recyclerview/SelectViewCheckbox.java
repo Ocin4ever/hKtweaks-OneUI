@@ -99,26 +99,26 @@ public class SelectViewCheckbox extends ValueView {
         mDialog.show();
     }
 
-    private void setCheckBoxesFromInt(){
-        if ((mCurrValue & 1 ) != 0) mCheckBoxes[0]=true;
+    private void setCheckBoxesFromInt() {
+        if ((mCurrValue & 1) != 0) mCheckBoxes[0] = true;
         else mCheckBoxes[0] = false;
 
-        if ((mCurrValue & 2 ) != 0) mCheckBoxes[1]=true;
+        if ((mCurrValue & 2) != 0) mCheckBoxes[1] = true;
         else mCheckBoxes[1] = false;
 
-        if ((mCurrValue & 4 ) != 0) mCheckBoxes[2]=true;
+        if ((mCurrValue & 4) != 0) mCheckBoxes[2] = true;
         else mCheckBoxes[2] = false;
 
-        if ((mCurrValue & 8 ) != 0) mCheckBoxes[3]=true;
+        if ((mCurrValue & 8) != 0) mCheckBoxes[3] = true;
         else mCheckBoxes[3] = false;
     }
 
-    private void setIntValueFromCheckBoxes(Context context){
+    private void setIntValueFromCheckBoxes(Context context) {
         mCurrValue = 0;
-        if(mCheckBoxes[0]) mCurrValue+=1;
-        if(mCheckBoxes[1]) mCurrValue+=2;
-        if(mCheckBoxes[2]) mCurrValue+=4;
-        if(mCheckBoxes[3]) mCurrValue+=8;
+        if (mCheckBoxes[0]) mCurrValue += 1;
+        if (mCheckBoxes[1]) mCurrValue += 2;
+        if (mCheckBoxes[2]) mCurrValue += 4;
+        if (mCheckBoxes[3]) mCurrValue += 8;
 
         S2w.getInstance().set(mCurrValue, context);
     }

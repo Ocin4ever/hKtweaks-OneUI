@@ -21,9 +21,9 @@ package com.hades.hKtweaks.utils.kernel.cpu;
 
 import android.content.Context;
 import android.os.Build;
-import com.hades.hKtweaks.utils.Log;
 
 import com.hades.hKtweaks.R;
+import com.hades.hKtweaks.utils.Log;
 import com.hades.hKtweaks.utils.Utils;
 
 import org.json.JSONArray;
@@ -37,7 +37,32 @@ import java.util.HashMap;
  */
 public class Temperature {
 
+    private static final HashMap<String, Integer> sCPUTemps = new HashMap<>();
+    private static final String THERMAL_ZONE0 = "/sys/class/thermal/thermal_zone0/temp";
     private static Temperature sInstance;
+    private static String EXYNOS_CPU_NODE;
+    private static String EXYNOS_GPU_NODE;
+    private static int EXYNOS_CPU_OFFSET;
+    private static int EXYNOS_GPU_OFFSET;
+    private static boolean isExynos = false;
+
+    static {
+        sCPUTemps.put("/sys/devices/platform/omap/omap_temp_sensor.0/temperature", 1000);
+        sCPUTemps.put("/proc/mtktscpu/mtktscpu_temperature", 1000);
+    }
+
+    private TempJson TEMP_JSON;
+    private String CPU_NODE;
+    private int CPU_OFFSET;
+    private String GPU_NODE;
+    private int GPU_OFFSET;
+
+    private Temperature(Context context) {
+        TEMP_JSON = new TempJson(context);
+        if (!TEMP_JSON.supported()) {
+            TEMP_JSON = null;
+        }
+    }
 
     public static Temperature getInstance(Context context) {
         if (sInstance == null) {
@@ -46,30 +71,8 @@ public class Temperature {
         return sInstance;
     }
 
-    private static final HashMap<String, Integer> sCPUTemps = new HashMap<>();
-
-    private static final String THERMAL_ZONE0 = "/sys/class/thermal/thermal_zone0/temp";
-
-    static {
-        sCPUTemps.put("/sys/devices/platform/omap/omap_temp_sensor.0/temperature", 1000);
-        sCPUTemps.put("/proc/mtktscpu/mtktscpu_temperature", 1000);
-    }
-
-    private TempJson TEMP_JSON;
-
-    private String CPU_NODE;
-    private int CPU_OFFSET;
-
-    private String GPU_NODE;
-    private int GPU_OFFSET;
-
-    private static String EXYNOS_CPU_NODE;
-    private static String EXYNOS_GPU_NODE;
-    private static int EXYNOS_CPU_OFFSET;
-    private static int EXYNOS_GPU_OFFSET;
-    private static boolean isExynos = false;
     private static void getExyNodes() {
-        for (String node : new String[] {
+        for (String node : new String[]{
                 // Add on this list needed values for temp zones.
                 "/sys/class/thermal/thermal_zone"}
         ) {
@@ -90,13 +93,6 @@ public class Temperature {
                     }
                 }
             }
-        }
-    }
-
-    private Temperature(Context context) {
-        TEMP_JSON = new TempJson(context);
-        if (!TEMP_JSON.supported()) {
-            TEMP_JSON = null;
         }
     }
 
@@ -191,7 +187,7 @@ public class Temperature {
             try {
                 JSONArray tempArray = new JSONArray(Utils.readAssetFile(context, "temp.json"));
                 String board = Build.BOARD.toLowerCase();
-                if (board.contains("exynos") || board.contains("universal")){
+                if (board.contains("exynos") || board.contains("universal")) {
                     isExynos = true;
                     getExyNodes();
                 }

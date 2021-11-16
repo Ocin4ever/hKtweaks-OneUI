@@ -24,54 +24,47 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.res.ColorStateList;
-import androidx.appcompat.widget.AppCompatImageView;
-import androidx.appcompat.widget.PopupMenu;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.appcompat.widget.AppCompatImageView;
+
+import com.google.android.material.card.MaterialCardView;
 import com.hades.hKtweaks.R;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import de.dlyt.yanndroid.oneui.view.PopupMenu;
+
 /**
  * Created by willi on 18.04.16.
  */
 public class CardView extends RecyclerViewItem {
 
-    public interface OnMenuListener {
-        void onMenuReady(CardView cardView, PopupMenu popupMenu);
-    }
-
     private Activity mActivity;
-
-    private androidx.cardview.widget.CardView mRootView;
+    private MaterialCardView mRootView;
     private View mTitleParent;
     private TextView mTitle;
     private AppCompatImageView mArrow;
     private View mLayoutParent;
     private LinearLayout mLayout;
     private View mMenuButton;
-
     private CharSequence mTitleText;
     private PopupMenu mPopupMenu;
     private OnMenuListener mOnMenuListener;
-
     private List<RecyclerViewItem> mItems = new ArrayList<>();
     private HashMap<RecyclerViewItem, View> mViews = new HashMap<>();
-
     private List<RecyclerViewItem> mLoading = new ArrayList<>();
     private List<Runnable> mRunnables = new ArrayList<>();
-
     private int mLayoutHeight;
     private ValueAnimator mLayoutAnimator;
     private boolean mShowLayout = true;
     private boolean mExpandable = true;
-
     private boolean mGrxIsInitSelected = false;
     private int mGrxColor = 0;
 
@@ -97,13 +90,13 @@ public class CardView extends RecyclerViewItem {
     }
 
     private void initLayouts(View view) {
-        mRootView = (androidx.cardview.widget.CardView) view;
+        mRootView = (MaterialCardView) view;
         mTitleParent = view.findViewById(R.id.title_parent);
         mTitle = view.findViewById(R.id.card_title);
         mArrow = view.findViewById(R.id.arrow_image);
         mLayoutParent = view.findViewById(R.id.layout_parent);
         mLayout = view.findViewById(R.id.card_layout);
-        if(mGrxIsInitSelected) this.setCardBackgroundColor(mGrxColor);
+        if (mGrxIsInitSelected) this.setCardBackgroundColor(mGrxColor);
     }
 
     @Override
@@ -127,7 +120,7 @@ public class CardView extends RecyclerViewItem {
         mLayoutParent.setVisibility(mShowLayout ? View.VISIBLE : View.GONE);
         mArrow.setRotationX(mShowLayout ? 0 : 180);
 
-        if(mExpandable) {
+        if (mExpandable) {
             mTitleParent.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -191,21 +184,21 @@ public class CardView extends RecyclerViewItem {
         refresh();
     }
 
-    public void GrxSetInitSelection(boolean isInitSelected, int color ){
+    public void GrxSetInitSelection(boolean isInitSelected, int color) {
         mGrxIsInitSelected = isInitSelected;
         mGrxColor = color;
     }
 
-    public void setCardBackgroundColor(int color){
-        mRootView.setCardBackgroundColor(color);
-    }
-
-    public void setCardBackgroundColor (ColorStateList color){
-        mRootView.setCardBackgroundColor(color);
-    }
-
-    public ColorStateList getCardBackgroundColor(){
+    public ColorStateList getCardBackgroundColor() {
         return mRootView.getCardBackgroundColor();
+    }
+
+    public void setCardBackgroundColor(int color) {
+        mRootView.setCardBackgroundColor(color);
+    }
+
+    public void setCardBackgroundColor(ColorStateList color) {
+        mRootView.setCardBackgroundColor(color);
     }
 
     public void addItem(final RecyclerViewItem item) {
@@ -322,18 +315,18 @@ public class CardView extends RecyclerViewItem {
         }
         if (mMenuButton != null && mOnMenuListener != null) {
             mMenuButton.setVisibility(View.VISIBLE);
-            mPopupMenu = new PopupMenu(mMenuButton.getContext(), mMenuButton);
+            mPopupMenu = new PopupMenu(mMenuButton);
             mOnMenuListener.onMenuReady(this, mPopupMenu);
         }
         if (mRootView != null && getOnItemClickListener() != null) {
             mRootView.setOnClickListener(view
                     -> getOnItemClickListener().onClick(CardView.this));
         }
+        if (mArrow != null) mArrow.setVisibility(mExpandable ? View.VISIBLE : View.GONE);
     }
 
-    @Override
-    protected boolean cardCompatible() {
-        return false;
+    public interface OnMenuListener {
+        void onMenuReady(CardView cardView, PopupMenu popupMenu);
     }
 
 }

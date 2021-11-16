@@ -69,6 +69,7 @@ public class Gamma {
     private static final List<String> sKGammaFiles = new ArrayList<>();
     private static final List<String> sGammaControlFiles = new ArrayList<>();
     private static final List<String> sDsiPanelFiles = new ArrayList<>();
+    private static GammaProfiles GAMMA_PROFILES;
 
     static {
         sKGammaFiles.add(K_GAMMA_R);
@@ -103,8 +104,6 @@ public class Gamma {
         sDsiPanelFiles.add(DSI_PANEL_W);
 
     }
-
-    private static GammaProfiles GAMMA_PROFILES;
 
     public static void setDsiPanelProfile(int profile, GammaProfiles.DsiPanelProfiles dsiPanelProfiles, Context context) {
         setBlueNegative(dsiPanelProfiles.getBlueNegative(profile), context);

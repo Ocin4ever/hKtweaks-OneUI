@@ -25,7 +25,6 @@ import com.hades.hKtweaks.R;
 import com.hades.hKtweaks.fragments.ApplyOnBootFragment;
 import com.hades.hKtweaks.utils.Utils;
 import com.hades.hKtweaks.utils.root.Control;
-import com.hades.hKtweaks.utils.root.RootUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -37,26 +36,14 @@ import java.util.List;
  */
 public class GPUFreqExynos {
 
-    private static GPUFreqExynos sIOInstance;
-
-    public static GPUFreqExynos getInstance() {
-        if (sIOInstance == null) {
-            sIOInstance = new GPUFreqExynos();
-        }
-        return sIOInstance;
-    }
-
     public static final String BACKUP = "/data/.hKtweaks/gpu_stock_voltage";
-
     private static final String MAX_FREQ_STOCK = "/sys/kernel/gpu/gpu_max_clock";
     private static final String MIN_FREQ_STOCK = "/sys/kernel/gpu/gpu_min_clock";
     private static final String AVAILABLE_FREQS_STOCK = "/sys/kernel/gpu/gpu_freq_table";
     private static final String DRIVER_VERSION = "/sys/module/mali_kbase/version";
-
     private static final String MAX_S7_FREQ_STOCK = "/sys/devices/platform/gpusysfs/gpu_max_clock";
     private static final String MIN_S7_FREQ_STOCK = "/sys/devices/platform/gpusysfs/gpu_min_clock";
     private static final String AVAILABLE_S7_FREQS_STOCK = "/sys/devices/platform/gpusysfs/gpu_freq_table";
-
     private static final String MAX_7885_FREQ = "/sys/devices/platform/11500000.mali/max_clock";
     private static final String MIN_7885_FREQ = "/sys/devices/platform/11500000.mali/min_clock";
     private static final String CUR_7885_FREQ = "/sys/devices/platform/11500000.mali/clock";
@@ -67,7 +54,6 @@ public class GPUFreqExynos {
     private static final String TUNABLE_HIGHSPEED_7885_DELAY = "/sys/devices/platform/11500000.mali/highspeed_delay";
     private static final String POWER_POLICY_7885 = "/sys/devices/platform/11500000.mali/power_policy";
     private static final String USAGE_7885 = "/sys/devices/platform/11500000.mali/utilization";
-
     private static final String MAX_78x0_FREQ = "/sys/devices/11400000.mali/max_clock";
     private static final String MIN_78x0_FREQ = "/sys/devices/11400000.mali/min_clock";
     private static final String CUR_78x0_FREQ = "/sys/devices/11400000.mali/clock";
@@ -78,7 +64,6 @@ public class GPUFreqExynos {
     private static final String TUNABLE_HIGHSPEED_78x0_DELAY = "/sys/devices/11400000.mali/highspeed_delay";
     private static final String POWER_POLICY_78x0 = "/sys/devices/11400000.mali/power_policy";
     private static final String USAGE_78x0 = "/sys/devices/11400000.mali/utilization";
-
     private static final String MAX_S7_FREQ = "/sys/devices/14ac0000.mali/max_clock";
     private static final String MIN_S7_FREQ = "/sys/devices/14ac0000.mali/min_clock";
     private static final String CUR_S7_FREQ = "/sys/devices/14ac0000.mali/clock";
@@ -89,7 +74,6 @@ public class GPUFreqExynos {
     private static final String TUNABLE_HIGHSPEED_S7_DELAY = "/sys/devices/14ac0000.mali/highspeed_delay";
     private static final String POWER_POLICY_S7 = "/sys/devices/14ac0000.mali/power_policy";
     private static final String USAGE_S7 = "/sys/devices/14ac0000.mali/utilization";
-
     private static final String MAX_S8_FREQ = "/sys/devices/platform/13900000.mali/max_clock";
     private static final String MIN_S8_FREQ = "/sys/devices/platform/13900000.mali/min_clock";
     private static final String CUR_S8_FREQ = "/sys/devices/platform/13900000.mali/clock";
@@ -100,7 +84,6 @@ public class GPUFreqExynos {
     private static final String TUNABLE_HIGHSPEED_S8_DELAY = "/sys/devices/platform/13900000.mali/highspeed_delay";
     private static final String POWER_POLICY_S8 = "/sys/devices/platform/13900000.mali/power_policy";
     private static final String USAGE_S8 = "/sys/devices/platform/13900000.mali/utilization";
-
     private static final String MAX_S9_FREQ = "/sys/devices/platform/17500000.mali/max_clock";
     private static final String MIN_S9_FREQ = "/sys/devices/platform/17500000.mali/min_clock";
     private static final String CUR_S9_FREQ = "/sys/devices/platform/17500000.mali/clock";
@@ -111,7 +94,6 @@ public class GPUFreqExynos {
     private static final String TUNABLE_HIGHSPEED_S9_DELAY = "/sys/devices/platform/17500000.mali/highspeed_delay";
     private static final String POWER_POLICY_S9 = "/sys/devices/platform/17500000.mali/power_policy";
     private static final String USAGE_S9 = "/sys/devices/platform/17500000.mali/utilization";
-
     private static final String MAX_S10_FREQ = "/sys/devices/platform/18500000.mali/max_clock";
     private static final String MIN_S10_FREQ = "/sys/devices/platform/18500000.mali/min_clock";
     private static final String CUR_S10_FREQ = "/sys/devices/platform/18500000.mali/clock";
@@ -122,8 +104,7 @@ public class GPUFreqExynos {
     private static final String TUNABLE_HIGHSPEED_S10_DELAY = "/sys/devices/platform/18500000.mali/highspeed_delay";
     private static final String POWER_POLICY_S10 = "/sys/devices/platform/18500000.mali/power_policy";
     private static final String USAGE_S10 = "/sys/devices/platform/18500000.mali/utilization";
-
-
+    private static GPUFreqExynos sIOInstance;
     private final HashMap<String, Integer> mAvailableVolts = new HashMap<>();
     private final HashMap<String, Integer> mCurrentFreqs = new HashMap<>();
     private final List<String> mMaxFreqs = new ArrayList<>();
@@ -135,6 +116,24 @@ public class GPUFreqExynos {
     private final HashMap<String, Integer> mTunableHighspeedDelays = new HashMap<>();
     private final HashMap<String, Integer> mPowerPolicies = new HashMap<>();
     private final HashMap<String, Integer> mUsage = new HashMap<>();
+    public String AVAILABLE_VOLTS;
+    public boolean needRefactor;
+    private int AVAILABLE_VOLTS_OFFSET;
+    private String CUR_FREQ;
+    private Integer CUR_FREQ_OFFSET;
+    private List<Integer> AVAILABLE_FREQS;
+    private List<Integer> AVAILABLE_FREQS_SORT;
+    private String MAX_FREQ;
+    private String MIN_FREQ;
+    private String GOVERNOR;
+    private String TUNABLE_HIGHSPEED_CLOCK;
+    private String TUNABLE_HIGHSPEED_LOAD;
+    private String TUNABLE_HIGHSPEED_DELAY;
+    private String POWER_POLICY;
+    private String USAGE;
+    private String SPLIT_NEW_LINE = "\\r?\\n";
+    private String SPLIT_LINE = " ";
+    private String hz;
 
     {
         mAvailableVolts.put(AVAILABLE_7885_FREQS, 1000);
@@ -221,25 +220,6 @@ public class GPUFreqExynos {
         mUsage.put(USAGE_S10, 1);
     }
 
-    public String AVAILABLE_VOLTS;
-    private int AVAILABLE_VOLTS_OFFSET;
-    private String CUR_FREQ;
-    private Integer CUR_FREQ_OFFSET;
-    private List<Integer> AVAILABLE_FREQS;
-    private List<Integer> AVAILABLE_FREQS_SORT;
-    private String MAX_FREQ;
-    private String MIN_FREQ;
-    private String GOVERNOR;
-    private String TUNABLE_HIGHSPEED_CLOCK;
-    private String TUNABLE_HIGHSPEED_LOAD;
-    private String TUNABLE_HIGHSPEED_DELAY;
-    private String POWER_POLICY;
-    private String USAGE;
-
-    private String SPLIT_NEW_LINE = "\\r?\\n";
-    private String SPLIT_LINE = " ";
-
-
     private GPUFreqExynos() {
         for (String file : mAvailableVolts.keySet()) {
             if (Utils.existFile(file)) {
@@ -273,7 +253,7 @@ public class GPUFreqExynos {
 
         for (String file : mAvailableFreqs) {
             if (Utils.existFile(file)) {
-                if ((file.equals(AVAILABLE_S7_FREQS_STOCK)) || (file.equals(AVAILABLE_FREQS_STOCK))){
+                if ((file.equals(AVAILABLE_S7_FREQS_STOCK)) || (file.equals(AVAILABLE_FREQS_STOCK))) {
                     String freqs[] = Utils.readFile(file).split(" ");
                     AVAILABLE_FREQS = new ArrayList<>();
                     AVAILABLE_FREQS_SORT = new ArrayList<>();
@@ -339,28 +319,33 @@ public class GPUFreqExynos {
         }
     }
 
-    public boolean needRefactor;
-    private String hz;
-    public String refactor(String hz){
-        if (hz.length() > 4){
+    public static GPUFreqExynos getInstance() {
+        if (sIOInstance == null) {
+            sIOInstance = new GPUFreqExynos();
+        }
+        return sIOInstance;
+    }
+
+    public String refactor(String hz) {
+        if (hz.length() > 4) {
             hz = String.valueOf(Utils.strToInt(hz) / 1000);
-            needRefactor= true;
+            needRefactor = true;
         }
         return hz;
     }
 
     public void setGovernor(String value, Context context) {
-        switch (value){
-            case "Default" :
+        switch (value) {
+            case "Default":
                 run(Control.write("0", GOVERNOR), GOVERNOR, context);
                 break;
-            case "Interactive" :
+            case "Interactive":
                 run(Control.write("1", GOVERNOR), GOVERNOR, context);
                 break;
-            case "Static" :
+            case "Static":
                 run(Control.write("2", GOVERNOR), GOVERNOR, context);
                 break;
-            case "Booster" :
+            case "Booster":
                 run(Control.write("3", GOVERNOR), GOVERNOR, context);
                 break;
         }
@@ -372,11 +357,11 @@ public class GPUFreqExynos {
             String[] lines = value.split("\\r?\\n");
             List<String> governors = new ArrayList<>();
             for (String line : lines) {
-                if (line.startsWith("[Current Governor]")){
+                if (line.startsWith("[Current Governor]")) {
                     break;
                 }
                 governors.add(line);
-        }
+            }
             return governors;
         }
         return null;
@@ -388,7 +373,7 @@ public class GPUFreqExynos {
             String[] lines = value.split("\\r?\\n");
             String governor = "";
             for (String line : lines) {
-                if (line.startsWith("[Current Governor]")){
+                if (line.startsWith("[Current Governor]")) {
                     governor = line.replace("[Current Governor] ", "");
                 }
             }
@@ -505,7 +490,7 @@ public class GPUFreqExynos {
     }
 
     public void setVoltage(Integer freq, String voltage, Context context) {
-        String volt = String.valueOf((int)(Utils.strToFloat(voltage) * AVAILABLE_VOLTS_OFFSET));
+        String volt = String.valueOf((int) (Utils.strToFloat(voltage) * AVAILABLE_VOLTS_OFFSET));
         run(Control.write(freq + " " + volt, AVAILABLE_VOLTS), AVAILABLE_VOLTS + freq, context);
     }
 
@@ -582,7 +567,7 @@ public class GPUFreqExynos {
         return USAGE != null;
     }
 
-    public int getVoltageOffset () {
+    public int getVoltageOffset() {
         return AVAILABLE_VOLTS_OFFSET;
     }
 
@@ -600,7 +585,7 @@ public class GPUFreqExynos {
                 || (hasMinFreq() && getAvailableFreqs() != null)
                 || hasGovernor()
                 || hasHighspeedClock() || hasHighspeedLoad() || hasHighspeedDelay()
-                || hasPowerPolicy() || hasUsage() ;
+                || hasPowerPolicy() || hasUsage();
     }
 
     private void run(String command, String id, Context context) {

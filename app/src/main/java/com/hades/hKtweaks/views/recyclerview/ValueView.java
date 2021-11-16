@@ -19,9 +19,10 @@
  */
 package com.hades.hKtweaks.views.recyclerview;
 
-import androidx.annotation.StringRes;
 import android.view.View;
 import android.widget.TextView;
+
+import androidx.annotation.StringRes;
 
 import com.hades.hKtweaks.R;
 
@@ -57,14 +58,22 @@ public abstract class ValueView extends RecyclerViewItem {
         super.onCreateView(view);
     }
 
+    public void setSummary(CharSequence summary) {
+        mSummary = summary;
+        refresh();
+    }
+
+    public CharSequence getTitle() {
+        return mTitle;
+    }
+
     public void setTitle(CharSequence title) {
         mTitle = title;
         refresh();
     }
 
-    public void setSummary(CharSequence summary) {
-        mSummary = summary;
-        refresh();
+    public String getValue() {
+        return mValue;
     }
 
     public void setValue(String value) {
@@ -75,14 +84,6 @@ public abstract class ValueView extends RecyclerViewItem {
     public void setValue(@StringRes int value) {
         mValuesRes = value;
         refresh();
-    }
-
-    public CharSequence getTitle() {
-        return mTitle;
-    }
-
-    public String getValue() {
-        return mValue;
     }
 
     @Override

@@ -1,10 +1,13 @@
 package com.hades.hKtweaks.views.recyclerview;
 
-import androidx.appcompat.widget.AppCompatTextView;
+import android.content.res.ColorStateList;
 import android.view.View;
 
-import com.akexorcist.roundcornerprogressbar.RoundCornerProgressBar;
+import androidx.appcompat.widget.AppCompatTextView;
+
 import com.hades.hKtweaks.R;
+
+import de.dlyt.yanndroid.oneui.view.ProgressBar;
 
 /**
  * Created by MoroGoku on 27/09/2017.
@@ -12,7 +15,7 @@ import com.hades.hKtweaks.R;
 
 public class ProgressBarView extends RecyclerViewItem {
 
-    private RoundCornerProgressBar mProgressBar;
+    private ProgressBar mProgressBar;
     private AppCompatTextView mTitle;
     private AppCompatTextView mTotal;
     private AppCompatTextView mUsed;
@@ -30,7 +33,6 @@ public class ProgressBarView extends RecyclerViewItem {
     private long mProgress;
     private int mMax = 100;
     private int mPadding = 0;
-    private int mRadius = 10;
     private int mColorBackground;
     private int mColorProgress;
     private String mUnit;
@@ -46,7 +48,7 @@ public class ProgressBarView extends RecyclerViewItem {
     @Override
     public void onCreateView(final View view) {
 
-        mProgressBar = (RoundCornerProgressBar) view.findViewById(R.id.progressbar);
+        mProgressBar = view.findViewById(R.id.progressbar);
         mTitle = (AppCompatTextView) view.findViewById(R.id.title);
         mTotal = (AppCompatTextView) view.findViewById(R.id.total);
         mUsed = (AppCompatTextView) view.findViewById(R.id.used);
@@ -102,7 +104,7 @@ public class ProgressBarView extends RecyclerViewItem {
             mFreeText = String.valueOf(total - progress);
             mPercentText = String.valueOf(mProgress) + " %";
             refresh();
-        }catch (Exception ignored) {
+        } catch (Exception ignored) {
         }
     }
 
@@ -116,18 +118,13 @@ public class ProgressBarView extends RecyclerViewItem {
         refresh();
     }
 
-    public void showPercent(boolean bool){
+    public void showPercent(boolean bool) {
         mShowPercent = bool;
         refresh();
     }
 
     public void setPadding(int padding) {
         mPadding = padding;
-        refresh();
-    }
-
-    public void setRadius(int radius) {
-        mRadius = radius;
         refresh();
     }
 
@@ -144,7 +141,7 @@ public class ProgressBarView extends RecyclerViewItem {
     @Override
     protected void refresh() {
         super.refresh();
-        if (mTitle != null){
+        if (mTitle != null) {
             if (mTitleText != null) {
                 mTitle.setText(mTitleText);
             }
@@ -157,10 +154,10 @@ public class ProgressBarView extends RecyclerViewItem {
         if (mUsed != null && mUsedText != null) {
             String text = mUsedText;
             if (mUnit != null) text += " " + mUnit;
-            if (mShowUsed){
+            if (mShowUsed) {
                 text += " ";
                 mUsedLabel.setVisibility(View.VISIBLE);
-            }else {
+            } else {
                 mUsedLabel.setVisibility(View.GONE);
             }
             mUsed.setText(text);
@@ -168,27 +165,28 @@ public class ProgressBarView extends RecyclerViewItem {
         if (mFree != null && mFreeText != null) {
             String text = mFreeText;
             if (mUnit != null) text += " " + mUnit;
-            if (mShowFree){
+            if (mShowFree) {
                 text += " ";
                 mFreeLabel.setVisibility(View.VISIBLE);
-            }else {
+            } else {
                 mFreeLabel.setVisibility(View.GONE);
             }
             mFree.setText(text);
         }
         if (mProgressBar != null) {
-            mProgressBar.setProgress(mProgress);
+            mProgressBar.setProgress((int) mProgress);
             mProgressBar.setMax(mMax);
-            mProgressBar.setPadding(mPadding);
-            mProgressBar.setRadius(mRadius);
-            if (mColorProgress != 0) mProgressBar.setProgressColor(mColorProgress);
-            if (mColorBackground != 0) mProgressBar.setProgressBackgroundColor(mColorBackground);
+            mProgressBar.setPadding(mPadding, mPadding, mPadding, mPadding);
+            if (mColorProgress != 0)
+                mProgressBar.setProgressTintList(ColorStateList.valueOf(mColorProgress));
+            if (mColorBackground != 0)
+                mProgressBar.setProgressBackgroundTintList(ColorStateList.valueOf(mColorBackground));
             if (mPercent != null) {
-                if(mPercentText != null){
+                if (mPercentText != null) {
                     mPercent.setText(mPercentText);
-                    if(mShowPercent){
+                    if (mShowPercent) {
                         mPercent.setVisibility(View.VISIBLE);
-                    }else {
+                    } else {
                         mPercent.setVisibility(View.GONE);
                     }
                 }

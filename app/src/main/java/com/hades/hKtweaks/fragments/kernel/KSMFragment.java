@@ -20,14 +20,15 @@
 package com.hades.hKtweaks.fragments.kernel;
 
 import com.hades.hKtweaks.R;
-import com.hades.hKtweaks.fragments.ApplyOnBootFragment;
+import com.hades.hKtweaks.activities.tools.profile.ProfileActivity;
 import com.hades.hKtweaks.fragments.recyclerview.RecyclerViewFragment;
 import com.hades.hKtweaks.utils.kernel.ksm.KSM;
+import com.hades.hKtweaks.views.recyclerview.ApplyOnBootFView;
 import com.hades.hKtweaks.views.recyclerview.CardView;
-import com.hades.hKtweaks.views.recyclerview.DescriptionView;
 import com.hades.hKtweaks.views.recyclerview.RecyclerViewItem;
 import com.hades.hKtweaks.views.recyclerview.SeekBarView;
 import com.hades.hKtweaks.views.recyclerview.SelectView;
+import com.hades.hKtweaks.views.recyclerview.StatsView;
 import com.hades.hKtweaks.views.recyclerview.SwitchView;
 
 import java.util.ArrayList;
@@ -38,9 +39,9 @@ import java.util.List;
  */
 public class KSMFragment extends RecyclerViewFragment {
 
+    private final List<StatsView> mInfos = new ArrayList<>();
+    private final List<String> mInfoSummaries = new ArrayList<>();
     private KSM mKSM;
-
-    private List<DescriptionView> mInfos = new ArrayList<>();
 
     public int getSpanCount() {
         return super.getSpanCount() + 1;
@@ -51,11 +52,13 @@ public class KSMFragment extends RecyclerViewFragment {
         super.init();
 
         mKSM = KSM.getInstance();
-        addViewPagerFragment(ApplyOnBootFragment.newInstance(this));
     }
 
     @Override
     protected void addItems(List<RecyclerViewItem> items) {
+        if (!(getActivity() instanceof ProfileActivity))
+            items.add(new ApplyOnBootFView(getActivity(), this));
+
         infoInit(items);
 
         CardView ksm = new CardView(getActivity());
@@ -173,7 +176,7 @@ public class KSMFragment extends RecyclerViewFragment {
         mInfos.clear();
         for (int i = 0; i < mKSM.getInfosSize(); i++) {
             if (mKSM.hasInfo(i)) {
-                DescriptionView info = new DescriptionView();
+                StatsView info = new StatsView();
                 info.setTitle(mKSM.getInfoText(i, getActivity()));
 
                 items.add(info);
@@ -181,8 +184,6 @@ public class KSMFragment extends RecyclerViewFragment {
             }
         }
     }
-
-    private List<String> mInfoSummaries = new ArrayList<>();
 
     @Override
     protected void refreshThread() {
@@ -200,7 +201,7 @@ public class KSMFragment extends RecyclerViewFragment {
 
         if (mInfos.size() > 0 && mInfos.size() == mInfoSummaries.size()) {
             for (int i = 0; i < mInfos.size(); i++) {
-                mInfos.get(i).setSummary(mInfoSummaries.get(i));
+                mInfos.get(i).setStat(mInfoSummaries.get(i));
             }
         }
     }

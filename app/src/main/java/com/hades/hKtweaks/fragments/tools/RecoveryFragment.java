@@ -19,26 +19,20 @@
  */
 package com.hades.hKtweaks.fragments.tools;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
-import android.os.Bundle;
 import android.os.Environment;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
-import androidx.core.graphics.drawable.DrawableCompat;
-import androidx.appcompat.view.ContextThemeWrapper;
-import androidx.appcompat.widget.AppCompatCheckBox;
-import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+
+import androidx.appcompat.view.menu.MenuBuilder;
 
 import com.hades.hKtweaks.R;
 import com.hades.hKtweaks.activities.FilePickerActivity;
-import com.hades.hKtweaks.fragments.BaseFragment;
 import com.hades.hKtweaks.fragments.recyclerview.RecyclerViewFragment;
 import com.hades.hKtweaks.utils.AppSettings;
 import com.hades.hKtweaks.utils.Utils;
@@ -73,23 +67,9 @@ public class RecoveryFragment extends RecyclerViewFragment {
     }
 
     @Override
-    protected Drawable getTopFabDrawable() {
-        Drawable drawable = DrawableCompat.wrap(
-                ContextCompat.getDrawable(getActivity(), R.drawable.ic_add));
-        DrawableCompat.setTint(drawable, Color.WHITE);
-        return drawable;
-    }
-
-    @Override
-    protected boolean showTopFab() {
-        return true;
-    }
-
-    @Override
     protected void init() {
         super.init();
-
-        addViewPagerFragment(OptionsFragment.newInstance(this));
+        showToolbarActionButton(item -> add(), R.id.menu_add);
 
         if (mRebootDialog != null) {
             mRebootDialog.show();
@@ -107,14 +87,9 @@ public class RecoveryFragment extends RecyclerViewFragment {
 
     @Override
     protected void addItems(List<RecyclerViewItem> items) {
+        items.add(new OptionsFView(this));
     }
 
-    @Override
-    protected void onTopFabClick() {
-        super.onTopFabClick();
-
-        add();
-    }
 
     private void add() {
         mAddDialog = new Dialog(getActivity()).setItems(getResources().getStringArray(
@@ -157,13 +132,19 @@ public class RecoveryFragment extends RecyclerViewFragment {
 
         CardView cardView = new CardView(getActivity());
         cardView.setOnMenuListener((cardView1, popupMenu) -> {
-            popupMenu.getMenu().add(Menu.NONE, 0, Menu.NONE, getString(R.string.delete));
+            @SuppressLint("RestrictedApi") Menu menu = new MenuBuilder(getContext());
+            menu.add(Menu.NONE, 0, Menu.NONE, getString(R.string.delete));
+
+            ArrayList<MenuItem> menuItems = new ArrayList<>();
+            for (int i = 0; i < menu.size(); i++) menuItems.add(menu.getItem(i));
+            popupMenu.inflate(menuItems);
+
             popupMenu.setOnMenuItemClickListener(item -> {
                 if (item.getItemId() == 0) {
                     mCommands.remove(recovery);
                     removeItem(cardView1);
                 }
-                return false;
+                popupMenu.dismiss();
             });
         });
 
@@ -224,39 +205,38 @@ public class RecoveryFragment extends RecyclerViewFragment {
         mRebootDialog.show();
     }
 
-    public static class OptionsFragment extends BaseFragment {
-        public static OptionsFragment newInstance(RecoveryFragment recoveryFragment) {
-            OptionsFragment fragment = new OptionsFragment();
-            fragment.mRecoveryFragment = recoveryFragment;
-            return fragment;
-        }
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mCommands.clear();
+    }
 
+    class OptionsFView extends RecyclerViewItem {
         private RecoveryFragment mRecoveryFragment;
         private int mRecoveryOption;
 
-        @Nullable
+        public OptionsFView(RecoveryFragment recoveryFragment) {
+            mRecoveryFragment = recoveryFragment;
+        }
+
         @Override
-        public View onCreateView(@NonNull LayoutInflater inflater,
-                                 @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_recovery_options, container, false);
+        public void onCreateView(View view) {
             mRecoveryOption = AppSettings.getRecoveryOption(getActivity());
 
-            LinearLayout layout = rootView.findViewById(R.id.layout);
+            LinearLayout layout = view.findViewById(R.id.layout);
             String[] options = getResources().getStringArray(R.array.recovery_options);
 
-            final List<AppCompatCheckBox> checkBoxes = new ArrayList<>();
+            final List<RadioButton> checkBoxes = new ArrayList<>();
             for (int i = 0; i < options.length; i++) {
-                AppCompatCheckBox checkBox = new AppCompatCheckBox(
-                        new ContextThemeWrapper(getActivity(),
-                                R.style.Base_Widget_AppCompat_CompoundButton_CheckBox_Custom), null, 0);
+                RadioButton checkBox = new RadioButton(getContext());
+                checkBox.setBackgroundResource(R.drawable.sesl_control_background);
+                checkBox.setButtonDrawable(R.drawable.sesl_btn_radio);
                 checkBox.setText(options[i]);
-                checkBox.setTextColor(Color.WHITE);
                 checkBox.setChecked(i == mRecoveryOption);
-                checkBox.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
-                        ViewGroup.LayoutParams.WRAP_CONTENT));
+                checkBox.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
                 final int position = i;
-                checkBox.setOnClickListener(view -> {
+                checkBox.setOnClickListener(v -> {
                     for (int i1 = 0; i1 < checkBoxes.size(); i1++) {
                         checkBoxes.get(i1).setChecked(position == i1);
                     }
@@ -268,7 +248,7 @@ public class RecoveryFragment extends RecyclerViewFragment {
                 layout.addView(checkBox);
             }
 
-            rootView.findViewById(R.id.button).setOnClickListener(view -> {
+            view.findViewById(R.id.button).setOnClickListener(v -> {
                 if (mRecoveryFragment != null && mRecoveryFragment.itemsSize() > 0) {
                     mRecoveryFragment.flashNow(mRecoveryOption);
                 } else {
@@ -276,19 +256,17 @@ public class RecoveryFragment extends RecyclerViewFragment {
                 }
             });
 
-            rootView.findViewById(R.id.reboot_button).setOnClickListener(v -> {
+            view.findViewById(R.id.reboot_button).setOnClickListener(v -> {
                 if (mRecoveryFragment != null) {
                     mRecoveryFragment.reboot();
                 }
             });
 
-            return rootView;
         }
-    }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        mCommands.clear();
+        @Override
+        public int getLayoutRes() {
+            return R.layout.fragment_recovery_options;
+        }
     }
 }

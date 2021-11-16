@@ -27,11 +27,12 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import androidx.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+
+import androidx.annotation.Nullable;
 
 import com.hades.hKtweaks.R;
 import com.hades.hKtweaks.utils.AppSettings;
@@ -42,19 +43,10 @@ import com.hades.hKtweaks.views.dialog.Dialog;
 import java.io.IOException;
 import java.io.InputStream;
 
-import io.codetail.animation.SupportAnimator;
-import io.codetail.animation.ViewAnimationUtils;
-
 /**
  * Created by willi on 28.12.15.
  */
 public class NavHeaderView extends LinearLayout {
-
-    private interface Callback {
-        void setImage(Uri uri) throws IOException;
-
-        void animate();
-    }
 
     private static Callback sCallback;
     private ImageView mImage;
@@ -74,11 +66,6 @@ public class NavHeaderView extends LinearLayout {
             public void setImage(Uri uri) throws IOException {
                 NavHeaderView.this.setImage(uri);
             }
-
-            @Override
-            public void animate() {
-                animateBg();
-            }
         };
 
         LayoutInflater.from(context).inflate(R.layout.nav_header_view, this);
@@ -87,19 +74,18 @@ public class NavHeaderView extends LinearLayout {
         try {
             if (AppSettings.isPreviewPictureEmpty(context)) {
                 String uri = AppSettings.getPreviewPicture(getContext());
-                if (uri == null){
+                if (uri == null) {
                     mImage.setImageDrawable(null);
                 } else {
                     setImage(Uri.parse(uri));
                 }
-            }else {
-                mImage.setImageResource(R.drawable.logo);
+            } else {
+                mImage.setImageResource(R.drawable.hades_adaptive_logo);
             }
 
         } catch (Exception e) {
             e.printStackTrace();
         }
-
 
 
         findViewById(R.id.nav_header_fab).setOnClickListener(v
@@ -115,10 +101,40 @@ public class NavHeaderView extends LinearLayout {
                             AppSettings.resetPreviewPicture(getContext());
                             AppSettings.setPreviewPictureEmpty(true, context);
                             mImage.setImageDrawable(null);
-                            animateBg();
                             break;
                     }
                 }).show());
+    }
+
+    private static Bitmap uriToBitmap(Uri uri, Context context) throws IOException {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
+            context.getContentResolver().takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        InputStream inputStream = context.getContentResolver().openInputStream(uri);
+        if (inputStream != null) {
+            Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+            inputStream.close();
+            return bitmap;
+        }
+        throw new IOException();
+    }
+
+    public void setImage(Uri uri) throws IOException, NullPointerException {
+        String selectedImagePath = null;
+        try {
+            selectedImagePath = Utils.getPath(uri, mImage.getContext());
+        } catch (Exception ignored) {
+        }
+        Bitmap bitmap;
+        if ((bitmap = selectedImagePath != null ? BitmapFactory.decodeFile(selectedImagePath) :
+                uriToBitmap(uri, mImage.getContext())) != null) {
+            mImage.setImageBitmap(ViewUtils.scaleDownBitmap(bitmap, 1024, 1024));
+        } else {
+            throw new NullPointerException("Getting Bitmap failed");
+        }
+    }
+
+    private interface Callback {
+        void setImage(Uri uri) throws IOException;
     }
 
     public static class MainHeaderActivity extends Activity {
@@ -147,59 +163,12 @@ public class NavHeaderView extends LinearLayout {
                     sCallback.setImage(selectedImageUri);
                     AppSettings.savePreviewPicture(selectedImageUri.toString(), this);
                     AppSettings.setPreviewPictureEmpty(true, this);
-
-                    sCallback.animate();
                 } catch (Exception e) {
                     e.printStackTrace();
                     Utils.toast(R.string.went_wrong, MainHeaderActivity.this);
                 }
             finish();
         }
-    }
-
-    public void animateBg() {
-        mImage.setVisibility(INVISIBLE);
-
-        int cx = mImage.getWidth();
-        int cy = mImage.getHeight();
-
-        SupportAnimator animator = ViewAnimationUtils.createCircularReveal(mImage, cx, cy, 0, Math.max(cx, cy));
-        animator.addListener(new SupportAnimator.SimpleAnimatorListener() {
-            @Override
-            public void onAnimationStart() {
-                super.onAnimationStart();
-                mImage.setVisibility(VISIBLE);
-            }
-        });
-        animator.setStartDelay(500);
-        animator.start();
-    }
-
-    public void setImage(Uri uri) throws IOException, NullPointerException {
-        String selectedImagePath = null;
-        try {
-            selectedImagePath = Utils.getPath(uri, mImage.getContext());
-        } catch (Exception ignored) {
-        }
-        Bitmap bitmap;
-        if ((bitmap = selectedImagePath != null ? BitmapFactory.decodeFile(selectedImagePath) :
-                uriToBitmap(uri, mImage.getContext())) != null) {
-            mImage.setImageBitmap(ViewUtils.scaleDownBitmap(bitmap, 1024, 1024));
-        } else {
-            throw new NullPointerException("Getting Bitmap failed");
-        }
-    }
-
-    private static Bitmap uriToBitmap(Uri uri, Context context) throws IOException {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
-            context.getContentResolver().takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        InputStream inputStream = context.getContentResolver().openInputStream(uri);
-        if (inputStream != null) {
-            Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-            inputStream.close();
-            return bitmap;
-        }
-        throw new IOException();
     }
 
 }

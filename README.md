@@ -1,48 +1,30 @@
-# hKtweaks
+# hKtweaks - OneUI
 
-hKtweaks is a fork of MoroGoku's [MTweaks](https://github.com/morogoku/MTweaks-KernelAdiutorMOD), adapted to be used on many Samsung Exynos soc based devices.
-
-Thanks to Willi Ye for this great application.
-
-
-### If you like my work and want to keep me going, feel free to hit the paypal button below to buy me a coffee!
-[![PayPal](https://www.paypalobjects.com/webstatic/mktg/Logo/pp-logo-200px.png)](https://paypal.me/corsicanu)
+This is a OneUI-Themed version of Corsicanu's [hKtweaks](https://github.com/corsicanu/hKtweaks).
 
 ## Credits
-* Willi Ye, author of [KernelAdiutor](https://github.com/Grarak/KernelAdiutor)
+* Willi Ye: [KernelAdiutor](https://github.com/Grarak/KernelAdiutor)
+* MoroGoku: [MTweaks](https://github.com/morogoku/MTweaks-KernelAdiutorMOD)
+* Corsicanu: [hKtweaks](https://github.com/corsicanu/hKtweaks)
 
 Following libraries were used:
 
-* Google: [v4 Support Library](https://developer.android.com/topic/libraries/support-library/features.html#v4)
-* Google: [v7 appcompat library](https://developer.android.com/topic/libraries/support-library/features.html#v7)
-* Google: [v7 cardview library](https://developer.android.com/topic/libraries/support-library/features.html#v7)
-* Google: [Design Support Library](https://developer.android.com/topic/libraries/support-library/features.html#design)
-* Google: [v7 recyclerview library](https://developer.android.com/topic/libraries/support-library/features.html#v7)
-* Ozodrukh: [CircularReveal](https://github.com/ozodrukh/CircularReveal)
-* Akexorcist: [RoundCornerProgressBar](https://github.com/akexorcist/Android-RoundCornerProgressBar)
-* Javier Santos: [AppUpdater](https://github.com/javiersantos/AppUpdater)
-* Roman Nurik: [dashclock](https://github.com/romannurik/dashclock)
-* Google: [Firebase](https://firebase.google.com)
-* Matthew Precious: [swirl](https://github.com/mattprecious/swirl)
-* Lopez Mikhael: [CircularImageView](https://github.com/lopspower/CircularImageView)
-* Square: [picasso](https://github.com/square/picasso)
+* Yanndroid: [OneUI Design Library](https://github.com/Yanndroid/OneUI-Design-Library)
+* Roman Nurik: [DashClock](https://github.com/romannurik/dashclock)
 * CyanogenMod: [CyanogenMod Platform SDK](https://github.com/CyanogenMod/cm_platform_sdk)
+* Bumptech: [Glide](https://github.com/bumptech/glide)
+* Bvalosek: [CpuSpy](https://github.com/bvalosek/cpuspy)
+* Grouxho: [Grx SoundControl](https://github.com/Grouxho)
+* Google: [Gson](https://github.com/google/gson)
+* Google: [Firebase](https://firebase.google.com/)
+* Google: [AppCompat](https://developer.android.com/topic/libraries/support-library/features.html#v7)
+* Google: [Material](https://github.com/material-components/material-components-android)
 
 Also code from different people, thank you all:
 
-#### Andrei F.
+* Andrei F. [RootUtils](https://github.com/Grarak/KernelAdiutor/blob/master/app/src/main/java/com/grarak/kerneladiutor/utils/root/RootUtils.java)
 
-* [RootUtils](https://github.com/Grarak/KernelAdiutor/blob/master/app/src/main/java/com/grarak/kerneladiutor/utils/root/RootUtils.java)
-
-#### apbaxel
-
-_(Many sys interface paths has been taken from his [UKM-Project](https://github.com/apbaxel/UKM))_
-
-#### Brandon Valosek
-
-* [CpuSpyApp](https://github.com/Grarak/KernelAdiutor/blob/master/app/src/main/java/com/bvalosek/cpuspy/CpuSpyApp.java)
-* [CpuStateMonitor](https://github.com/Grarak/KernelAdiutor/blob/master/app/src/main/java/com/bvalosek/cpuspy/CpuStateMonitor.java)
-* [OverallFragment](https://github.com/Grarak/KernelAdiutor/blob/master/app/src/main/java/com/grarak/kerneladiutor/fragments/statistics/OverallFragment.java)
+* apbaxel _(Many sys interface paths has been taken from his [UKM-Project](https://github.com/apbaxel/UKM))_
 
 ## License
 

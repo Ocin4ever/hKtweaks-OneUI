@@ -49,6 +49,7 @@ public class LazyPlug {
     public static void enableStateNotifier(boolean enable, Context context) {
         run(Control.write(enable ? "Y" : "N", STATE_NOTIFIER), STATE_NOTIFIER, context);
     }
+
     public static void setPossibleCores(int value, Context context) {
         run(Control.write(String.valueOf(value), POSSIBLE_CORES), POSSIBLE_CORES, context);
     }

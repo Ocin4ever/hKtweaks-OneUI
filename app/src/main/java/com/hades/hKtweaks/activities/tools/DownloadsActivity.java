@@ -20,13 +20,14 @@
 package com.hades.hKtweaks.activities.tools;
 
 import android.os.Bundle;
+
 import androidx.annotation.Nullable;
-import com.google.android.material.tabs.TabLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import com.google.android.material.tabs.TabLayout;
 import com.hades.hKtweaks.R;
 import com.hades.hKtweaks.activities.BaseActivity;
 import com.hades.hKtweaks.fragments.tools.downloads.AboutFragment;
@@ -37,6 +38,8 @@ import com.hades.hKtweaks.utils.tools.SupportedDownloads;
 
 import java.util.LinkedHashMap;
 import java.util.List;
+
+import de.dlyt.yanndroid.oneui.layout.ToolbarLayout;
 
 /**
  * Created by willi on 06.07.16.
@@ -50,10 +53,11 @@ public class DownloadsActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_downloads);
 
-        initToolBar();
-
         SupportedDownloads.KernelContent content = new SupportedDownloads.KernelContent(getIntent().getStringExtra(JSON_INTENT));
-        getSupportActionBar().setTitle(Utils.htmlFrom(content.getName()).toString());
+
+        ToolbarLayout toolbarLayout = getToolBarLayout();
+        toolbarLayout.setTitle(Utils.htmlFrom(content.getName()).toString());
+        toolbarLayout.setNavigationButtonOnClickListener(v -> onBackPressed());
 
         final ViewPager viewPager = findViewById(R.id.viewpager);
 

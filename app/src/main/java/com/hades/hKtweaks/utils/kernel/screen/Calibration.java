@@ -33,15 +33,6 @@ import java.util.List;
  */
 public class Calibration {
 
-    private static Calibration sInstance;
-
-    public static Calibration getInstance() {
-        if (sInstance == null) {
-            sInstance = new Calibration();
-        }
-        return sInstance;
-    }
-
     private static final String KCAL = "/sys/devices/platform/kcal_ctrl.0";
     private static final String KCAL_CTRL = KCAL + "/kcal";
     private static final String KCAL_CTRL_CTRL = KCAL + "/kcal_ctrl";
@@ -52,30 +43,28 @@ public class Calibration {
     private static final String KCAL_CTRL_HUE = KCAL + "/kcal_hue";
     private static final String KCAL_CTRL_VAL = KCAL + "/kcal_val";
     private static final String KCAL_CTRL_CONT = KCAL + "/kcal_cont";
-
     private static final String DIAG0 = "/sys/devices/platform/DIAG0.0";
     private static final String DIAG0_POWER = DIAG0 + "/power_rail";
     private static final String DIAG0_POWER_CTRL = DIAG0 + "/power_rail_ctrl";
-
     private static final String COLOR_CONTROL = "/sys/class/misc/colorcontrol";
     private static final String COLOR_CONTROL_MUILTIPLIER = COLOR_CONTROL + "/multiplier";
     private static final String COLOR_CONTROL_CTRL = COLOR_CONTROL + "/safety_enabled";
-
     private static final String SAMOLED_COLOR = "/sys/class/misc/samoled_color";
     private static final String SAMOLED_COLOR_RED = SAMOLED_COLOR + "/red_multiplier";
     private static final String SAMOLED_COLOR_GREEN = SAMOLED_COLOR + "/green_multiplier";
     private static final String SAMOLED_COLOR_BLUE = SAMOLED_COLOR + "/blue_multiplier";
-
     private static final String FB0_RGB = "/sys/class/graphics/fb0/rgb";
     private static final String FB_KCAL = "/sys/class/graphics/fb0/kcal";
-
     private static final String HBM = "/sys/class/graphics/fb0/hbm";
-
+    private static Calibration sInstance;
     private final List<String> mSRGB = new ArrayList<>();
-
     private final List<String> mColors = new ArrayList<>();
     private final List<String> mColorEnables = new ArrayList<>();
     private final List<String> mNewKCAL = new ArrayList<>();
+    private String SRGB;
+    private String COLOR;
+    private String COLOR_ENABLE;
+    private boolean HBM_NEW;
 
     {
         mSRGB.add("/sys/class/graphics/fb0/SRGB");
@@ -101,13 +90,6 @@ public class Calibration {
         mNewKCAL.add(KCAL_CTRL_CONT);
     }
 
-    private String SRGB;
-
-    private String COLOR;
-    private String COLOR_ENABLE;
-
-    private boolean HBM_NEW;
-
     private Calibration() {
         for (String file : mSRGB) {
             if (Utils.existFile(file)) {
@@ -130,6 +112,13 @@ public class Calibration {
                 break;
             }
         }
+    }
+
+    public static Calibration getInstance() {
+        if (sInstance == null) {
+            sInstance = new Calibration();
+        }
+        return sInstance;
     }
 
     public void enableSRGB(boolean enable, Context context) {

@@ -26,11 +26,12 @@ import android.content.IntentFilter;
 import android.os.BatteryManager;
 
 import com.hades.hKtweaks.R;
-import com.hades.hKtweaks.fragments.ApplyOnBootFragment;
+import com.hades.hKtweaks.activities.tools.profile.ProfileActivity;
 import com.hades.hKtweaks.fragments.recyclerview.RecyclerViewFragment;
 import com.hades.hKtweaks.utils.AppSettings;
 import com.hades.hKtweaks.utils.Utils;
 import com.hades.hKtweaks.utils.kernel.battery.Battery;
+import com.hades.hKtweaks.views.recyclerview.ApplyOnBootFView;
 import com.hades.hKtweaks.views.recyclerview.CardView;
 import com.hades.hKtweaks.views.recyclerview.RecyclerViewItem;
 import com.hades.hKtweaks.views.recyclerview.SeekBarView;
@@ -67,10 +68,27 @@ public class BatteryFragment extends RecyclerViewFragment {
     private double mBatteryTemp;
     private String mBatteryStatus;
     private String mBatteryHealth;
+    private final BroadcastReceiver mBatteryReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (Battery.BATTERY_NODE == null) {
+                Battery.setValues();
+            }
+            mBatteryLevel = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0);
+            mBatteryVoltage = intent.getIntExtra(BatteryManager.EXTRA_VOLTAGE, 0);
+            mBatteryCurrent = Utils.strToInt(Utils.readFile(Battery.BATTERY_NODE + "/power_supply/battery/current_now"));
+            mBatteryCurrentAvg = Utils.strToInt(Utils.readFile(Battery.BATTERY_NODE + "/power_supply/battery/current_avg"));
+            mBatteryCharSource = Battery.getChargeSource(context);
+            mBatteryCapacity = Battery.getCapacity() + getString(R.string.mah);
+            mBatteryTemp = intent.getIntExtra(BatteryManager.EXTRA_TEMPERATURE, 0) / 10D;
+            mBatteryStatus = Utils.readFile(Battery.BATTERY_NODE + "/power_supply/battery/status");
+            mBatteryHealth = Battery.getHealthValue();
+        }
+    };
 
     public int getSpanCount() {
         return 3;
-}
+    }
 
     @Override
     protected void init() {
@@ -81,6 +99,9 @@ public class BatteryFragment extends RecyclerViewFragment {
 
     @Override
     protected void addItems(List<RecyclerViewItem> items) {
+        if (!(getActivity() instanceof ProfileActivity))
+            items.add(new ApplyOnBootFView(getActivity(), this));
+
         if (mBattery.hasCharge()) {
             charsourceInit(items);
             capacityInit(items);
@@ -103,15 +124,6 @@ public class BatteryFragment extends RecyclerViewFragment {
             blxInit(items);
         }
         chargeRateInit(items);
-    }
-
-    @Override
-    protected void postInit() {
-        super.postInit();
-
-        if (itemsSize() > 2) {
-            addViewPagerFragment(ApplyOnBootFragment.newInstance(this));
-        }
     }
 
     private void chargeInit(List<RecyclerViewItem> items) {
@@ -140,7 +152,7 @@ public class BatteryFragment extends RecyclerViewFragment {
         storeCard.setTitle(getString(R.string.store_mode));
         storeCard.setFullSpan(true);
 
-        if (mBattery.hasStoreMode()){
+        if (mBattery.hasStoreMode()) {
             SwitchView sMode = new SwitchView();
             sMode.setTitle(getString(R.string.store_mode));
             sMode.setSummary(getString(R.string.store_mode_summary));
@@ -157,11 +169,11 @@ public class BatteryFragment extends RecyclerViewFragment {
             smMax.setMax(100);
             smMax.setMin(1);
             smMax.setUnit(getString(R.string.percent));
-            smMax.setProgress(Utils.strToInt(mBattery.getStoreModeMax()) -1 );
+            smMax.setProgress(Utils.strToInt(mBattery.getStoreModeMax()) - 1);
             smMax.setOnSeekBarListener(new SeekBarView.OnSeekBarListener() {
                 @Override
                 public void onStop(SeekBarView seekBarView, int position, String value) {
-                    mBattery.setStoreModeMax(position +1, getActivity());
+                    mBattery.setStoreModeMax(position + 1, getActivity());
                 }
 
                 @Override
@@ -178,11 +190,11 @@ public class BatteryFragment extends RecyclerViewFragment {
             smMin.setMax(100);
             smMin.setMin(1);
             smMin.setUnit(getString(R.string.percent));
-            smMin.setProgress(Utils.strToInt(mBattery.getStoreModeMin()) -1 );
+            smMin.setProgress(Utils.strToInt(mBattery.getStoreModeMin()) - 1);
             smMin.setOnSeekBarListener(new SeekBarView.OnSeekBarListener() {
                 @Override
                 public void onStop(SeekBarView seekBarView, int position, String value) {
-                    mBattery.setStoreModeMin(position +1, getActivity());
+                    mBattery.setStoreModeMin(position + 1, getActivity());
                 }
 
                 @Override
@@ -369,7 +381,7 @@ public class BatteryFragment extends RecyclerViewFragment {
         usbCard.setTitle(getString(R.string.usb_port));
         usbCard.setFullSpan(true);
 
-        if(mBattery.hasUsbInput()) {
+        if (mBattery.hasUsbInput()) {
             SeekBarView usb_input = new SeekBarView();
             usb_input.setTitle(getString(R.string.usb_input));
             usb_input.setSummary(getString(R.string.def) + ": " + AppSettings.getString("bat_usb_input", "", getActivity()) + getString(R.string.ma));
@@ -392,7 +404,7 @@ public class BatteryFragment extends RecyclerViewFragment {
             usbCard.addItem(usb_input);
         }
 
-        if(mBattery.hasUsbCharge()) {
+        if (mBattery.hasUsbCharge()) {
             SeekBarView usb_charge = new SeekBarView();
             usb_charge.setTitle(getString(R.string.usb_charge));
             usb_charge.setSummary(getString(R.string.def) + ": " + AppSettings.getString("bat_usb_charge", "", getActivity()) + getString(R.string.ma));
@@ -424,7 +436,7 @@ public class BatteryFragment extends RecyclerViewFragment {
         carCard.setTitle(getString(R.string.car_dock));
         carCard.setFullSpan(true);
 
-        if(mBattery.hasCarInput()) {
+        if (mBattery.hasCarInput()) {
             SeekBarView car_input = new SeekBarView();
             car_input.setTitle(getString(R.string.car_input));
             car_input.setSummary(getString(R.string.def) + ": " + AppSettings.getString("bat_car_input", "", getActivity()) + getString(R.string.ma));
@@ -447,7 +459,7 @@ public class BatteryFragment extends RecyclerViewFragment {
             carCard.addItem(car_input);
         }
 
-        if(mBattery.hasCarCharge()) {
+        if (mBattery.hasCarCharge()) {
             SeekBarView car_charge = new SeekBarView();
             car_charge.setTitle(getString(R.string.car_charge));
             car_charge.setSummary(getString(R.string.def) + ": " + AppSettings.getString("bat_car_charge", "", getActivity()) + getString(R.string.ma));
@@ -479,7 +491,7 @@ public class BatteryFragment extends RecyclerViewFragment {
         wcCard.setTitle(getString(R.string.wireless_power));
         wcCard.setFullSpan(true);
 
-        if(mBattery.hasWcInput()) {
+        if (mBattery.hasWcInput()) {
             SeekBarView wc_input = new SeekBarView();
             wc_input.setTitle(getString(R.string.wc_input));
             wc_input.setSummary(getString(R.string.def) + ": " + AppSettings.getString("bat_wc_input", "", getActivity()) + getString(R.string.ma));
@@ -502,7 +514,7 @@ public class BatteryFragment extends RecyclerViewFragment {
             wcCard.addItem(wc_input);
         }
 
-        if(mBattery.hasWcCharge()) {
+        if (mBattery.hasWcCharge()) {
             SeekBarView wc_charge = new SeekBarView();
             wc_charge.setTitle(getString(R.string.wc_charge));
             wc_charge.setSummary(getString(R.string.def) + ": " + AppSettings.getString("bat_wc_charge", "", getActivity()) + getString(R.string.ma));
@@ -578,6 +590,7 @@ public class BatteryFragment extends RecyclerViewFragment {
 
         items.add(mHealth);
     }
+
     private void charsourceInit(List<RecyclerViewItem> items) {
         mCharSource = new StatsView();
         mCharSource.setTitle(getString(R.string.char_source));
@@ -591,6 +604,7 @@ public class BatteryFragment extends RecyclerViewFragment {
 
         items.add(mCapacity);
     }
+
     private void forceFastChargeInit(List<RecyclerViewItem> items) {
         SwitchView forceFastCharge = new SwitchView();
         forceFastCharge.setTitle(getString(R.string.usb_fast_charge));
@@ -671,24 +685,6 @@ public class BatteryFragment extends RecyclerViewFragment {
         }
     }
 
-    private BroadcastReceiver mBatteryReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (Battery.BATTERY_NODE == null) {
-                Battery.setValues();
-            }
-            mBatteryLevel = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0);
-            mBatteryVoltage = intent.getIntExtra(BatteryManager.EXTRA_VOLTAGE, 0);
-            mBatteryCurrent = Utils.strToInt(Utils.readFile(Battery.BATTERY_NODE + "/power_supply/battery/current_now"));
-            mBatteryCurrentAvg = Utils.strToInt(Utils.readFile(Battery.BATTERY_NODE + "/power_supply/battery/current_avg"));
-            mBatteryCharSource = Battery.getChargeSource(context);
-            mBatteryCapacity = Battery.getCapacity() + getString(R.string.mah);
-            mBatteryTemp = intent.getIntExtra(BatteryManager.EXTRA_TEMPERATURE, 0) / 10D;
-            mBatteryStatus = Utils.readFile(Battery.BATTERY_NODE + "/power_supply/battery/status");
-            mBatteryHealth = Battery.getHealthValue();
-        }
-    };
-
     @Override
     protected void refresh() {
         super.refresh();
@@ -711,7 +707,10 @@ public class BatteryFragment extends RecyclerViewFragment {
             mCapacity.setStat(mBatteryCapacity);
         }
         if (mCurrent != null) {
-            mTemp.setStat(mBatteryTemp + getString(R.string.celsius));
+            double temp = mBatteryTemp;
+            boolean useFahrenheit = Utils.useFahrenheit(getContext());
+            if (useFahrenheit) temp = Utils.celsiusToFahrenheit(temp);
+            mTemp.setStat(Utils.roundTo2Decimals(temp) + getString(useFahrenheit ? R.string.fahrenheit : R.string.celsius));
         }
         if (mStatus != null) {
             mStatus.setStat(mBatteryStatus);

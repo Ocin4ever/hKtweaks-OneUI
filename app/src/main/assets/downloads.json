@@ -183,9 +183,9 @@
       "XT1040",
       "XT1045"
     ],
-    "link": "https://raw.githubusercontent.com/BryanByteZero/KernelAdiutor/master/download/peregrine.json" 
+    "link": "https://raw.githubusercontent.com/BryanByteZero/KernelAdiutor/master/download/peregrine.json"
   },
-  {  
+  {
     "vendor": [
       "YU"
     ],
@@ -255,9 +255,9 @@
     ],
     "link": "https://raw.githubusercontent.com/Grarak/KernelAdiutor/master/download/galaxys7.json"
   },
-  { 
+  {
     "vendor": [
-      "Sony",	
+      "Sony",
       "SONY"
     ],
     "device": [
@@ -271,9 +271,9 @@
     ],
     "link": "https://raw.githubusercontent.com/Grarak/KernelAdiutor/master/download/nicki.json"
   },
-  { 
+  {
     "vendor": [
-      "LeEco",	
+      "LeEco",
       "LeTv"
     ],
     "device": [
@@ -286,9 +286,9 @@
     ],
     "link": "https://raw.githubusercontent.com/Grarak/KernelAdiutor/master/download/s2.json"
   },
-  { 
+  {
     "vendor": [
-      "LeEco",	
+      "LeEco",
       "LeTv"
     ],
     "device": [

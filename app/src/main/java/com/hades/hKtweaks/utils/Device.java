@@ -25,6 +25,7 @@ import android.os.SystemClock;
 
 import com.hades.hKtweaks.R;
 import com.hades.hKtweaks.utils.root.RootUtils;
+
 import org.json.JSONObject;
 
 import java.lang.reflect.Field;
@@ -44,321 +45,37 @@ import java.util.regex.Pattern;
  */
 public class Device {
 
-    private static int CPUcount;
     private static final String CPU_PRESENT = "/sys/devices/system/cpu/present";
+    private static final HashMap<String, BoardFormatter> sBoardFormatters = new HashMap<>();
+    private static final HashMap<String, String> sBoardAliases = new HashMap<>();
+    private static int CPUcount;
+    private static String BOARD;
 
-    public static class Input {
+    static {
+        sBoardFormatters.put(".*msm.+.\\d+.*", board
+                -> "msm" + board.split("msm")[1].trim().split(" ")[0]);
 
-        private static Input sInstance;
+        sBoardFormatters.put("mt\\d*.", board
+                -> "mt" + board.split("mt")[1].trim().split(" ")[0]);
 
-        public static Input getInstance() {
-            if (sInstance == null) {
-                sInstance = new Input();
+        sBoardFormatters.put(".*apq.+.\\d+.*", board
+                -> "apq" + board.split("apq")[1].trim().split(" ")[0]);
+
+        sBoardFormatters.put(".*omap+\\d.*", board -> {
+            Matcher matcher = Pattern.compile("omap+\\d").matcher(board);
+            if (matcher.find()) {
+                return matcher.group();
             }
-            return sInstance;
-        }
+            return null;
+        });
 
-        private static final String BUS_INPUT = "/proc/bus/input/devices";
+        sBoardFormatters.put("sun+\\d.", board -> board);
 
-        private final List<Item> mItems = new ArrayList<>();
+        sBoardFormatters.put("spyder", board -> "omap4");
+        sBoardFormatters.put("tuna", board -> "omap4");
 
-        private Input() {
-            String value = Utils.readFile(BUS_INPUT);
-            if (value == null) return;
-            List<String> input = new ArrayList<>();
-            for (String line : value.split("\\r?\\n")) {
-                if (line.isEmpty()) {
-                    mItems.add(new Item(input));
-                    input = new ArrayList<>();
-                } else {
-                    input.add(line);
-                }
-            }
-        }
-
-        public List<Item> getItems() {
-            return mItems;
-        }
-
-        public boolean supported() {
-            return mItems.size() > 0;
-        }
-
-        public static class Item {
-
-            private String mBus;
-            private String mVendor;
-            private String mProduct;
-            private String mVersion;
-            private String mName;
-            private String mSysfs;
-            private String mHandlers;
-
-            private Item(List<String> input) {
-                for (String line : input) {
-                    if (line.startsWith("I:")) {
-                        line = line.replace("I:", "").trim();
-                        try {
-                            mBus = line.split("Bus=")[1].split(" ")[0];
-                        } catch (Exception ignored) {
-                        }
-                        try {
-                            mVendor = line.split("Vendor=")[1].split(" ")[0];
-                        } catch (Exception ignored) {
-                        }
-                        try {
-                            mProduct = line.split("Product=")[1].split(" ")[0];
-                        } catch (Exception ignored) {
-                        }
-                        try {
-                            mVersion = line.split("Version=")[1].split(" ")[0];
-                        } catch (Exception ignored) {
-                        }
-                    } else if (line.startsWith("N:")) {
-                        mName = line.replace("N:", "").trim().replace("Name=", "").replace("\"", "");
-                    } else if (line.startsWith("S:")) {
-                        mSysfs = line.replace("S:", "").trim().replace("Sysfs=", "").replace("\"", "");
-                    } else if (line.startsWith("H:")) {
-                        mHandlers = line.replace("H:", "").trim().replace("Handlers=", "").replace("\"", "");
-                    }
-                }
-            }
-
-            public String getBus() {
-                return mBus;
-            }
-
-            public String getVendor() {
-                return mVendor;
-            }
-
-            public String getProduct() {
-                return mProduct;
-            }
-
-            public String getVersion() {
-                return mVersion;
-            }
-
-            public String getName() {
-                return mName;
-            }
-
-            public String getSysfs() {
-                return mSysfs;
-            }
-
-            public String getHandlers() {
-                return mHandlers;
-            }
-
-        }
-
-    }
-
-    public static class ROMInfo {
-
-        private static ROMInfo sInstance;
-
-        public static ROMInfo getInstance() {
-            if (sInstance == null) {
-                sInstance = new ROMInfo();
-            }
-            return sInstance;
-        }
-
-        private static final String[] sProps = {
-                "ro.cm.version",
-                "ro.pa.version",
-                "ro.pac.version",
-                "ro.carbon.version",
-                "ro.slim.version",
-                "ro.mod.version",
-                "ro.lineage.version",
-                "ro.rr.version"
-        };
-
-        private String mROMVersion;
-
-        private ROMInfo() {
-            for (String prop : sProps) {
-                mROMVersion = RootUtils.getProp(prop);
-                if (mROMVersion != null && !mROMVersion.isEmpty()) {
-                    break;
-                }
-            }
-        }
-
-        public String getVersion() {
-            return mROMVersion;
-        }
-
-    }
-
-    public static class MemInfo {
-
-        private static MemInfo sInstance;
-
-        public static MemInfo getInstance() {
-            if (sInstance == null) {
-                sInstance = new MemInfo();
-            }
-            return sInstance;
-        }
-
-        private static final String MEMINFO_PROC = "/proc/meminfo";
-        private String MEMINFO;
-
-        private MemInfo() {
-            MEMINFO = Utils.readFile(MEMINFO_PROC);
-        }
-
-        public long getTotalMem() {
-            try {
-                return Long.parseLong(getItem("MemTotal").replaceAll("[^\\d]", "")) / 1024L;
-            } catch (NumberFormatException ignored) {
-                return 0;
-            }
-        }
-
-        public long getItemMb( String prefix) {
-            try {
-                return Long.parseLong(getItem(prefix).replaceAll("[^\\d]", "")) / 1024L;
-            } catch (NumberFormatException ignored) {
-                return 0;
-            }
-        }
-
-        public List<String> getItems() {
-            List<String> list = new ArrayList<>();
-            try {
-                load();
-                for (String line : MEMINFO.split("\\r?\\n")) {
-                    list.add(line.split(":")[0]);
-                }
-            } catch (Exception ignored) {
-            }
-            return list;
-        }
-
-        public String getItem(String prefix) {
-            try {
-                load();
-                for (String line : MEMINFO.split("\\r?\\n")) {
-                    if (line.startsWith(prefix)) {
-                        return line.split(":")[1].trim();
-                    }
-                }
-            } catch (Exception ignored) {
-            }
-            return "";
-        }
-
-        public void load() {
-            MEMINFO = Utils.readFile(MEMINFO_PROC);
-        }
-
-    }
-
-    public static class CPUInfo {
-
-        private static CPUInfo sInstance;
-
-        public static CPUInfo getInstance() {
-            if (sInstance == null) {
-                sInstance = new CPUInfo();
-            }
-            return sInstance;
-        }
-
-        private static final String CPUINFO_PROC = "/proc/cpuinfo";
-
-        private final String mCPUInfo;
-
-        private CPUInfo() {
-            mCPUInfo = Utils.readFile(CPUINFO_PROC, false);
-        }
-
-        public String getFeatures() {
-            String features = getString("Features");
-            if (!features.isEmpty()) return features;
-            return getString("flags");
-        }
-
-        public String getProcessor() {
-            String pro = getString("Processor");
-            if (!pro.isEmpty()) return pro;
-            return getString("model name");
-        }
-
-        public String getVendor() {
-            String vendor = getString("Hardware");
-            if (!vendor.isEmpty()) return vendor;
-            return getString("vendor_id");
-        }
-
-        public String getCpuInfo() {
-            return mCPUInfo;
-        }
-
-        private String getString(String prefix) {
-            try {
-                for (String line : mCPUInfo.split("\\r?\\n")) {
-                    if (line.startsWith(prefix)) {
-                        return line.split(":")[1].trim();
-                    }
-                }
-            } catch (Exception ignored) {
-            }
-            return "";
-        }
-
-    }
-
-    public static class TrustZone {
-
-        private static TrustZone sInstance;
-
-        public static TrustZone getInstance() {
-            if (sInstance == null) {
-                sInstance = new TrustZone();
-            }
-            return sInstance;
-        }
-
-        private static final HashMap<String, String> PARTITIONS = new HashMap<>();
-
-        static {
-            PARTITIONS.put("/dev/block/platform/msm_sdcc.1/by-name/tz", "QC_IMAGE_VERSION_STRING=");
-            PARTITIONS.put("/dev/block/bootdevice/by-name/tz", "QC_IMAGE_VERSION_STRING=");
-        }
-
-        private String mVersion = "";
-
-        private TrustZone() {
-            String partition = null;
-
-            for (String p : PARTITIONS.keySet()) {
-                if (Utils.existFile(p)) {
-                    partition = p;
-                    break;
-                }
-            }
-
-            if (partition == null) return;
-            String prefix = PARTITIONS.get(partition);
-            String raw = RootUtils.runCommand("strings " + partition + " | grep " + prefix);
-            for (String line : raw.split("\\r?\\n")) {
-                if (line.startsWith(prefix)) {
-                    mVersion = line.replace(prefix, "");
-                    break;
-                }
-            }
-        }
-
-        public String getVersion() {
-            return mVersion;
-        }
+        sBoardAliases.put("msm8994v2.1", "msm8994");
+        sBoardAliases.put("msm8974pro.*", "msm8974pro");
     }
 
     public static String getKernelVersion(boolean extended) {
@@ -461,42 +178,6 @@ public class Device {
         return Build.VERSION.SDK_INT;
     }
 
-    private interface BoardFormatter {
-        String format(String board);
-    }
-
-    private static final HashMap<String, BoardFormatter> sBoardFormatters = new HashMap<>();
-    private static final HashMap<String, String> sBoardAliases = new HashMap<>();
-
-    static {
-        sBoardFormatters.put(".*msm.+.\\d+.*", board
-                -> "msm" + board.split("msm")[1].trim().split(" ")[0]);
-
-        sBoardFormatters.put("mt\\d*.", board
-                -> "mt" + board.split("mt")[1].trim().split(" ")[0]);
-
-        sBoardFormatters.put(".*apq.+.\\d+.*", board
-                -> "apq" + board.split("apq")[1].trim().split(" ")[0]);
-
-        sBoardFormatters.put(".*omap+\\d.*", board -> {
-            Matcher matcher = Pattern.compile("omap+\\d").matcher(board);
-            if (matcher.find()) {
-                return matcher.group();
-            }
-            return null;
-        });
-
-        sBoardFormatters.put("sun+\\d.", board -> board);
-
-        sBoardFormatters.put("spyder", board -> "omap4");
-        sBoardFormatters.put("tuna", board -> "omap4");
-
-        sBoardAliases.put("msm8994v2.1", "msm8994");
-        sBoardAliases.put("msm8974pro.*", "msm8974pro");
-    }
-
-    private static String BOARD;
-
     public static String getBoard() {
         if (BOARD != null) {
             return BOARD;
@@ -526,16 +207,16 @@ public class Device {
         return Build.FINGERPRINT;
     }
 
-    public static String getUptime(){
-    	long uptime = SystemClock.elapsedRealtime();
-    	// TODO: find a better way to return uptime as hh:mm:ss
+    public static String getUptime() {
+        long uptime = SystemClock.elapsedRealtime();
+        // TODO: find a better way to return uptime as hh:mm:ss
         String h = String.valueOf(TimeUnit.MILLISECONDS.toHours(uptime));
         String m = String.valueOf((TimeUnit.MILLISECONDS.toMinutes(uptime) - TimeUnit.HOURS.toMinutes(Long.parseLong(h))));
         String s = String.valueOf((TimeUnit.MILLISECONDS.toSeconds(uptime) - TimeUnit.HOURS.toSeconds(Long.parseLong(h)) - TimeUnit.MINUTES.toSeconds(Long.parseLong(m))));
         if (h.length() == 1) h = "0" + h;
         if (m.length() == 1) m = "0" + m;
         if (s.length() == 1) s = "0" + s;
-        return(h + ":" + m + ":" + s);
+        return (h + ":" + m + ":" + s);
     }
 
     public static String getManufacturedDate() {
@@ -572,6 +253,316 @@ public class Device {
 
     public static String getModel() {
         return Build.MODEL;
+    }
+
+    private interface BoardFormatter {
+        String format(String board);
+    }
+
+    public static class Input {
+
+        private static final String BUS_INPUT = "/proc/bus/input/devices";
+        private static Input sInstance;
+        private final List<Item> mItems = new ArrayList<>();
+
+        private Input() {
+            String value = Utils.readFile(BUS_INPUT);
+            if (value == null) return;
+            List<String> input = new ArrayList<>();
+            for (String line : value.split("\\r?\\n")) {
+                if (line.isEmpty()) {
+                    mItems.add(new Item(input));
+                    input = new ArrayList<>();
+                } else {
+                    input.add(line);
+                }
+            }
+        }
+
+        public static Input getInstance() {
+            if (sInstance == null) {
+                sInstance = new Input();
+            }
+            return sInstance;
+        }
+
+        public List<Item> getItems() {
+            return mItems;
+        }
+
+        public boolean supported() {
+            return mItems.size() > 0;
+        }
+
+        public static class Item {
+
+            private String mBus;
+            private String mVendor;
+            private String mProduct;
+            private String mVersion;
+            private String mName;
+            private String mSysfs;
+            private String mHandlers;
+
+            private Item(List<String> input) {
+                for (String line : input) {
+                    if (line.startsWith("I:")) {
+                        line = line.replace("I:", "").trim();
+                        try {
+                            mBus = line.split("Bus=")[1].split(" ")[0];
+                        } catch (Exception ignored) {
+                        }
+                        try {
+                            mVendor = line.split("Vendor=")[1].split(" ")[0];
+                        } catch (Exception ignored) {
+                        }
+                        try {
+                            mProduct = line.split("Product=")[1].split(" ")[0];
+                        } catch (Exception ignored) {
+                        }
+                        try {
+                            mVersion = line.split("Version=")[1].split(" ")[0];
+                        } catch (Exception ignored) {
+                        }
+                    } else if (line.startsWith("N:")) {
+                        mName = line.replace("N:", "").trim().replace("Name=", "").replace("\"", "");
+                    } else if (line.startsWith("S:")) {
+                        mSysfs = line.replace("S:", "").trim().replace("Sysfs=", "").replace("\"", "");
+                    } else if (line.startsWith("H:")) {
+                        mHandlers = line.replace("H:", "").trim().replace("Handlers=", "").replace("\"", "");
+                    }
+                }
+            }
+
+            public String getBus() {
+                return mBus;
+            }
+
+            public String getVendor() {
+                return mVendor;
+            }
+
+            public String getProduct() {
+                return mProduct;
+            }
+
+            public String getVersion() {
+                return mVersion;
+            }
+
+            public String getName() {
+                return mName;
+            }
+
+            public String getSysfs() {
+                return mSysfs;
+            }
+
+            public String getHandlers() {
+                return mHandlers;
+            }
+
+        }
+
+    }
+
+    public static class ROMInfo {
+
+        private static final String[] sProps = {
+                "ro.cm.version",
+                "ro.pa.version",
+                "ro.pac.version",
+                "ro.carbon.version",
+                "ro.slim.version",
+                "ro.mod.version",
+                "ro.lineage.version",
+                "ro.rr.version"
+        };
+        private static ROMInfo sInstance;
+        private String mROMVersion;
+
+        private ROMInfo() {
+            for (String prop : sProps) {
+                mROMVersion = RootUtils.getProp(prop);
+                if (mROMVersion != null && !mROMVersion.isEmpty()) {
+                    break;
+                }
+            }
+        }
+
+        public static ROMInfo getInstance() {
+            if (sInstance == null) {
+                sInstance = new ROMInfo();
+            }
+            return sInstance;
+        }
+
+        public String getVersion() {
+            return mROMVersion;
+        }
+
+    }
+
+    public static class MemInfo {
+
+        private static final String MEMINFO_PROC = "/proc/meminfo";
+        private static MemInfo sInstance;
+        private String MEMINFO;
+
+        private MemInfo() {
+            MEMINFO = Utils.readFile(MEMINFO_PROC);
+        }
+
+        public static MemInfo getInstance() {
+            if (sInstance == null) {
+                sInstance = new MemInfo();
+            }
+            return sInstance;
+        }
+
+        public long getTotalMem() {
+            try {
+                return Long.parseLong(getItem("MemTotal").replaceAll("[^\\d]", "")) / 1024L;
+            } catch (NumberFormatException ignored) {
+                return 0;
+            }
+        }
+
+        public long getItemMb(String prefix) {
+            try {
+                return Long.parseLong(getItem(prefix).replaceAll("[^\\d]", "")) / 1024L;
+            } catch (NumberFormatException ignored) {
+                return 0;
+            }
+        }
+
+        public List<String> getItems() {
+            List<String> list = new ArrayList<>();
+            try {
+                load();
+                for (String line : MEMINFO.split("\\r?\\n")) {
+                    list.add(line.split(":")[0]);
+                }
+            } catch (Exception ignored) {
+            }
+            return list;
+        }
+
+        public String getItem(String prefix) {
+            try {
+                load();
+                for (String line : MEMINFO.split("\\r?\\n")) {
+                    if (line.startsWith(prefix)) {
+                        return line.split(":")[1].trim();
+                    }
+                }
+            } catch (Exception ignored) {
+            }
+            return "";
+        }
+
+        public void load() {
+            MEMINFO = Utils.readFile(MEMINFO_PROC);
+        }
+
+    }
+
+    public static class CPUInfo {
+
+        private static final String CPUINFO_PROC = "/proc/cpuinfo";
+        private static CPUInfo sInstance;
+        private final String mCPUInfo;
+
+        private CPUInfo() {
+            mCPUInfo = Utils.readFile(CPUINFO_PROC, false);
+        }
+
+        public static CPUInfo getInstance() {
+            if (sInstance == null) {
+                sInstance = new CPUInfo();
+            }
+            return sInstance;
+        }
+
+        public String getFeatures() {
+            String features = getString("Features");
+            if (!features.isEmpty()) return features;
+            return getString("flags");
+        }
+
+        public String getProcessor() {
+            String pro = getString("Processor");
+            if (!pro.isEmpty()) return pro;
+            return getString("model name");
+        }
+
+        public String getVendor() {
+            String vendor = getString("Hardware");
+            if (!vendor.isEmpty()) return vendor;
+            return getString("vendor_id");
+        }
+
+        public String getCpuInfo() {
+            return mCPUInfo;
+        }
+
+        private String getString(String prefix) {
+            try {
+                for (String line : mCPUInfo.split("\\r?\\n")) {
+                    if (line.startsWith(prefix)) {
+                        return line.split(":")[1].trim();
+                    }
+                }
+            } catch (Exception ignored) {
+            }
+            return "";
+        }
+
+    }
+
+    public static class TrustZone {
+
+        private static final HashMap<String, String> PARTITIONS = new HashMap<>();
+        private static TrustZone sInstance;
+
+        static {
+            PARTITIONS.put("/dev/block/platform/msm_sdcc.1/by-name/tz", "QC_IMAGE_VERSION_STRING=");
+            PARTITIONS.put("/dev/block/bootdevice/by-name/tz", "QC_IMAGE_VERSION_STRING=");
+        }
+
+        private String mVersion = "";
+
+        private TrustZone() {
+            String partition = null;
+
+            for (String p : PARTITIONS.keySet()) {
+                if (Utils.existFile(p)) {
+                    partition = p;
+                    break;
+                }
+            }
+
+            if (partition == null) return;
+            String prefix = PARTITIONS.get(partition);
+            String raw = RootUtils.runCommand("strings " + partition + " | grep " + prefix);
+            for (String line : raw.split("\\r?\\n")) {
+                if (line.startsWith(prefix)) {
+                    mVersion = line.replace(prefix, "");
+                    break;
+                }
+            }
+        }
+
+        public static TrustZone getInstance() {
+            if (sInstance == null) {
+                sInstance = new TrustZone();
+            }
+            return sInstance;
+        }
+
+        public String getVersion() {
+            return mVersion;
+        }
     }
 
 }

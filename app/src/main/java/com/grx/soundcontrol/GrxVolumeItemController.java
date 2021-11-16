@@ -35,7 +35,7 @@ import android.widget.TextView;
 import com.hades.hKtweaks.R;
 
 
-public class GrxVolumeItemController extends LinearLayout implements GrxVolumeControlView.onProgressChangedListener{
+public class GrxVolumeItemController extends LinearLayout implements GrxVolumeControlView.onProgressChangedListener {
 
 
     final public static int DEF_DEFREFVAL = 128;
@@ -43,11 +43,11 @@ public class GrxVolumeItemController extends LinearLayout implements GrxVolumeCo
     final public static int DEF_DEFREFVALPOSITION = 10;
 
     public GrxVolumeControlView mVolumeView;
-    private String mLabel="";
-    TextView  mValueTextView;
+    TextView mValueTextView;
+    VolumeItemListener mListener = null;
 
     /* wheel configuration variables */
-
+    private String mLabel = "";
     private int mRefVal;
     private int mValStep;
     private int mRefValPosition;
@@ -66,78 +66,68 @@ public class GrxVolumeItemController extends LinearLayout implements GrxVolumeCo
         initView(attrs, defStyleAttr);
     }
 
-    private void initView(AttributeSet attrs, int defStyleAttr){
+    private void initView(AttributeSet attrs, int defStyleAttr) {
 
         if (attrs != null) {
 
             TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.VolumeItemController, defStyleAttr, 0);
 
-            String label  = a.getString(R.styleable.VolumeItemController_label);
-            if(label!=null) mLabel = label;
+            String label = a.getString(R.styleable.VolumeItemController_label);
+            if (label != null) mLabel = label;
 
-            mRefValPosition=a.getInt(R.styleable.VolumeItemController_refValposition,DEF_DEFREFVALPOSITION);
-            mRefVal=a.getInt(R.styleable.VolumeItemController_refVal,DEF_DEFREFVAL);
-            mValStep=a.getInt(R.styleable.VolumeItemController_valStep,DEF_DEFVALSTEP);
-            mWheelSize=a.getDimensionPixelSize(R.styleable.VolumeItemController_wheelsize,130);
+            mRefValPosition = a.getInt(R.styleable.VolumeItemController_refValposition, DEF_DEFREFVALPOSITION);
+            mRefVal = a.getInt(R.styleable.VolumeItemController_refVal, DEF_DEFREFVAL);
+            mValStep = a.getInt(R.styleable.VolumeItemController_valStep, DEF_DEFVALSTEP);
+            mWheelSize = a.getDimensionPixelSize(R.styleable.VolumeItemController_wheelsize, 130);
             a.recycle();
         }
-        inflate(getContext(),R.layout.grx_volume_item,this);
+        inflate(getContext(), R.layout.grx_volume_item, this);
     }
 
-
-    public void configureVolumeControl( int refval, int refvalposition, int valstep){
+    public void configureVolumeControl(int refval, int refvalposition, int valstep) {
         mRefValPosition = refvalposition;
         mRefVal = refval;
         mValStep = valstep;
         invalidate();
     }
 
-    public void setControlSize (int size) {
+    public void setControlSize(int size) {
 
-        mWheelSize = Math.round(size*(getResources().getDisplayMetrics().xdpi/ DisplayMetrics.DENSITY_DEFAULT));
+        mWheelSize = Math.round(size * (getResources().getDisplayMetrics().xdpi / DisplayMetrics.DENSITY_DEFAULT));
 
         mVolumeView = findViewById(R.id.volumeview);
-        if(mVolumeView!=null) {
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(mWheelSize,mWheelSize);
+        if (mVolumeView != null) {
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(mWheelSize, mWheelSize);
             mVolumeView.setLayoutParams(params);
-        }else Log.d("GrxVolumeItemControler", " cannot assing wheel size, wheel view is null" );
+        } else Log.d("GrxVolumeItemControler", " cannot assing wheel size, wheel view is null");
     }
 
-
     @Override
-    protected void onFinishInflate(){
+    protected void onFinishInflate() {
         super.onFinishInflate();
 
         mVolumeView = findViewById(R.id.volumeview);
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(mWheelSize,mWheelSize);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(mWheelSize, mWheelSize);
         mVolumeView.setLayoutParams(params);
 
         TextView textView = findViewById(R.id.label);
         textView.setText(mLabel);
-        mValueTextView=findViewById(R.id.value);
+        mValueTextView = findViewById(R.id.value);
 
         mVolumeView.setOnProgressChangedListener(this);
     }
 
-
-    VolumeItemListener mListener=null;
-
-    public interface VolumeItemListener{
-        void onProgressChanged(int progress, int refval, int refvalposition, int step, int dif);
+    public void setListener(VolumeItemListener listener) {
+        mListener = listener;
     }
 
-    public void setListener(VolumeItemListener listener){
-        mListener=listener;
+    public void setText(String text) {
+        if (mValueTextView != null) mValueTextView.setText(text);
     }
 
-
-    public void setText(String text){
-        if(mValueTextView!=null) mValueTextView.setText(text);
-    }
-
-    public void setProgressText(int progress){
-        int change = progress- mRefValPosition;
-        int val = mRefVal + change*mValStep;
+    public void setProgressText(int progress) {
+        int change = progress - mRefValPosition;
+        int val = mRefVal + change * mValStep;
         Log.d("Grxdeg received", String.valueOf(val));
     }
 
@@ -145,31 +135,36 @@ public class GrxVolumeItemController extends LinearLayout implements GrxVolumeCo
     public void onProgressChanged(int progress, int dif) {
 
         setProgressText(progress);
-        if(mListener!=null) mListener.onProgressChanged(progress,mRefVal, mRefValPosition, mValStep, dif);
+        if (mListener != null)
+            mListener.onProgressChanged(progress, mRefVal, mRefValPosition, mValStep, dif);
     }
 
     public void setProgress(int progress) {
         setProgressText(progress);
     }
 
-    public GrxVolumeControlView getVolumeControlView(){
+    public GrxVolumeControlView getVolumeControlView() {
         return mVolumeView;
     }
 
-    public int getValue(int progress){  // return real value for a given progress position
+    public int getValue(int progress) {  // return real value for a given progress position
         return mRefVal + (progress - mRefValPosition) * mValStep;
     }
 
-    public int getStepValue(){
+    public int getStepValue() {
         return mValStep;
     }
 
-    public int getRefValPosition(){
+    public int getRefValPosition() {
         return mRefValPosition;
     }
 
-    public int getReferenceValue(){
+    public int getReferenceValue() {
         return mRefVal;
+    }
+
+    public interface VolumeItemListener {
+        void onProgressChanged(int progress, int refval, int refvalposition, int step, int dif);
     }
 
 

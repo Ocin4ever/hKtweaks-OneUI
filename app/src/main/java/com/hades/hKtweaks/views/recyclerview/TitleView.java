@@ -19,8 +19,9 @@
  */
 package com.hades.hKtweaks.views.recyclerview;
 
-import androidx.appcompat.widget.AppCompatTextView;
 import android.view.View;
+
+import androidx.appcompat.widget.AppCompatTextView;
 
 import com.hades.hKtweaks.R;
 
@@ -57,10 +58,5 @@ public class TitleView extends RecyclerViewItem {
         if (mTitle != null && mTitleText != null) {
             mTitle.setText(mTitleText);
         }
-    }
-
-    @Override
-    protected boolean cardCompatible() {
-        return false;
     }
 }

@@ -24,12 +24,11 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
-import com.hades.hKtweaks.utils.Log;
-
 import com.hades.hKtweaks.R;
 import com.hades.hKtweaks.database.tools.profiles.Profiles;
 import com.hades.hKtweaks.services.boot.ApplyOnBoot;
 import com.hades.hKtweaks.utils.AppSettings;
+import com.hades.hKtweaks.utils.Log;
 import com.hades.hKtweaks.utils.Utils;
 import com.hades.hKtweaks.utils.kernel.cpu.CPUFreq;
 import com.hades.hKtweaks.utils.root.RootUtils;
@@ -48,34 +47,6 @@ public class Tile extends BroadcastReceiver {
     private static final String NAME = "name";
     private static final String COMMANDS = "commands";
     private static final String ACTION_TOGGLE_STATE = "com.hades.hKtweaks.action.ACTION_TOGGLE_STATE";
-
-    @Override
-    public void onReceive(Context context, Intent intent) {
-        if (ACTION_TOGGLE_STATE.equals(intent.getAction())) {
-            String name = intent.getStringExtra(NAME);
-            if (name != null) Log.i(name);
-            String[] commands = intent.getStringArrayExtra(COMMANDS);
-            if (commands != null) {
-                List<String> adjustedCommands = new ArrayList<>();
-                RootUtils.SU su = new RootUtils.SU(true, true);
-                for (String command : commands) {
-                    synchronized (this) {
-                        CPUFreq.ApplyCpu applyCpu;
-                        if (command.startsWith("#") && command.contains("%d")
-                                && (applyCpu = new CPUFreq.ApplyCpu(command.substring(1))).toString() != null) {
-                            adjustedCommands.addAll(ApplyOnBoot.getApplyCpu(applyCpu, su));
-                        } else {
-                            adjustedCommands.add(command);
-                        }
-                    }
-                }
-
-                for (String command : adjustedCommands) {
-                    su.runCommand(command);
-                }
-            }
-        }
-    }
 
     public static void publishProfileTile(List<Profiles.ProfileItem> profiles, Context context) {
         if (!Utils.hasCMSDK()) return;
@@ -120,6 +91,34 @@ public class Tile extends BroadcastReceiver {
             CMStatusBarManager.getInstance(context).publishTile(0, mCustomTile);
         } catch (Exception e) {
             AppSettings.saveProfileTile(false, context);
+        }
+    }
+
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        if (ACTION_TOGGLE_STATE.equals(intent.getAction())) {
+            String name = intent.getStringExtra(NAME);
+            if (name != null) Log.i(name);
+            String[] commands = intent.getStringArrayExtra(COMMANDS);
+            if (commands != null) {
+                List<String> adjustedCommands = new ArrayList<>();
+                RootUtils.SU su = new RootUtils.SU(true, true);
+                for (String command : commands) {
+                    synchronized (this) {
+                        CPUFreq.ApplyCpu applyCpu;
+                        if (command.startsWith("#") && command.contains("%d")
+                                && (applyCpu = new CPUFreq.ApplyCpu(command.substring(1))).toString() != null) {
+                            adjustedCommands.addAll(ApplyOnBoot.getApplyCpu(applyCpu, su));
+                        } else {
+                            adjustedCommands.add(command);
+                        }
+                    }
+                }
+
+                for (String command : adjustedCommands) {
+                    su.runCommand(command);
+                }
+            }
         }
     }
 

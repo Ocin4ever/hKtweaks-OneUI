@@ -21,7 +21,6 @@ package com.hades.hKtweaks.services.monitor;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -32,14 +31,12 @@ import android.os.Binder;
 import android.os.Build;
 import android.os.IBinder;
 import android.os.SystemClock;
+
 import androidx.annotation.Nullable;
 
 import com.hades.hKtweaks.BuildConfig;
 import com.hades.hKtweaks.R;
-import com.hades.hKtweaks.activities.MainActivity;
-import com.hades.hKtweaks.activities.NavigationActivity;
 import com.hades.hKtweaks.database.Settings;
-import com.hades.hKtweaks.fragments.tools.DataSharingFragment;
 import com.hades.hKtweaks.utils.AppSettings;
 import com.hades.hKtweaks.utils.Device;
 import com.hades.hKtweaks.utils.Utils;
@@ -118,6 +115,7 @@ public class Monitor extends Service {
             }
         }
     };
+    private IBinder mBinder = new MonitorBinder();
 
     private void postCreate(final Long[] times) {
         if (mLevel < 15 || !AppSettings.isDataSharing(this)) return;
@@ -164,19 +162,6 @@ public class Monitor extends Service {
         }).start();
     }
 
-
-    private IBinder mBinder = new MonitorBinder();
-
-    public class MonitorBinder extends Binder {
-        public void onSettingsChange() {
-            if (mTimes != null) {
-                mTimes.clear();
-                mLevel = 0;
-                mTime = 0;
-            }
-        }
-    }
-
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
@@ -193,36 +178,9 @@ public class Monitor extends Service {
         super.onCreate();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationManager notificationManager =
-                    (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            NotificationChannel notificationChannel = new NotificationChannel(CHANNEL_ID,
-                    getString(R.string.data_sharing), NotificationManager.IMPORTANCE_LOW);
+            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            NotificationChannel notificationChannel = new NotificationChannel(CHANNEL_ID, getString(R.string.data_sharing), NotificationManager.IMPORTANCE_LOW);
             notificationManager.createNotificationChannel(notificationChannel);
-
-            PendingIntent disableIntent = PendingIntent.getBroadcast(this, 1,
-                    new Intent(this, DisableReceiver.class),
-                    PendingIntent.FLAG_UPDATE_CURRENT);
-
-            Intent launchIntent = new Intent(this, MainActivity.class);
-            launchIntent.setAction(Intent.ACTION_VIEW);
-            launchIntent.putExtra(NavigationActivity.INTENT_SECTION,
-                    DataSharingFragment.class.getCanonicalName());
-            launchIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
-                    launchIntent, 0);
-
-            /*
-            Notification.Builder builder =
-                    new Notification.Builder(this, CHANNEL_ID);
-            builder.setContentTitle(getString(R.string.data_sharing))
-                    .setContentText(getString(R.string.data_sharing_summary_notification))
-                    .setSmallIcon(R.mipmap.ic_launcher)
-                    .setContentIntent(contentIntent)
-                    .addAction(0, getString(R.string.disable), disableIntent)
-                    .setPriority(Notification.PRIORITY_MIN);
-
-            startForeground(NotificationId.MONITOR, builder.build());
-            */
         }
 
         registerReceiver(mBatteryReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
@@ -252,6 +210,16 @@ public class Monitor extends Service {
             context.sendBroadcast(new Intent(ACTION_DISABLE));
         }
 
+    }
+
+    public class MonitorBinder extends Binder {
+        public void onSettingsChange() {
+            if (mTimes != null) {
+                mTimes.clear();
+                mLevel = 0;
+                mTime = 0;
+            }
+        }
     }
 
 

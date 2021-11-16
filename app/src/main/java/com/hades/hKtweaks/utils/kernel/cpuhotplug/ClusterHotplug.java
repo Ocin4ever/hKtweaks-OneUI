@@ -39,7 +39,7 @@ public class ClusterHotplug {
     private static final String CLUSTER_HOTPLUG_LOAD_THRESHOLD_UP = CLUSTER_HOTPLUG + "/load_threshold_up";
     private static final String CLUSTER_HOTPLUG_VOTE_THRESHOLD_DOWN = CLUSTER_HOTPLUG + "/vote_threshold_down";
     private static final String CLUSTER_HOTPLUG_VOTE_THRESHOLD_UP = CLUSTER_HOTPLUG + "/vote_threshold_up";
-	private static final String CLUSTER_HOTPLUG_SAMPLING_TIME = CLUSTER_HOTPLUG + "/sampling_time";
+    private static final String CLUSTER_HOTPLUG_SAMPLING_TIME = CLUSTER_HOTPLUG + "/sampling_time";
 
 
     public static void setClusterHotplugSamplingTime(int value, Context context) {

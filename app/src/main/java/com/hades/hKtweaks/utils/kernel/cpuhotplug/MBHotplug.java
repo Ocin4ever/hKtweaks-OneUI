@@ -34,15 +34,6 @@ import java.util.List;
  */
 public class MBHotplug {
 
-    private static MBHotplug sInstance;
-
-    public static MBHotplug getInstance() {
-        if (sInstance == null) {
-            sInstance = new MBHotplug();
-        }
-        return sInstance;
-    }
-
     private static final String MSM_MPDECISION_HOTPLUG = "/sys/kernel/msm_mpdecision/conf";
     private static final String BRICKED_HOTPLUG = "/sys/kernel/bricked_hotplug/conf";
     private static final String MB_ENABLED = "enabled";
@@ -60,7 +51,7 @@ public class MBHotplug {
     private static final String MB_STARTDELAY = "startdelay";
     private static final String MB_DELAY = "delay";
     private static final String MB_PAUSE = "pause";
-
+    private static MBHotplug sInstance;
     private String PARENT;
     private String MIN_CPUS_FILE;
     private String MAX_CPUS_FILE;
@@ -80,6 +71,13 @@ public class MBHotplug {
             MAX_CPUS_FILE = PARENT + "/" + MB_MAX_CPUS;
         else if (Utils.existFile(PARENT + "/" + MB_MAX_CPUS_ONLINE))
             MAX_CPUS_FILE = PARENT + "/" + MB_MAX_CPUS_ONLINE;
+    }
+
+    public static MBHotplug getInstance() {
+        if (sInstance == null) {
+            sInstance = new MBHotplug();
+        }
+        return sInstance;
     }
 
     public void setMBHotplugPause(int value, Context context) {

@@ -17,19 +17,20 @@
  * along with Kernel Adiutor.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
- 
+
 package com.hades.hKtweaks.fragments.kernel;
 
 import com.hades.hKtweaks.R;
-import com.hades.hKtweaks.fragments.ApplyOnBootFragment;
+import com.hades.hKtweaks.activities.tools.profile.ProfileActivity;
 import com.hades.hKtweaks.fragments.recyclerview.RecyclerViewFragment;
+import com.hades.hKtweaks.utils.Utils;
 import com.hades.hKtweaks.utils.kernel.cpu.CPUFreq;
 import com.hades.hKtweaks.utils.kernel.cpuhotplug.AiOHotplug;
 import com.hades.hKtweaks.utils.kernel.cpuhotplug.AlucardHotplug;
 import com.hades.hKtweaks.utils.kernel.cpuhotplug.AutoSmp;
 import com.hades.hKtweaks.utils.kernel.cpuhotplug.BluPlug;
-import com.hades.hKtweaks.utils.kernel.cpuhotplug.CoreCtl;
 import com.hades.hKtweaks.utils.kernel.cpuhotplug.ClusterHotplug;
+import com.hades.hKtweaks.utils.kernel.cpuhotplug.CoreCtl;
 import com.hades.hKtweaks.utils.kernel.cpuhotplug.IntelliPlug;
 import com.hades.hKtweaks.utils.kernel.cpuhotplug.LazyPlug;
 import com.hades.hKtweaks.utils.kernel.cpuhotplug.MBHotplug;
@@ -39,13 +40,13 @@ import com.hades.hKtweaks.utils.kernel.cpuhotplug.MakoHotplug;
 import com.hades.hKtweaks.utils.kernel.cpuhotplug.SamsungPlug;
 import com.hades.hKtweaks.utils.kernel.cpuhotplug.ThunderPlug;
 import com.hades.hKtweaks.utils.kernel.cpuhotplug.ZenDecision;
+import com.hades.hKtweaks.views.recyclerview.ApplyOnBootFView;
 import com.hades.hKtweaks.views.recyclerview.CardView;
 import com.hades.hKtweaks.views.recyclerview.DescriptionView;
 import com.hades.hKtweaks.views.recyclerview.RecyclerViewItem;
 import com.hades.hKtweaks.views.recyclerview.SeekBarView;
 import com.hades.hKtweaks.views.recyclerview.SelectView;
 import com.hades.hKtweaks.views.recyclerview.SwitchView;
-import com.hades.hKtweaks.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -56,13 +57,12 @@ import java.util.List;
  */
 public class CPUHotplugFragment extends RecyclerViewFragment {
 
+    private final List<SwitchView> mEnableViews = new ArrayList<>();
     private CPUFreq mCPUFreq;
     private IntelliPlug mIntelliPlug;
     private MSMHotplug mMSMHotplug;
     private MBHotplug mMBHotplug;
     private CoreCtl mCoreCtl;
-
-    private List<SwitchView> mEnableViews = new ArrayList<>();
 
     @Override
     protected void init() {
@@ -73,11 +73,13 @@ public class CPUHotplugFragment extends RecyclerViewFragment {
         mMSMHotplug = MSMHotplug.getInstance();
         mMBHotplug = MBHotplug.getInstance();
         mCoreCtl = CoreCtl.getInstance();
-        addViewPagerFragment(ApplyOnBootFragment.newInstance(this));
     }
 
     @Override
     protected void addItems(List<RecyclerViewItem> items) {
+        if (!(getActivity() instanceof ProfileActivity))
+            items.add(new ApplyOnBootFView(getActivity(), this));
+
         mEnableViews.clear();
 
         if (SamsungPlug.supported()) {
@@ -670,7 +672,7 @@ public class CPUHotplugFragment extends RecyclerViewFragment {
             enable.setTitle(getString(R.string.blu_plug));
             enable.setSummary(getString(R.string.blu_plug_summary));
             enable.setChecked(BluPlug.isBluPlugEnabled());
-             enable.addOnSwitchListener((switchView, isChecked) -> {
+            enable.addOnSwitchListener((switchView, isChecked) -> {
                 if (isChecked) {
                     BluPlug.enableStateNotifier(true, getActivity());
                     BluPlug.enableBluPlug(true, getActivity());
@@ -802,7 +804,7 @@ public class CPUHotplugFragment extends RecyclerViewFragment {
 
             bluplug.addItem(upThreshold);
         }
-		
+
         if (BluPlug.hasBluPlugPlugThreshold()) {
             SeekBarView PlugThreshold = new SeekBarView();
             PlugThreshold.setTitle(getString(R.string.plug_threshold));
@@ -1509,7 +1511,7 @@ public class CPUHotplugFragment extends RecyclerViewFragment {
             SeekBarView SamplingTime = new SeekBarView();
             SamplingTime.setTitle(getString(R.string.cl_sampling_time));
             SamplingTime.setProgress(ClusterHotplug.getClusterHotplugSamplingTime());
-			SamplingTime.setMax(500);
+            SamplingTime.setMax(500);
             SamplingTime.setMin(1);
             SamplingTime.setOnSeekBarListener(new SeekBarView.OnSeekBarListener() {
                 @Override
@@ -1785,8 +1787,8 @@ public class CPUHotplugFragment extends RecyclerViewFragment {
             enable.setTitle(getString(R.string.alucard_hotplug));
             enable.setSummary(getString(R.string.alucard_hotplug_summary));
             enable.setChecked(AlucardHotplug.isAlucardHotplugEnable());
-			enable.addOnSwitchListener((switchView, isChecked)
-			           -> AlucardHotplug.enableAlucardHotplug(isChecked, getActivity()));
+            enable.addOnSwitchListener((switchView, isChecked)
+                    -> AlucardHotplug.enableAlucardHotplug(isChecked, getActivity()));
 
             alucardHotplug.addItem(enable);
             mEnableViews.add(enable);
@@ -1937,8 +1939,8 @@ public class CPUHotplugFragment extends RecyclerViewFragment {
             alucardHotplug.addItem(cpuUpRate);
         }
 
-		// added by @nalas XDA | 2019-07-12 | support for all Alucard features
-		if (AlucardHotplug.hasAlucardHotplugFreq_1_1() && mCPUFreq.getFreqs() != null) {
+        // added by @nalas XDA | 2019-07-12 | support for all Alucard features
+        if (AlucardHotplug.hasAlucardHotplugFreq_1_1() && mCPUFreq.getFreqs() != null) {
             SelectView freq_1_1 = new SelectView();
             freq_1_1.setTitle("Freq_1_1");
             freq_1_1.setSummary(getString(R.string.freq_1_1));
@@ -1952,7 +1954,7 @@ public class CPUHotplugFragment extends RecyclerViewFragment {
             alucardHotplug.addItem(freq_1_1);
         }
 
-		if (AlucardHotplug.hasAlucardHotplugFreq_2_0() && mCPUFreq.getFreqs() != null) {
+        if (AlucardHotplug.hasAlucardHotplugFreq_2_0() && mCPUFreq.getFreqs() != null) {
             SelectView freq_2_0 = new SelectView();
             freq_2_0.setTitle("Freq_2_0");
             freq_2_0.setSummary(getString(R.string.freq_2_0));
@@ -1966,7 +1968,7 @@ public class CPUHotplugFragment extends RecyclerViewFragment {
             alucardHotplug.addItem(freq_2_0);
         }
 
-		if (AlucardHotplug.hasAlucardHotplugFreq_2_1() && mCPUFreq.getFreqs() != null) {
+        if (AlucardHotplug.hasAlucardHotplugFreq_2_1() && mCPUFreq.getFreqs() != null) {
             SelectView freq_2_1 = new SelectView();
             freq_2_1.setTitle("Freq_2_1");
             freq_2_1.setSummary(getString(R.string.freq_2_1));
@@ -1980,7 +1982,7 @@ public class CPUHotplugFragment extends RecyclerViewFragment {
             alucardHotplug.addItem(freq_2_1);
         }
 
-		if (AlucardHotplug.hasAlucardHotplugFreq_3_0() && mCPUFreq.getFreqs() != null) {
+        if (AlucardHotplug.hasAlucardHotplugFreq_3_0() && mCPUFreq.getFreqs() != null) {
             SelectView freq_3_0 = new SelectView();
             freq_3_0.setTitle("Freq_3_0");
             freq_3_0.setSummary(getString(R.string.freq_3_0));
@@ -1994,7 +1996,7 @@ public class CPUHotplugFragment extends RecyclerViewFragment {
             alucardHotplug.addItem(freq_3_0);
         }
 
-		if (AlucardHotplug.hasAlucardHotplugFreq_3_1() && mCPUFreq.getFreqs() != null) {
+        if (AlucardHotplug.hasAlucardHotplugFreq_3_1() && mCPUFreq.getFreqs() != null) {
             SelectView freq_3_1 = new SelectView();
             freq_3_1.setTitle("Freq_3_1");
             freq_3_1.setSummary(getString(R.string.freq_3_1));
@@ -2008,7 +2010,7 @@ public class CPUHotplugFragment extends RecyclerViewFragment {
             alucardHotplug.addItem(freq_3_1);
         }
 
-		if (AlucardHotplug.hasAlucardHotplugFreq_4_0() && mCPUFreq.getFreqs() != null) {
+        if (AlucardHotplug.hasAlucardHotplugFreq_4_0() && mCPUFreq.getFreqs() != null) {
             SelectView freq_4_0 = new SelectView();
             freq_4_0.setTitle("Freq_4_0");
             freq_4_0.setSummary(getString(R.string.freq_4_0));
@@ -2425,9 +2427,9 @@ public class CPUHotplugFragment extends RecyclerViewFragment {
 
     private void thunderPlugInit(List<RecyclerViewItem> items) {
         CardView thunderPlug = new CardView(getActivity());
-        if (ThunderPlug.hasThunderPlugVersion()){
+        if (ThunderPlug.hasThunderPlugVersion()) {
             thunderPlug.setTitle(ThunderPlug.getThunderPlugVersion());
-        }else {
+        } else {
             thunderPlug.setTitle(getString(R.string.thunderplug));
         }
         thunderPlug.setExpand(false);
@@ -2535,7 +2537,7 @@ public class CPUHotplugFragment extends RecyclerViewFragment {
 
             thunderPlug.addItem(touchBoost);
         }
-		
+
         if (ThunderPlug.hasThunderPlugSuspend()) {
             SwitchView h_suspend = new SwitchView();
             h_suspend.setTitle(getString(R.string.thunder_plug_suspend));
@@ -2575,7 +2577,7 @@ public class CPUHotplugFragment extends RecyclerViewFragment {
             lockDuration.setUnit(getString(R.string.ms));
             lockDuration.setMax(5000);
             lockDuration.setOffset(50);
-			lockDuration.setMin(100);
+            lockDuration.setMin(100);
             lockDuration.setProgress(ThunderPlug.getThunderPlugBoostLockDuration() / 1000);
             lockDuration.setOnSeekBarListener(new SeekBarView.OnSeekBarListener() {
                 @Override
@@ -2611,7 +2613,7 @@ public class CPUHotplugFragment extends RecyclerViewFragment {
 
             thunderPlug.addItem(maxCoreOnLine);
         }
-		
+
         if (ThunderPlug.hasThunderPlugMinCoreOnline()) {
             SeekBarView minCoreOnLine = new SeekBarView();
             minCoreOnLine.setTitle(getString(R.string.cpus_min_core_online));

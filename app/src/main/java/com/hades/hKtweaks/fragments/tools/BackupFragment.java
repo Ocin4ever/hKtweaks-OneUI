@@ -23,21 +23,17 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.Environment;
-import androidx.core.content.ContextCompat;
-import androidx.core.graphics.drawable.DrawableCompat;
 
 import com.hades.hKtweaks.R;
 import com.hades.hKtweaks.activities.FilePickerActivity;
-import com.hades.hKtweaks.fragments.DescriptionFragment;
 import com.hades.hKtweaks.fragments.recyclerview.RecyclerViewFragment;
 import com.hades.hKtweaks.utils.Device;
 import com.hades.hKtweaks.utils.Utils;
 import com.hades.hKtweaks.utils.ViewUtils;
 import com.hades.hKtweaks.utils.tools.Backup;
 import com.hades.hKtweaks.views.dialog.Dialog;
+import com.hades.hKtweaks.views.recyclerview.DescriptionFView;
 import com.hades.hKtweaks.views.recyclerview.DescriptionView;
 import com.hades.hKtweaks.views.recyclerview.RecyclerViewItem;
 import com.hades.hKtweaks.views.recyclerview.TitleView;
@@ -62,19 +58,6 @@ public class BackupFragment extends RecyclerViewFragment {
     private Dialog mRestoreDialog;
 
     @Override
-    protected boolean showTopFab() {
-        return true;
-    }
-
-    @Override
-    protected Drawable getTopFabDrawable() {
-        Drawable drawable = DrawableCompat.wrap(
-                ContextCompat.getDrawable(getActivity(), R.drawable.ic_add));
-        DrawableCompat.setTint(drawable, Color.WHITE);
-        return drawable;
-    }
-
-    @Override
     public int getSpanCount() {
         int span = Utils.isTablet(getActivity()) ? Utils.getOrientation(getActivity()) ==
                 Configuration.ORIENTATION_LANDSCAPE ? 4 : 3 : Utils.getOrientation(getActivity()) ==
@@ -89,18 +72,31 @@ public class BackupFragment extends RecyclerViewFragment {
     protected void init() {
         super.init();
 
-        if (Backup.getBootPartition() != null) {
-            addViewPagerFragment(DescriptionFragment.newInstance(getString(R.string.boot_partition),
-                    Backup.getBootPartition()));
-        }
-        if (Backup.getRecoveryPartition() != null) {
-            addViewPagerFragment(DescriptionFragment.newInstance(getString(R.string.recovery_partition),
-                    Backup.getRecoveryPartition()));
-        }
-        if (Backup.getFotaPartition() != null) {
-            addViewPagerFragment(DescriptionFragment.newInstance(getString(R.string.fota_partition),
-                    Backup.getFotaPartition()));
-        }
+        showToolbarActionButton(item -> {
+            if (mPermissionDenied) {
+                Utils.toast(R.string.permission_denied_write_storage, getActivity());
+                return;
+            }
+
+            mOptionsDialog = new Dialog(getActivity()).setItems(getResources().getStringArray(
+                    R.array.backup_options),
+                    (dialogInterface, i) -> {
+                        switch (i) {
+                            case 0:
+                                showBackupFlashingDialog(null);
+                                break;
+                            case 1:
+                                Intent intent = new Intent(getActivity(), FilePickerActivity.class);
+                                intent.putExtra(FilePickerActivity.PATH_INTENT,
+                                        Environment.getExternalStorageDirectory().toString());
+                                intent.putExtra(FilePickerActivity.EXTENSION_INTENT, ".img");
+                                startActivityForResult(intent, 0);
+                                break;
+                        }
+                    })
+                    .setOnDismissListener(dialogInterface -> mOptionsDialog = null);
+            mOptionsDialog.show();
+        }, R.id.menu_add);
 
         if (mOptionsDialog != null) {
             mOptionsDialog.show();
@@ -137,6 +133,13 @@ public class BackupFragment extends RecyclerViewFragment {
     @Override
     protected void load(List<RecyclerViewItem> items) {
         super.load(items);
+        if (Backup.getBootPartition() != null)
+            items.add(new DescriptionFView(getActivity(), getString(R.string.boot_partition), Backup.getBootPartition()));
+        if (Backup.getRecoveryPartition() != null)
+            items.add(new DescriptionFView(getActivity(), getString(R.string.recovery_partition), Backup.getRecoveryPartition()));
+        if (Backup.getFotaPartition() != null)
+            items.add(new DescriptionFView(getActivity(), getString(R.string.fota_partition), Backup.getFotaPartition()));
+
 
         if (Backup.getBootPartition() != null) {
             List<RecyclerViewItem> boot = new ArrayList<>();
@@ -201,34 +204,6 @@ public class BackupFragment extends RecyclerViewFragment {
         }
     }
 
-    @Override
-    protected void onTopFabClick() {
-        super.onTopFabClick();
-        if (mPermissionDenied) {
-            Utils.toast(R.string.permission_denied_write_storage, getActivity());
-            return;
-        }
-
-        mOptionsDialog = new Dialog(getActivity()).setItems(getResources().getStringArray(
-                R.array.backup_options),
-                (dialogInterface, i) -> {
-                    switch (i) {
-                        case 0:
-                            showBackupFlashingDialog(null);
-                            break;
-                        case 1:
-                            Intent intent = new Intent(getActivity(), FilePickerActivity.class);
-                            intent.putExtra(FilePickerActivity.PATH_INTENT,
-                                    Environment.getExternalStorageDirectory().toString());
-                            intent.putExtra(FilePickerActivity.EXTENSION_INTENT, ".img");
-                            startActivityForResult(intent, 0);
-                            break;
-                    }
-                })
-                .setOnDismissListener(dialogInterface -> mOptionsDialog = null);
-        mOptionsDialog.show();
-    }
-
     private void showBackupFlashingDialog(final File file) {
         final LinkedHashMap<String, Backup.PARTITION> menu = getPartitionMenu();
         mBackupFlashingDialog = new Dialog(getActivity()).setItems(menu.keySet().toArray(
@@ -253,24 +228,6 @@ public class BackupFragment extends RecyclerViewFragment {
                         -> showDialog(new RestoreTask(getActivity(), flashing, file, partition)),
                 dialogInterface -> mRestoreDialog = null, getActivity());
         mRestoreDialog.show();
-    }
-
-    private static class RestoreTask extends DialogLoadHandler<BackupFragment> {
-        private File mFile;
-        private Backup.PARTITION mPartition;
-
-        private RestoreTask(Context context, boolean flashing,
-                            File file, Backup.PARTITION partition) {
-            super(null, context.getString(flashing ? R.string.flashing : R.string.restoring));
-            mFile = file;
-            mPartition = partition;
-        }
-
-        @Override
-        public Void doInBackground(BackupFragment fragment) {
-            Backup.restore(mFile, mPartition);
-            return null;
-        }
     }
 
     private void delete(final File file) {
@@ -328,29 +285,6 @@ public class BackupFragment extends RecyclerViewFragment {
                         -> mBackupPartition = null).show();
     }
 
-    private static class BackupTask extends DialogLoadHandler<BackupFragment> {
-        private String mName;
-        private Backup.PARTITION mPartition;
-
-        private BackupTask(Context context, String name, Backup.PARTITION partition) {
-            super(null, context.getString(R.string.backing_up));
-            mName = name;
-            mPartition = partition;
-        }
-
-        @Override
-        public Void doInBackground(BackupFragment fragment) {
-            Backup.backup(mName, mPartition);
-            return null;
-        }
-
-        @Override
-        public void onPostExecute(BackupFragment fragment, Void aVoid) {
-            super.onPostExecute(fragment, aVoid);
-            fragment.reload();
-        }
-    }
-
     private LinkedHashMap<String, Backup.PARTITION> getPartitionMenu() {
         LinkedHashMap<String, Backup.PARTITION> partitions = new LinkedHashMap<>();
         if (Backup.getBootPartition() != null) {
@@ -378,5 +312,46 @@ public class BackupFragment extends RecyclerViewFragment {
     public void onDestroy() {
         super.onDestroy();
         mPermissionDenied = false;
+    }
+
+    private static class RestoreTask extends DialogLoadHandler<BackupFragment> {
+        private File mFile;
+        private Backup.PARTITION mPartition;
+
+        private RestoreTask(Context context, boolean flashing,
+                            File file, Backup.PARTITION partition) {
+            super(null, context.getString(flashing ? R.string.flashing : R.string.restoring));
+            mFile = file;
+            mPartition = partition;
+        }
+
+        @Override
+        public Void doInBackground(BackupFragment fragment) {
+            Backup.restore(mFile, mPartition);
+            return null;
+        }
+    }
+
+    private static class BackupTask extends DialogLoadHandler<BackupFragment> {
+        private String mName;
+        private Backup.PARTITION mPartition;
+
+        private BackupTask(Context context, String name, Backup.PARTITION partition) {
+            super(null, context.getString(R.string.backing_up));
+            mName = name;
+            mPartition = partition;
+        }
+
+        @Override
+        public Void doInBackground(BackupFragment fragment) {
+            Backup.backup(mName, mPartition);
+            return null;
+        }
+
+        @Override
+        public void onPostExecute(BackupFragment fragment, Void aVoid) {
+            super.onPostExecute(fragment, aVoid);
+            fragment.reload();
+        }
     }
 }

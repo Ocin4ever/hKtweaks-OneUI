@@ -22,7 +22,7 @@ public class Selinux {
 
     public static String getStringEnforceMode() {
         int mode = Utils.strToInt(Utils.readFile(SELINUX_ENFORCE));
-        switch (mode){
+        switch (mode) {
             case 0:
                 return "Permissive";
             case 1:
@@ -31,7 +31,7 @@ public class Selinux {
         return null;
     }
 
-    public static int getEnforceMode(){
+    public static int getEnforceMode() {
         return Utils.strToInt(Utils.readFile(SELINUX_ENFORCE));
     }
 

@@ -1,9 +1,9 @@
 package com.hades.hKtweaks.views.recyclerview;
 
-import androidx.appcompat.widget.AppCompatTextView;
 import android.view.View;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
+
+import androidx.appcompat.widget.AppCompatTextView;
 
 import com.hades.hKtweaks.R;
 
@@ -16,14 +16,9 @@ import java.util.List;
 
 public class CheckBoxView extends RecyclerViewItem {
 
-    public interface OnCheckboxListener {
-        void onChanged(CheckBoxView checkboxView, boolean isChecked);
-    }
-
     private AppCompatTextView mTitle;
     private AppCompatTextView mSummary;
     private CheckBox mCheckbox;
-
     private CharSequence mTitleText;
     private CharSequence mSummaryText;
     private CharSequence mSummaryOnText;
@@ -32,7 +27,6 @@ public class CheckBoxView extends RecyclerViewItem {
     private boolean mEnabled = true;
     private float mAlpha = 1f;
     private View mView;
-
     private List<OnCheckboxListener> mOnCheckboxListeners = new ArrayList<>();
 
     @Override
@@ -71,11 +65,6 @@ public class CheckBoxView extends RecyclerViewItem {
         });
     }
 
-    public void setTitle(CharSequence title) {
-        mTitleText = title;
-        refresh();
-    }
-
     public void setSummary(CharSequence summary) {
         mSummaryText = summary;
         refresh();
@@ -88,11 +77,6 @@ public class CheckBoxView extends RecyclerViewItem {
 
     public void setSummaryOff(CharSequence summary) {
         mSummaryOffText = summary;
-        refresh();
-    }
-
-    public void setChecked(boolean checked) {
-        mChecked = checked;
         refresh();
     }
 
@@ -110,8 +94,18 @@ public class CheckBoxView extends RecyclerViewItem {
         return mTitleText;
     }
 
+    public void setTitle(CharSequence title) {
+        mTitleText = title;
+        refresh();
+    }
+
     public boolean isChecked() {
         return mChecked;
+    }
+
+    public void setChecked(boolean checked) {
+        mChecked = checked;
+        refresh();
     }
 
     public void addOnCheckboxListener(OnCheckboxListener OnCheckboxListener) {
@@ -136,10 +130,10 @@ public class CheckBoxView extends RecyclerViewItem {
         if (mSummary != null && mSummaryText != null) {
             mSummary.setText(mSummaryText);
         }
-        if (mSummary != null && mSummaryOnText != null && mSummaryOffText != null){
+        if (mSummary != null && mSummaryOnText != null && mSummaryOffText != null) {
             if (mChecked) {
                 mSummary.setText(mSummaryOnText);
-            }else {
+            } else {
                 mSummary.setText(mSummaryOffText);
             }
         }
@@ -151,7 +145,9 @@ public class CheckBoxView extends RecyclerViewItem {
         }
     }
 
-
+    public interface OnCheckboxListener {
+        void onChanged(CheckBoxView checkboxView, boolean isChecked);
+    }
 
 
 }

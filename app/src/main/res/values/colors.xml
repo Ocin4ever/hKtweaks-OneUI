@@ -1,18 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="textcolor_light">#8a000000</color>
-    <color name="textcolor_dark">#b3ffffff</color>
 
-    <color name="black">#000000</color>
-    <color name="white">#ffffff</color>
-    <color name="green">#5fb962</color>
-    <color name="red">#f66055</color>
+    <color name="primary_color">#6b8bd3</color>
+    <color name="secondary_color">#7bd3fe</color>
+    <color name="primary_dark_color">#5573be</color>
 
     <color name="colorBalance">#43a047</color>
     <color name="colorPerformance">#fb8c00</color>
     <color name="colorBattery">#03a9f4</color>
     <color name="colorGaming">#ef5350</color>
 
-    <color name="rcBackground_light">#dcdcdc</color>
-    <color name="rcBackground_dark">#000000</color>
 </resources>

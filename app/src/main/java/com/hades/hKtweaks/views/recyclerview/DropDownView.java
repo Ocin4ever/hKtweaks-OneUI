@@ -20,12 +20,13 @@
 package com.hades.hKtweaks.views.recyclerview;
 
 import android.animation.ValueAnimator;
-import androidx.appcompat.widget.AppCompatImageView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.appcompat.widget.AppCompatImageView;
 
 import com.hades.hKtweaks.R;
 
@@ -54,10 +55,6 @@ public class DropDownView extends RecyclerViewItem {
     private ValueAnimator mAnimator;
 
     private OnDropDownListener mOnDropDownListener;
-
-    public interface OnDropDownListener {
-        void onSelect(DropDownView dropDownView, int position, String value);
-    }
 
     @Override
     public int getLayoutRes() {
@@ -199,6 +196,10 @@ public class DropDownView extends RecyclerViewItem {
             mParent.requestLayout();
             viewChanged();
         }
+    }
+
+    public interface OnDropDownListener {
+        void onSelect(DropDownView dropDownView, int position, String value);
     }
 
 }

@@ -34,16 +34,14 @@ import java.util.List;
 public abstract class Provider {
 
     /**
+     * JSON file location
+     */
+    private final String mPath;
+    /**
      * JSON Objects
      */
     private JSONObject mDatabaseMain;
     private JSONArray mDatabaseItems;
-
-    /**
-     * JSON file location
-     */
-    private final String mPath;
-
     private int mVersion;
 
     /**

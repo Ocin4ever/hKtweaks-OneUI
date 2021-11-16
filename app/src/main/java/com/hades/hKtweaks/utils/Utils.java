@@ -23,10 +23,8 @@ import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.UiModeManager;
 import android.content.ActivityNotFoundException;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.hardware.display.DisplayManager;
@@ -36,21 +34,23 @@ import android.os.Environment;
 import android.os.PowerManager;
 import android.provider.MediaStore;
 import android.provider.Settings;
-import androidx.annotation.StringRes;
-import androidx.core.view.ViewCompat;
-import androidx.appcompat.app.AlertDialog;
 import android.text.Html;
 import android.util.Base64;
 import android.view.Display;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.annotation.StringRes;
+import androidx.core.view.ViewCompat;
+
 import com.hades.hKtweaks.BuildConfig;
 import com.hades.hKtweaks.R;
-import com.hades.hKtweaks.activities.StartActivity;
-import com.hades.hKtweaks.activities.StartActivityMaterial;
 import com.hades.hKtweaks.utils.root.RootFile;
 import com.hades.hKtweaks.utils.root.RootUtils;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -70,19 +70,14 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Locale;
 import java.util.Random;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import de.dlyt.yanndroid.oneui.dialog.AlertDialog;
 
 /**
  * Created by willi on 14.04.16.
  */
 public class Utils {
 
-    public static boolean DARK_THEME;
-    public static boolean AMOLED_DARK_THEME;
-
-    public static String appVersion(){
+    public static String appVersion() {
         return BuildConfig.VERSION_NAME;
     }
 
@@ -100,14 +95,14 @@ public class Utils {
         } catch (JSONException ignored) {
             Log.e("Can't read changelog, no release information provided");
         }
-        AlertDialog.Builder alert = new AlertDialog.Builder(context);
-        alert.setTitle(String.format(context.getString(R.string.changelog), versionName ));
-        alert.setMessage(changelog.toString());
-        alert.setPositiveButton(context.getString(R.string.close), (dialog, id) -> {
-            AppSettings.saveBoolean("show_changelog", false, context);
-        });
 
-        alert.show();
+        new AlertDialog.Builder(context)
+                .setTitle(String.format(context.getString(R.string.changelog), versionName))
+                .setMessage(changelog.toString())
+                .setPositiveButton(context.getString(R.string.close), (dialog, id) -> {
+                    AppSettings.saveBoolean("show_changelog", false, context);
+                })
+                .show();
     }
 
     public static void startService(Context context, Intent intent) {
@@ -177,35 +172,6 @@ public class Utils {
     public static boolean isTv(Context context) {
         return ((UiModeManager) context.getSystemService(Context.UI_MODE_SERVICE))
                 .getCurrentModeType() == Configuration.UI_MODE_TYPE_TELEVISION;
-    }
-
-    public static void setupStartActivity(Context context) {
-        PackageManager pm = context.getPackageManager();
-        if (Utils.hideStartActivity()) {
-            pm.setComponentEnabledSetting(new ComponentName(context, StartActivity.class),
-                    PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
-            pm.setComponentEnabledSetting(new ComponentName(context, StartActivityMaterial.class),
-                    PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
-        } else {
-            setStartActivity(Prefs.getBoolean("materialicon", false, context), context);
-        }
-    }
-
-    public static void setStartActivity(boolean material, Context context) {
-        PackageManager pm = context.getPackageManager();
-        pm.setComponentEnabledSetting(new ComponentName(context, StartActivity.class),
-                material ? PackageManager.COMPONENT_ENABLED_STATE_DISABLED :
-                        PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
-        pm.setComponentEnabledSetting(new ComponentName(context, StartActivityMaterial.class),
-                material ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED :
-                        PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
-    }
-
-    public static boolean hideStartActivity() {
-        RootUtils.SU su = new RootUtils.SU(false, false);
-        String prop = su.runCommand("getprop ro.kerneladiutor.hide");
-        su.close();
-        return prop != null && prop.equals("true");
     }
 
     public static boolean isServiceRunning(Class<?> serviceClass, Context context) {
@@ -406,8 +372,8 @@ public class Utils {
         int m = ((int) tSec % (60 * 60)) / 60;
         int s = ((int) tSec % (60 * 60)) % 60;
         String sDur = "";
-        if(h != 0) sDur = h + "h ";
-        if(m != 0) sDur += m + "m ";
+        if (h != 0) sDur = h + "h ";
+        if (m != 0) sDur += m + "m ";
         sDur += s + "s";
 
         return sDur;
@@ -484,7 +450,7 @@ public class Utils {
             writer.write(text);
             writer.flush();
         } catch (IOException e) {
-            Log.e("Failed to write " + path);
+            e.printStackTrace();
         } finally {
             try {
                 if (writer != null) writer.close();

@@ -20,17 +20,19 @@
 package com.hades.hKtweaks.fragments.kernel;
 
 import com.hades.hKtweaks.R;
+import com.hades.hKtweaks.activities.tools.profile.ProfileActivity;
 import com.hades.hKtweaks.fragments.ApplyOnBootFragment;
 import com.hades.hKtweaks.fragments.BaseFragment;
 import com.hades.hKtweaks.fragments.recyclerview.RecyclerViewFragment;
 import com.hades.hKtweaks.utils.AppSettings;
 import com.hades.hKtweaks.utils.Utils;
-import com.hades.hKtweaks.utils.kernel.gpu.AdrenoIdler;
 import com.hades.hKtweaks.utils.kernel.gpu.AdrenoBoost;
+import com.hades.hKtweaks.utils.kernel.gpu.AdrenoIdler;
 import com.hades.hKtweaks.utils.kernel.gpu.GPUFreq;
 import com.hades.hKtweaks.utils.kernel.gpu.GPUFreqExynos;
 import com.hades.hKtweaks.utils.kernel.gpu.GPUFreqTmu;
 import com.hades.hKtweaks.utils.kernel.gpu.SimpleGPU;
+import com.hades.hKtweaks.views.recyclerview.ApplyOnBootFView;
 import com.hades.hKtweaks.views.recyclerview.CardView;
 import com.hades.hKtweaks.views.recyclerview.DescriptionView;
 import com.hades.hKtweaks.views.recyclerview.RecyclerViewItem;
@@ -50,22 +52,19 @@ import java.util.Objects;
  */
 public class GPUFragment extends RecyclerViewFragment {
 
+    private static final float mVoltMinValue = -100000f;
+    private static final float mVoltMaxValue = 25000f;
+    private static final int mVoltStep = 6250;
+    public static int mDefZeroPosition = (Math.round(mVoltMaxValue - mVoltMinValue) / mVoltStep) - (Math.round(mVoltMaxValue) / mVoltStep);
+    private final List<SeekBarView> mVoltages = new ArrayList<>();
+    private final SeekBarView mSeekbarProf = new SeekBarView();
     private GPUFreq mGPUFreq;
     private GPUFreqExynos mGPUFreqExynos;
     private GPUFreqTmu mGPUFreqTmu;
-
     private XYGraphView m2dCurFreq;
     private XYGraphView mCurFreq;
     private XYGraphView mUsage;
-    private List<SeekBarView> mVoltages = new ArrayList<>();
-    private SeekBarView mSeekbarProf = new SeekBarView();
-
     private PathReaderFragment mGPUGovernorTunableFragment;
-
-    private static float mVoltMinValue = -100000f;
-    private static float mVoltMaxValue = 25000f;
-    private static int mVoltStep = 6250;
-    public static int mDefZeroPosition = (Math.round(mVoltMaxValue - mVoltMinValue) / mVoltStep) - (Math.round(mVoltMaxValue) / mVoltStep);
 
     @Override
     protected BaseFragment getForegroundFragment() {
@@ -79,24 +78,26 @@ public class GPUFragment extends RecyclerViewFragment {
         mGPUFreq = GPUFreq.getInstance();
         mGPUFreqExynos = GPUFreqExynos.getInstance();
         mGPUFreqTmu = GPUFreqTmu.getInstance();
-        addViewPagerFragment(ApplyOnBootFragment.newInstance(this));
     }
 
     @Override
     protected void addItems(List<RecyclerViewItem> items) {
+        if (!(getActivity() instanceof ProfileActivity))
+            items.add(new ApplyOnBootFView(getActivity(), this));
+
         mVoltages.clear();
 
         freqInit(items);
-        if (mGPUFreqExynos.hasPowerPolicy()){
+        if (mGPUFreqExynos.hasPowerPolicy()) {
             powerPolicyInit(items);
         }
-        if (mGPUFreqExynos.hasGovernor()){
+        if (mGPUFreqExynos.hasGovernor()) {
             governorInit(items);
         }
-        if (mGPUFreqTmu.supported()){
+        if (mGPUFreqTmu.supported()) {
             throttlingInit(items);
         }
-        if (mGPUFreqExynos.hasVoltage()){
+        if (mGPUFreqExynos.hasVoltage()) {
             voltageInit(items);
         }
         if (SimpleGPU.supported()) {
@@ -118,7 +119,7 @@ public class GPUFragment extends RecyclerViewFragment {
         desc.setSummary(getString(R.string.gpu_throttling_summary));
         thrott.addItem(desc);
 
-        if(mGPUFreqTmu.hasTmu()) {
+        if (mGPUFreqTmu.hasTmu()) {
             SwitchView tmu = new SwitchView();
             tmu.setTitle(getString(R.string.gpu_tmu));
             tmu.setSummary(getString(R.string.gpu_tmu_summary));
@@ -161,7 +162,7 @@ public class GPUFragment extends RecyclerViewFragment {
             }
         }
 
-        if(mGPUFreqTmu.hasThrottling1()) {
+        if (mGPUFreqTmu.hasThrottling1()) {
             SeekBarView th1 = new SeekBarView();
             th1.setTitle(getString(R.string.gpu_throttling1));
             th1.setSummary(getString(R.string.gpu_throttling1_summary));
@@ -182,7 +183,7 @@ public class GPUFragment extends RecyclerViewFragment {
             thrott.addItem(th1);
         }
 
-        if(mGPUFreqTmu.hasThrottling2()) {
+        if (mGPUFreqTmu.hasThrottling2()) {
             SeekBarView th2 = new SeekBarView();
             th2.setTitle(getString(R.string.gpu_throttling2));
             th2.setSummary(getString(R.string.gpu_throttling2_summary));
@@ -203,7 +204,7 @@ public class GPUFragment extends RecyclerViewFragment {
             thrott.addItem(th2);
         }
 
-        if(mGPUFreqTmu.hasThrottling3()) {
+        if (mGPUFreqTmu.hasThrottling3()) {
             SeekBarView th3 = new SeekBarView();
             th3.setTitle(getString(R.string.gpu_throttling3));
             th3.setSummary(getString(R.string.gpu_throttling3_summary));
@@ -224,7 +225,7 @@ public class GPUFragment extends RecyclerViewFragment {
             thrott.addItem(th3);
         }
 
-        if(mGPUFreqTmu.hasThrottling4()) {
+        if (mGPUFreqTmu.hasThrottling4()) {
             SeekBarView th4 = new SeekBarView();
             th4.setTitle(getString(R.string.gpu_throttling4));
             th4.setSummary(getString(R.string.gpu_throttling4_summary));
@@ -245,7 +246,7 @@ public class GPUFragment extends RecyclerViewFragment {
             thrott.addItem(th4);
         }
 
-        if(mGPUFreqTmu.hasTripping()) {
+        if (mGPUFreqTmu.hasTripping()) {
             SeekBarView trip = new SeekBarView();
             trip.setTitle(getString(R.string.gpu_tripping));
             trip.setSummary(getString(R.string.gpu_tripping_summary));
@@ -373,7 +374,7 @@ public class GPUFragment extends RecyclerViewFragment {
         }
     }
 
-    private void powerPolicyInit (List<RecyclerViewItem> items){
+    private void powerPolicyInit(List<RecyclerViewItem> items) {
         CardView powCard = new CardView(getActivity());
         powCard.setTitle(getString(R.string.gpu_power_policy_card));
 
@@ -426,7 +427,7 @@ public class GPUFragment extends RecyclerViewFragment {
             if (mGPUFreqExynos.hasHighspeedClock()) {
                 List<String> freqs = new ArrayList<>();
                 List<Integer> list = mGPUFreqExynos.getAvailableFreqsSort();
-                if(list != null) {
+                if (list != null) {
                     int value = 0;
                     for (int i = 0; i < list.size(); i++) {
                         freqs.add(mGPUFreqExynos.refactor(String.valueOf(list.get(i))));
@@ -444,7 +445,7 @@ public class GPUFragment extends RecyclerViewFragment {
                     seekbar.setOnSeekBarListener(new SeekBarView.OnSeekBarListener() {
                         @Override
                         public void onStop(SeekBarView seekBarView, int position, String value) {
-                            if (mGPUFreqExynos.needRefactor){
+                            if (mGPUFreqExynos.needRefactor) {
                                 value = String.valueOf((Integer.parseInt(value) * 1000));
                             }
                             mGPUFreqExynos.setHighspeedClock(value, getActivity());
@@ -509,13 +510,13 @@ public class GPUFragment extends RecyclerViewFragment {
                 DescriptionView tunables = new DescriptionView();
                 tunables.setTitle(getString(R.string.gpu_governor_tunables));
                 tunables.setSummary(getString(R.string.governor_tunables_summary));
-                tunables.setOnItemClickListener(( item) -> {
-                        String gov = mGPUFreq.getGovernor();
-                        setForegroundText(gov);
-                        mGPUGovernorTunableFragment.setError(getString(R.string.tunables_error, governor));
-                        mGPUGovernorTunableFragment.setPath(mGPUFreq.getTunables(mGPUFreq.getGovernor()),
-                                ApplyOnBootFragment.GPU);
-                        showForeground();
+                tunables.setOnItemClickListener((item) -> {
+                    String gov = mGPUFreq.getGovernor();
+                    setForegroundText(gov);
+                    mGPUGovernorTunableFragment.setError(getString(R.string.tunables_error, governor));
+                    mGPUGovernorTunableFragment.setPath(mGPUFreq.getTunables(mGPUFreq.getGovernor()),
+                            ApplyOnBootFragment.GPU);
+                    showForeground();
                 });
 
                 govCard.addItem(tunables);
@@ -556,16 +557,16 @@ public class GPUFragment extends RecyclerViewFragment {
             voltControl.setSummaryOff(getString(R.string.cpu_manual_volt_summaryOff));
             voltControl.setChecked(enableGlobal);
             voltControl.addOnSwitchListener((switchView, isChecked) -> {
-                    if (isChecked) {
-                        AppSettings.saveBoolean("gpu_global_volts", true, getActivity());
-                        AppSettings.saveBoolean("gpu_individual_volts", false, getActivity());
-                        reload();
-                    } else {
-                        AppSettings.saveBoolean("gpu_global_volts", false, getActivity());
-                        AppSettings.saveBoolean("gpu_individual_volts", true, getActivity());
-                        AppSettings.saveInt("gpu_seekbarPref_value", mDefZeroPosition, getActivity());
-                        reload();
-                    }
+                if (isChecked) {
+                    AppSettings.saveBoolean("gpu_global_volts", true, getActivity());
+                    AppSettings.saveBoolean("gpu_individual_volts", false, getActivity());
+                    reload();
+                } else {
+                    AppSettings.saveBoolean("gpu_global_volts", false, getActivity());
+                    AppSettings.saveBoolean("gpu_individual_volts", true, getActivity());
+                    AppSettings.saveInt("gpu_seekbarPref_value", mDefZeroPosition, getActivity());
+                    reload();
+                }
             });
 
             voltCard.addItem(voltControl);
@@ -596,7 +597,7 @@ public class GPUFragment extends RecyclerViewFragment {
 
         int value = 0;
         for (int i = 0; i < progress.size(); i++) {
-            if (i == global){
+            if (i == global) {
                 value = i;
                 break;
             }
@@ -608,7 +609,7 @@ public class GPUFragment extends RecyclerViewFragment {
         seekbar.setItems(progress);
         seekbar.setProgress(value);
         seekbar.setEnabled(enableSeekbar);
-        if(!enableSeekbar) seekbar.setAlpha(0.4f);
+        if (!enableSeekbar) seekbar.setAlpha(0.4f);
         else seekbar.setAlpha(1f);
         seekbar.setOnSeekBarListener(new SeekBarView.OnSeekBarListener() {
             @Override
@@ -621,6 +622,7 @@ public class GPUFragment extends RecyclerViewFragment {
                 }
                 getHandler().postDelayed(() -> reload(), 200);
             }
+
             @Override
             public void onMove(SeekBarView seekBarView, int position, String value) {
             }
@@ -628,21 +630,21 @@ public class GPUFragment extends RecyclerViewFragment {
     }
 
     private void seekbarInit(SeekBarView seekbar, final Integer freq, String voltage,
-            String voltageStock) {
+                             String voltageStock) {
 
         int mOffset = mGPUFreqExynos.getVoltageOffset();
-        float mMin = (Utils.strToFloat(voltageStock) - (- mVoltMinValue / 1000)) * mOffset;
+        float mMin = (Utils.strToFloat(voltageStock) - (-mVoltMinValue / 1000)) * mOffset;
         float mMax = ((Utils.strToFloat(voltageStock) + (mVoltMaxValue / 1000)) * mOffset) + mVoltStep;
 
         List<String> progress = new ArrayList<>();
-        for(float i = mMin ; i < mMax; i += mVoltStep){
+        for (float i = mMin; i < mMax; i += mVoltStep) {
             String string = String.valueOf(i / mOffset);
             progress.add(string);
         }
 
         int value = 0;
         for (int i = 0; i < progress.size(); i++) {
-            if (Objects.equals(progress.get(i), voltage)){
+            if (Objects.equals(progress.get(i), voltage)) {
                 value = i;
                 break;
             }
@@ -656,14 +658,14 @@ public class GPUFragment extends RecyclerViewFragment {
         seekbar.setItems(progress);
         seekbar.setProgress(value);
         seekbar.setEnabled(enableSeekbar);
-        if(!enableSeekbar) seekbar.setAlpha(0.4f);
+        if (!enableSeekbar) seekbar.setAlpha(0.4f);
         else seekbar.setAlpha(1f);
         seekbar.setOnSeekBarListener(new SeekBarView.OnSeekBarListener() {
 
             @Override
             public void onStop(SeekBarView seekBarView, int position, String value) {
                 mGPUFreqExynos.setVoltage(freq, value, getActivity());
-            getHandler().postDelayed(() -> reload(), 200);
+                getHandler().postDelayed(() -> reload(), 200);
             }
 
             @Override

@@ -22,22 +22,16 @@ package com.hades.hKtweaks.fragments.statistics;
 import com.hades.hKtweaks.R;
 import com.hades.hKtweaks.fragments.recyclerview.RecyclerViewFragment;
 import com.hades.hKtweaks.utils.Device;
+import com.hades.hKtweaks.views.recyclerview.CardView;
 import com.hades.hKtweaks.views.recyclerview.DescriptionView;
 import com.hades.hKtweaks.views.recyclerview.RecyclerViewItem;
-import com.hades.hKtweaks.views.recyclerview.TitleView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by willi on 28.06.16.
  */
 public class InputsFragment extends RecyclerViewFragment {
-
-    @Override
-    protected boolean showViewPager() {
-        return false;
-    }
 
     @Override
     public int getSpanCount() {
@@ -59,7 +53,7 @@ public class InputsFragment extends RecyclerViewFragment {
                         {getString(R.string.handlers), input.getHandlers()}
                 };
 
-                List<RecyclerViewItem> inputItems = new ArrayList<>();
+                /*List<RecyclerViewItem> inputItems = new ArrayList<>();
 
                 for (String[] inputsList : list) {
                     if (inputsList[1] != null) {
@@ -75,7 +69,20 @@ public class InputsFragment extends RecyclerViewFragment {
                     inputTile.setText(name);
                     items.add(inputTile);
                     items.addAll(inputItems);
+                }*/
+
+                CardView cardView = new CardView(getActivity());
+                cardView.setTitle(name);
+                for (String[] inputsList : list) {
+                    if (inputsList[1] != null) {
+                        DescriptionView inputView = new DescriptionView();
+                        inputView.setTitle(inputsList[0]);
+                        inputView.setSummary(inputsList[1]);
+                        cardView.addItem(inputView);
+                    }
                 }
+                items.add(cardView);
+
             }
         }
     }

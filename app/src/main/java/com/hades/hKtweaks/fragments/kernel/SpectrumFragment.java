@@ -2,14 +2,15 @@ package com.hades.hKtweaks.fragments.kernel;
 
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+
 import androidx.core.content.ContextCompat;
 
 import com.hades.hKtweaks.R;
-import com.hades.hKtweaks.fragments.DescriptionFragment;
 import com.hades.hKtweaks.fragments.recyclerview.RecyclerViewFragment;
 import com.hades.hKtweaks.utils.AppSettings;
 import com.hades.hKtweaks.utils.kernel.spectrum.Spectrum;
 import com.hades.hKtweaks.views.recyclerview.CardView;
+import com.hades.hKtweaks.views.recyclerview.DescriptionFView;
 import com.hades.hKtweaks.views.recyclerview.DescriptionView;
 import com.hades.hKtweaks.views.recyclerview.RecyclerViewItem;
 
@@ -21,20 +22,12 @@ import java.util.List;
 
 public class SpectrumFragment extends RecyclerViewFragment {
 
-    @Override
-    protected void init() {
-        super.init();
-
-        addViewPagerFragment(DescriptionFragment.newInstance(getString(R.string.spec_title), getString(R.string.spec_info)));
-
-    }
-
     private CardView oldCard;
     private DescriptionView oldDesc;
 
-
     @Override
     protected void addItems(List<RecyclerViewItem> items) {
+        items.add(new DescriptionFView(getActivity(), getString(R.string.spec_title), getString(R.string.spec_info)));
 
         final int balColor = ContextCompat.getColor(getContext(), R.color.colorBalance);
         final int perColor = ContextCompat.getColor(getContext(), R.color.colorPerformance);
@@ -128,22 +121,22 @@ public class SpectrumFragment extends RecyclerViewFragment {
         //Detects the selected profile on launch
         int mProfile = AppSettings.getInt("spectrum_profile", 0, getActivity());
 
-        if(mProfile == 0){
+        if (mProfile == 0) {
             card0.GrxSetInitSelection(true, balColor);
             desc0.GrxSetInitSelection(true, Color.WHITE);
             oldCard = card0;
             oldDesc = desc0;
-        } else if(mProfile == 1){
+        } else if (mProfile == 1) {
             card1.GrxSetInitSelection(true, perColor);
             desc1.GrxSetInitSelection(true, Color.WHITE);
             oldCard = card1;
             oldDesc = desc1;
-        } else if(mProfile == 2){
+        } else if (mProfile == 2) {
             card2.GrxSetInitSelection(true, batColor);
             desc2.GrxSetInitSelection(true, Color.WHITE);
             oldCard = card2;
             oldDesc = desc2;
-        } else if(mProfile == 3){
+        } else if (mProfile == 3) {
             card3.GrxSetInitSelection(true, gamColor);
             desc3.GrxSetInitSelection(true, Color.WHITE);
             oldCard = card3;
@@ -159,8 +152,8 @@ public class SpectrumFragment extends RecyclerViewFragment {
             ColorStateList odColor = desc.getTextColors();
             card.setCardBackgroundColor(color);
             desc.setTextColor(Color.WHITE);
-            if(oldCard != null) oldCard.setCardBackgroundColor(ogColor);
-            if(oldDesc != null) oldDesc.setTextColor(odColor);
+            if (oldCard != null) oldCard.setCardBackgroundColor(ogColor);
+            if (oldDesc != null) oldDesc.setTextColor(odColor);
             Spectrum.setProfile(prof, getActivity());
             oldCard = card;
             oldDesc = desc;

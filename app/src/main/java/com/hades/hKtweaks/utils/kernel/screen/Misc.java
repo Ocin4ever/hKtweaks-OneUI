@@ -35,19 +35,9 @@ import java.util.List;
  */
 public class Misc {
 
-    private static Misc sInstance;
-
-    public static Misc getInstance() {
-        if (sInstance == null) {
-            sInstance = new Misc();
-        }
-        return sInstance;
-    }
-
     private static final String LM3530_BRIGTHNESS_MODE = "/sys/devices/i2c-0/0-0038/lm3530_br_mode";
     private static final String LM3530_MIN_BRIGHTNESS = "/sys/devices/i2c-0/0-0038/lm3530_min_br";
     private static final String LM3530_MAX_BRIGHTNESS = "/sys/devices/i2c-0/0-0038/lm3530_max_br";
-
     private static final String LM3630_BACKLIGHT_DIMMER = "/sys/module/lm3630_bl/parameters/backlight_dimmer";
     private static final String MDSS_BACKLIGHT_DIMMER = "/sys/module/mdss_fb/parameters/backlight_dimmer";
     private static final String LM3630_MIN_BRIGHTNESS = "/sys/module/lm3630_bl/parameters/min_brightness";
@@ -55,15 +45,16 @@ public class Misc {
     private static final String LM3630_BACKLIGHT_DIMMER_THRESHOLD = "/sys/module/lm3630_bl/parameters/backlight_threshold";
     private static final String LM3630_BACKLIGHT_DIMMER_OFFSET = "/sys/module/lm3630_bl/parameters/backlight_offset";
     private static final String PSB_BL_MIN_BRIGHTNESS = "/sys/class/backlight/psb-bl/min_brightness";
-
     private static final String NEGATIVE_TOGGLE = "/sys/module/cypress_touchkey/parameters/mdnie_shortcut_enabled";
-
     private static final String REGISTER_HOOK = "/sys/class/misc/mdnie/hook_intercept";
     private static final String MASTER_SEQUENCE = "/sys/class/misc/mdnie/sequence_intercept";
-
+    private static Misc sInstance;
     private final List<String> mBackLightDimmer = new ArrayList<>();
     private final HashMap<String, Integer> mMinBrightnessFiles = new HashMap<>();
     private final HashMap<String, Switch> mGloveMode = new HashMap<>();
+    private String BACKLIGHT_DIMMER;
+    private String MIN_BRIGHTNESS;
+    private String GLOVE_MODE;
 
     {
         mBackLightDimmer.add(LM3630_BACKLIGHT_DIMMER);
@@ -76,10 +67,6 @@ public class Misc {
         mGloveMode.put("/sys/devices/virtual/touchscreen/touchscreen_dev/mode", new Switch("glove", "normal"));
         mGloveMode.put("/sys/lenovo_tp_gestures/tpd_glove_status", new Switch("1", "0"));
     }
-
-    private String BACKLIGHT_DIMMER;
-    private String MIN_BRIGHTNESS;
-    private String GLOVE_MODE;
 
     private Misc() {
         for (String file : mBackLightDimmer) {
@@ -102,6 +89,13 @@ public class Misc {
                 break;
             }
         }
+    }
+
+    public static Misc getInstance() {
+        if (sInstance == null) {
+            sInstance = new Misc();
+        }
+        return sInstance;
     }
 
     public void enableGloveMode(boolean enable, Context context) {

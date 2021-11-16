@@ -7,7 +7,7 @@ public class WakeLockInfo {
     public int wWakeups = 0;
     public boolean wState = true;
 
-    WakeLockInfo(String name, int time, int wakeups){
+    WakeLockInfo(String name, int time, int wakeups) {
         wName = name;
         wTime = time;
         wWakeups = wakeups;
