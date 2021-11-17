@@ -15,15 +15,9 @@
     <string name="press_back_again_exit">Volvi primir Atrás pa colar</string>
     <string name="cancel">Encaboxar</string>
     <string name="ok">Aceutar</string>
-    <string name="donate">Donar</string>
-    <string name="donate_summary">¡Esta carauterística namái ta disponible al instalase l\'aplicación de donación! Nun t\'esmolezas porque magar qu\'esta aplicación seya códigu llibre, precisa de financiación. Sicasí, pues compilala tu y desaniciar esta comprobación. Namái merques l\'aplicación de donación, tienes de reaniciar Kernel Adiutor p\'habilitar toles carauterístiques. Gracies por usar Kernel Adiutor.</string>
-    <string name="donate_nope">¡Nun dexaré timame!</string>
-    <string name="donate_yes">¡Quiero donar!</string>
     <string name="warning">Alvertencia</string>
     <string name="apply_on_boot">Aplicar nel arranque</string>
     <string name="apply_on_boot_text">Aplicando axustes en %d segundos.</string>
-    <string name="options">Opciones</string>
-    <string name="more">Más</string>
     <!-- Permissions Denied -->
     <string name="permission_denied_write_storage">¡Ñegóse\'l permisu pa escribir nel almacenamientu!</string>
     <!-- Editor -->
@@ -458,7 +452,6 @@
     <string name="zswap">ZSWAP</string>
     <string name="maximum_compression_ratio">Tasa máxima de compresión</string>
     <!-- Entropy -->
-    <string name="available">Disponible</string>
     <string name="poolsize">Tamañu de reserva</string>
     <string name="read">Llectura</string>
     <string name="write">Escritura</string>
@@ -498,7 +491,6 @@
     <!-- Custom Controls -->
     <string name="welcome">Dámoste l\'acoyida</string>
     <string name="custom_controls_summary">Nesta seición pues crear o importar controles personalizaos qu\'(entá) nun esisten n\'aplicación.</string>
-    <string name="example">Exemplos</string>
     <string name="custom_controls_example_summary">¿Precises exemplos? Primi &lt;a href=\"https://github.com/Grarak/KernelAdiutor/wiki/Custom-Controls\"&gt;equí&lt;a&gt;.</string>
     <string name="create">Crear</string>
     <string name="import_item">Importar</string>
@@ -538,8 +530,6 @@
     <string name="flash">Flaxar</string>
     <!-- Build prop Editor -->
     <string name="add">Amestar</string>
-    <string name="item_count">%s elementu</string>
-    <string name="items_count">%s elementos</string>
     <string name="key">Clave</string>
     <string name="value">Valor</string>
     <string name="key_empty">¡La clave nun pue tar balera!</string>
@@ -579,8 +569,6 @@
     <string name="fahrenheit_title">Fahrenheit</string>
     <string name="fahrenheit_summary">Usa graos fahrenheit pa midir la temperatura.</string>
     <string name="user_interface">Interfaz d\'usuariu</string>
-    <string name="section_icons">Iconos de seición</string>
-    <string name="section_icons_summary">Amuesa los iconos de cada seición nel caxón de navegación.</string>
     <string name="five_sec">5 segundos</string>
     <string name="ten_sec">10 segundos</string>
     <string name="twenty_sec">20 segundos</string>

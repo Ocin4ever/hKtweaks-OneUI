@@ -16,18 +16,12 @@
     <string name="cancel">Huỷ</string>
     <string name="ok">OK</string>
     <string name="unknown">Không xác định</string>
-    <string name="donate">Ủng hộ</string>
-    <string name="donate_summary">Tính năng này chỉ có sẵn khi ứng dụng ủng hộ được cài đặt! Đừng lo lắng. Bởi vì ứng dụng này là mã nguồn mở, bạn có thể dễ dàng xây dựng nó cho mình và loại bỏ sự kiểm tra này. Nhưng tôi hy vọng bạn hỗ trợ các nhà phát triển. Cảm ơn bạn đã sử dụng Kernel Adiutor! Một khi bạn mua các ứng dụng ủng hộ bạn phải khởi động lại Kernel Adiutor để kích hoạt tất cả tính năng.</string>
-    <string name="donate_nope">Tôi sẽ ko bị dụ đâu :P!</string>
-    <string name="donate_yes">Tôi yêu ứng dụng này. Phải ủng hộ!</string>
     <string name="warning">Cảnh báo</string>
     <string name="apply_on_boot">Áp dụng khi khởi động</string>
     <string name="apply_on_boot_text">Áp dụng thiết đặt trong %d giây.</string>
     <string name="apply_on_boot_complete">Áp dụng thiết đặt hoàn tất.</string>
     <string name="apply_on_boot_canceled">Áp dụng thiết đặt hủy bỏ.</string>
     <string name="not_in_range">Không có trong phạm vi</string>
-    <string name="options">Tuỳ chọn</string>
-    <string name="more">Nhiều hơn</string>
     <!-- Permissions Denied -->
     <string name="permission_denied_write_storage">Quyền ghi vào bộ nhớ bị từ chối!</string>
     <!-- Editor -->
@@ -502,7 +496,6 @@
     <string name="maximum_compression_ratio">Tỉ lệ nén tối đa</string>
     <string name="maximum_compression_ratio_summary">Tỉ lệ nén tối đa, tỷ lệ phần trăm cho một trang nén được chấp nhận. Bất kỳ trang nào không nén bởi ít tỉ lệ này sẽ bị từ chối.</string>
     <!-- Entropy -->
-    <string name="available">Sẵn có</string>
     <string name="poolsize">Kích thước Pool</string>
     <string name="read">Đọc</string>
     <string name="write">Ghi</string>
@@ -552,7 +545,6 @@
     <!-- Custom Controls -->
     <string name="welcome">Chào mừng</string>
     <string name="custom_controls_summary">Trong phần này, bạn có thể tạo ra hoặc nhập khẩu điều khiển tùy chỉnh.</string>
-    <string name="example">Ví dụ</string>
     <string name="custom_controls_example_summary">Cần ví dụ? Nhấp vào &lt;a href = \"https://github.com/Grarak/KernelAdiutor/wiki/Custom-Controls\" &gt; &lt; một &gt; ở đây;.</string>
     <string name="create">Tạo mới</string>
     <string name="import_item">Nhập vào</string>
@@ -604,8 +596,6 @@
     <!-- Build prop Editor -->
     <string name="add">Thêm</string>
     <string name="backup_item">%1$s đã được sao lưu tới %2$s</string>
-    <string name="item_count">%s mục</string>
-    <string name="items_count">%s mục</string>
     <string name="key">Mã khóa</string>
     <string name="value">Giá trị</string>
     <string name="key_empty">Mã khóa không thể để trống!</string>
@@ -659,10 +649,6 @@
     <string name="fahrenheit_summary">Sử dụng độ F để đo nhiệt độ.</string>
     <string name="force_english">Bắt buộc hiển thị tiếng Anh</string>
     <string name="user_interface">Giao diện người dùng</string>
-    <string name="banner_resizer">Thay đổi kích thước Banner</string>
-    <string name="hide_banner">Ẩn banner</string>
-    <string name="force_cards">Bắt buộc dạng thẻ</string>
-    <string name="force_cards_summary">Sử dụng dạng thẻ cho các mục nếu có thể.</string>
     <string name="instant">Ngay lập tức</string>
     <string name="five_sec">5 giây</string>
     <string name="ten_sec">10 giây</string>

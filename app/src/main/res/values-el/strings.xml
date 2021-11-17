@@ -15,18 +15,12 @@
     <string name="cancel">Ακύρωση</string>
     <string name="ok">OK</string>
     <string name="unknown">Άγνωστη</string>
-    <string name="donate">Δωρεά</string>
-    <string name="donate_summary">Αυτή η δυνατότητα είναι διαθέσιμη μόνο όταν είναι εγκατεστημένη η εφαρμογή δωρεά! Μην ανησυχείτε όμως. Επειδή αυτή η εφαρμογή είναι open source μπορείτε εύκολα να δημιουργήσετε εσείς και να καταργήσετε αυτόν τον έλεγχο. Αλλά ελπίζω να σας υποστηρίξει την ανάπτυξη ούτως ή άλλως. Ευχαριστώ για τη χρήση του πυρήνα Adiutor! Μόλις έχετε αγοράσει το δωρεά app πρέπει να κάνετε επανεκκίνηση πυρήνα Adiutor για να ενεργοποιήσετε όλες τις δυνατότητες.</string>
-    <string name="donate_nope">Δεν πέφτω για αυτή την απάτη!</string>
-    <string name="donate_yes">Λατρεύω αυτό την εφαρμογή. Πρέπει να δωρίσω!</string>
     <string name="warning">Προειδοποίηση</string>
     <string name="apply_on_boot">Εφαρμογή κατά την εκκίνηση</string>
     <string name="apply_on_boot_text">Εφαρμογή των ρυθμίσεων σας σε %d δευτερόλεπτα.</string>
     <string name="apply_on_boot_complete">Εφαρμογή των ρυθμίσεων που έχουν ολοκληρωθεί.</string>
     <string name="apply_on_boot_canceled">Εφαρμογή ρυθμίσεων ακυρώθηκε.</string>
     <string name="not_in_range">Εκτός εμβέλειας</string>
-    <string name="options">Επιλογές</string>
-    <string name="more">Περισσότερα</string>
     <!-- Permissions Denied -->
     <string name="permission_denied_write_storage">Δεν έχετε δικαίωμα πρόσβασης για γράψιμο στο χώρο αποθήκευσης!</string>
     <!-- Editor -->

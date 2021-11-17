@@ -16,18 +16,12 @@
     <string name="cancel">Peruuta</string>
     <string name="ok">OK</string>
     <string name="unknown">Tuntematon</string>
-    <string name="donate">Lahjoita</string>
-    <string name="donate_summary">Tämä toiminto on saatavilla ainoastaan, kun lahjoitusversio on asennettu! Mutta älä hätäile. Koska tämä sovellus perustuu avoimeen lähdekoodiin, voit helposti koodata sen itse ja poistaa tämän ilmoituksen. Mutta toivon, että tuet kehittäjiä jokatapauksessa. Kiitos kun käytät Kernel Audiutoria! Kun olet ostanut lahjoitusversion, sinun täytyy käynnistää ohjelma uudelleen aktivoidaksesi kaikki ominaisuudet.</string>
-    <string name="donate_nope">Minä en mene tuohon lankaan!</string>
-    <string name="donate_yes">Rakastan tätä sovellusta. Pakko lahjoittaa!</string>
     <string name="warning">Varoitus</string>
     <string name="apply_on_boot">Toteuta käynnistyessä</string>
     <string name="apply_on_boot_text">Otetaan asetukset käyttöön %d sekunnissa.</string>
     <string name="apply_on_boot_complete">Asetukset otettiin käyttöön.</string>
     <string name="apply_on_boot_canceled">Asetuksien käyttöönotto peruutettiin.</string>
     <string name="not_in_range">Äänialan ulkopuolella</string>
-    <string name="options">Vaihtoehdot</string>
-    <string name="more">Lisää</string>
     <!-- Permissions Denied -->
     <string name="permission_denied_write_storage">Muistiin kirjoittaminen estetty!</string>
     <!-- Editor -->
@@ -552,7 +546,6 @@
     <string name="disksize">Levykoko</string>
     <string name="disksize_summary">Yrittää lisätä suorituskykyä estämällä paginoitumisen fyysisessä muistissa, sen sijaan että käytettäisiin virtuaalista laitetta RAMissa. Paging menee RAMiin, kunnes on tarpeen vaihtaa fyysiseen muistiin tilan saamiseksi.</string>
     <!-- Entropy -->
-    <string name="available">Saatavissa</string>
     <string name="poolsize">Poolsize</string>
     <string name="read">Luku</string>
     <string name="write">Kirjoitus</string>
@@ -602,7 +595,6 @@
     <!-- Custom Controls -->
     <string name="welcome">Tervetuloa</string>
     <string name="custom_controls_summary">Tässä osiossa voit luoda tai tuoda kustomoituja kontrolleja, jotka eivät vielä ole ohjelmassa.</string>
-    <string name="example">Esimerkkejä</string>
     <string name="custom_controls_example_summary">Esimerkki hakusessa? Klikkaa &lt;a href=\"https://github.com/Grarak/KernelAdiutor/wiki/Custom-Controls\"&gt;tästä&lt;a&gt;.</string>
     <string name="create">Luo</string>
     <string name="import_item">Tuo</string>
@@ -656,8 +648,6 @@
     <!-- Build prop Editor -->
     <string name="add">Lisää</string>
     <string name="backup_item">%1$s on varmuuskopioitu kohteeseen %2$s</string>
-    <string name="item_count">%s kohdetta</string>
-    <string name="items_count">%s kohdetta</string>
     <string name="key">Avainarvo</string>
     <string name="value">Arvo</string>
     <string name="key_empty">Avainarvo ei voi olla tyhjä!</string>

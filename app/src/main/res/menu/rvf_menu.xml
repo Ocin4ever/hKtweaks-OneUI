@@ -8,15 +8,15 @@
         android:visible="false"
         app:showAsAction="always" />
     <item
-        android:id="@+id/menu_add"
-        android:icon="@drawable/ic_samsung_plus"
-        android:title="@string/add"
-        android:visible="false"
-        app:showAsAction="always" />
-    <item
         android:id="@+id/menu_done"
         android:icon="@drawable/ic_samsung_selected"
         android:title="@string/sesl_done"
+        android:visible="false"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/menu_add"
+        android:icon="@drawable/ic_samsung_plus"
+        android:title="@string/add"
         android:visible="false"
         app:showAsAction="always" />
 </menu>

@@ -20,18 +20,12 @@
     <string name="used">utilisé</string>
     <string name="free">disponible</string>
     <string name="total">total</string>
-    <string name="donate">Faire un don</string>
-    <string name="donate_summary">Cette fonctionnalité est disponible uniquement lorsque l’application de don est installée ! Ne vous inquiétez pas pour autant, car cette application est \"open source\". Vous pouvez facilement la compiler, et supprimer cette vérification. Mais j’espère que, de toute manière, vous soutenez les développeurs. Merci d’utiliser Kernel Adiutor ! Après avoir acheté l’application de don, vous devez redémarrer Kernel Adiutor pour activer toutes les fonctionnalités.</string>
-    <string name="donate_nope">Je ne tomberai pas dans ce type d’escroquerie !</string>
-    <string name="donate_yes">J’adore cette application. Je suis obligé de faire un don !</string>
     <string name="warning">Avertissement</string>
     <string name="apply_on_boot">Appliquer au démarrage</string>
     <string name="apply_on_boot_text">Mise en œuvre des paramètres dans %d secondes</string>
     <string name="apply_on_boot_complete">Mise en œuvre des paramètres terminée</string>
     <string name="apply_on_boot_canceled">Mise en œuvre des paramètres annulée</string>
     <string name="not_in_range">Hors de gamme</string>
-    <string name="options">Paramètres</string>
-    <string name="more">Plus</string>
     <string name="def">Défaut</string>
     <!-- Permissions Denied -->
     <string name="permission_denied_write_storage">Autorisation d\'écriture sur le stockage refusée !</string>
@@ -807,7 +801,6 @@
     <string name="maximum_compression_ratio">Taux de compression maximal</string>
     <string name="maximum_compression_ratio_summary">Taux de compression maximal, en pourcentage, pour une page compressée acceptable. Toute page qui ne compresse pas au moins ce rapport sera rejetée.</string>
     <!-- Entropy -->
-    <string name="available">Disponible</string>
     <string name="poolsize">Taille du réservoir (threads poolsize)</string>
     <string name="read">Lecture</string>
     <string name="write">Écriture</string>
@@ -868,7 +861,6 @@
     <!-- Custom Controls -->
     <string name="welcome">Bienvenue</string>
     <string name="custom_controls_summary">Dans cette section, vous pouvez créer ou importer des contrôles personnalisés, qui n\’existent pas encore dans l’application.</string>
-    <string name="example">Exemples</string>
     <string name="custom_controls_example_summary">Besoin d\'exemple ? Cliquer &lt;a href="https://github.com/Grarak/KernelAdiutor/wiki/Custom-Controls">ici&lt;a>.</string>
     <string name="create">Créer</string>
     <string name="import_item">Importer</string>
@@ -923,8 +915,6 @@
     <!-- Build prop Editor -->
     <string name="add">Ajouter</string>
     <string name="backup_item">%1$s a été sauvegardé dans %2$s</string>
-    <string name="item_count">%s objet</string>
-    <string name="items_count">%s objets</string>
     <string name="key">Clé </string>
     <string name="value">Valeur </string>
     <string name="key_empty">La clé ne peut pas être vide !</string>
@@ -983,13 +973,7 @@
     <string name="fahrenheit_summary">Utiliser le Fahrenheit afin de mesurer la température.</string>
     <string name="force_english">Forcer l\'affichage de la langue Anglaise</string>
     <string name="user_interface">Interface Utilisateur</string>
-    <string name="banner_resizer">Redimmensionner la bannière</string>
-    <string name="hide_banner">Cacher la bannière</string>
-    <string name="force_cards">Forcer les cartes</string>
-    <string name="force_cards_summary">Utilisez des cartes pour les objets si possible.</string>
     <string name="primary_color">Primary color</string>
-    <string name="section_icons">Icônes de section</string>
-    <string name="section_icons_summary">Afficher les icônes pour chaque section dans le tiroir de navigation.</string>
     <string name="instant">Instantané</string>
     <string name="five_sec">5 secondes</string>
     <string name="ten_sec">10 secondes</string>

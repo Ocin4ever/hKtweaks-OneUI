@@ -15,18 +15,12 @@
     <string name="cancel">Cancel·la</string>
     <string name="ok">OK</string>
     <string name="unknown">Desconegut</string>
-    <string name="donate">Donar</string>
-    <string name="donate_summary">Aquesta funció només està disponible quan s\'instal·la l\'aplicació donació! Però no es preocupi. A causa que aquesta aplicació és de codi obert, es pot compilar fàcilment i eliminar aquesta comprovació. Però de totes maneres espero que doni suport als desenvolupadors. Gràcies per utilitzar Kernel Adiutor! Una vegada que compri l\'aplicació donació, ha de reiniciar l\'app per activar totes les funcions.</string>
-    <string name="donate_nope">No cauré en aquest frau!</string>
-    <string name="donate_yes">M\'agrada aquesta aplicació. Dono!</string>
     <string name="warning">Atenció</string>
     <string name="apply_on_boot">Aplicar a l\'inici</string>
     <string name="apply_on_boot_text">Aplicar la configuració en %d segons.</string>
     <string name="apply_on_boot_complete">Aplicació de la configuració completa.</string>
     <string name="apply_on_boot_canceled">Aplicació de la configuració cancel·lada.</string>
     <string name="not_in_range">Fora de l\'abast</string>
-    <string name="options">Opcions</string>
-    <string name="more">Més</string>
     <!-- Permissions Denied -->
     <string name="permission_denied_write_storage">S\'ha denegat el permís per escriure a l\'emmagatzematge!</string>
     <!-- Editor -->

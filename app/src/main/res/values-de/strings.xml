@@ -16,18 +16,12 @@
     <string name="cancel">Abbrechen</string>
     <string name="ok">OK</string>
     <string name="unknown">Unbekannt</string>
-    <string name="donate">Spenden</string>
-    <string name="donate_summary">Diese Funktion ist nur verfügbar, wenn du die Spenden-App installiert hast. Aber keine Sorge. Da die App Open Source ist, kannst du die App einfach selbst ändern und diesen Check entfernen. Aber ich hoffe du unterstützt uns trotzdem. Danke dass du Kernel Adiutor verwendest! Sobald du die Spenden-App gekauft hast, musst du Kernel Adiutor neustarten um alle Funktionen freizuschalten.</string>
-    <string name="donate_nope">Ich werde nicht auf diesen Betrug hereinfallen!</string>
-    <string name="donate_yes">Ich liebe diese App. Da muss man spenden!</string>
     <string name="warning">Warnung</string>
     <string name="apply_on_boot">Beim Systemstart anwenden</string>
     <string name="apply_on_boot_text">Wende Einstellungen in %d Sekunden an.</string>
     <string name="apply_on_boot_complete">Einstellungen wurden angewendet.</string>
     <string name="apply_on_boot_canceled">Anwenden der Einstellungen wurde abgebrochen.</string>
     <string name="not_in_range">Außerhalb des zulässigen Bereichs</string>
-    <string name="options">Optionen</string>
-    <string name="more">Mehr</string>
     <!-- Permissions Denied -->
     <string name="permission_denied_write_storage">Berechtigung zum Schreiben auf das Speichermedium verweigert!</string>
     <!-- Editor -->
@@ -593,7 +587,6 @@
     <string name="maximum_compression_ratio">Maximale Kompressionsverhältnis</string>
     <string name="maximum_compression_ratio_summary">Maximale Kompressionsverhältnis, als Prozentsatz für eine akzeptable komprimierte Seite. Jede Seite, die nicht durch mindestens dieses Verhältnis zu komprimieren ist, wird verworfen.</string>
     <!-- Entropy -->
-    <string name="available">Verfügbar</string>
     <string name="poolsize">Speichergrösse</string>
     <string name="read">Lesen</string>
     <string name="write">Schreiben</string>
@@ -644,7 +637,6 @@
     <!-- Custom Controls -->
     <string name="welcome">Willkommen</string>
     <string name="custom_controls_summary">In diesem Abschnitt können Sie benutzerdefinierte Steuerelemente erstellen oder importieren welche es in der App (noch) nicht gibt.</string>
-    <string name="example">Beispiele</string>
     <string name="custom_controls_example_summary">Beispiel benötigt? Klicke &lt;a href=\"https://github.com/Grarak/KernelAdiutor/wiki/Custom-Controls\"&gt;hier&lt;a&gt;.</string>
     <string name="create">Erstellen</string>
     <string name="import_item">Importien</string>
@@ -700,8 +692,6 @@ sicher?</string>
     <!-- Build prop Editor -->
     <string name="add">Hinzufügen</string>
     <string name="backup_item">%1$s wurde zu %2$s gesichert</string>
-    <string name="item_count">%s Element</string>
-    <string name="items_count">%s Elemente</string>
     <string name="key">Schlüssel</string>
     <string name="value">Wert</string>
     <string name="key_empty">Schlüssel kann nicht leer sein!</string>
@@ -756,12 +746,6 @@ sicher?</string>
     <string name="fahrenheit_summary">Verwenden Sie Fahrenheit, um die Temperatur zu messen.</string>
     <string name="force_english">Zwingt die englische Sprache anzuzeigen</string>
     <string name="user_interface">Benutzeroberfläche</string>
-    <string name="banner_resizer">Grösse Werbebanner ändern</string>
-    <string name="hide_banner">Werbebanner ausblenden</string>
-    <string name="force_cards">Karten erzwingen</string>
-    <string name="force_cards_summary">Benutze Karten als Symbole wenn möglich </string>
-    <string name="section_icons">Symbole für Abschnitt</string>
-    <string name="section_icons_summary">Zeige Symbole für jeden Abschnitt im Navigationsdrawer.</string>
     <string name="instant">Augenblicklich</string>
     <string name="five_sec">5 Sekunden</string>
     <string name="ten_sec">10 Sekunden</string>

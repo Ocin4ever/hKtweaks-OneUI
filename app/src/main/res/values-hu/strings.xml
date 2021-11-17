@@ -16,18 +16,12 @@
     <string name="cancel">Mégse</string>
     <string name="ok">OK</string>
     <string name="unknown">Ismeretlen</string>
-    <string name="donate">Támogatás</string>
-    <string name="donate_summary">Ez a szolgáltatás csak akkor vehető igénybe, ha a támogatói alkalmazás telepítve van! Mégse aggódj. Mivel ez az alkalmazás nyit forráskódú, így könnyen magad is építheted eltávolítva ezt az ellenőrzést. De remélem támogatod a fejlesztőket. Köszönjük, hogy a Kernel Adiutor-t használod! Ha megvásároltad a támogatói alkalmazást, akkor újra kell indítani a Kernel Adiutor-t ahhoz, hogy minden funkció engedélyezésre kerüljön.</string>
-    <string name="donate_nope">Nem dőlök be ennek a csalásnak!</string>
-    <string name="donate_yes">Szeretem ezt az alkalmazást. Támogatom!</string>
     <string name="warning">Figyelmeztetés</string>
     <string name="apply_on_boot">Alkalmazás induláskor</string>
     <string name="apply_on_boot_text">Beállítások alkalmazása %d másodperc múlva.</string>
     <string name="apply_on_boot_complete">Beállítások alkalmazása befejeződött.</string>
     <string name="apply_on_boot_canceled">Beállítások alkalmazása visszavonva.</string>
     <string name="not_in_range">Nincs a hatókörben</string>
-    <string name="options">Beállítások</string>
-    <string name="more">Több</string>
     <!-- Permissions Denied -->
     <string name="permission_denied_write_storage">Engedély megtagadva a tároló írásához!</string>
     <!-- Editor -->
@@ -598,7 +592,6 @@
     <string name="maximum_compression_ratio">Maximális tömörítési arány</string>
     <string name="maximum_compression_ratio_summary">Maximális tömörítési aránya, százalékban, egy elfogadható tömörített oldalhoz. Bármely oldal, ami nem tömörített legalább erre az arányra, elutasításra kerül.</string>
     <!-- Entropy -->
-    <string name="available">Elérhető</string>
     <string name="poolsize">Medenceméret</string>
     <string name="read">Olvasás</string>
     <string name="write">Írás</string>
@@ -649,7 +642,6 @@
     <!-- Custom Controls -->
     <string name="welcome">Üdvözöllek</string>
     <string name="custom_controls_summary">Ebben a részben hozhatsz létre, vagy importálhatsz egyéni vezérlőket, amelyek nem léteznek az alkalmazásban (még).</string>
-    <string name="example">Példák</string>
     <string name="custom_controls_example_summary">Példára van szükséged? Kattints &lt;a href=\"https://github.com/Grarak/KernelAdiutor/wiki/Custom-Controls\"&gt;ide&lt;a&gt;.</string>
     <string name="create">Létrehozás</string>
     <string name="import_item">Importálás</string>
@@ -704,8 +696,6 @@
     <!-- Build prop Editor -->
     <string name="add">Hozzáadás</string>
     <string name="backup_item">%1$s biztonségi mentése ide mentve: %2$s</string>
-    <string name="item_count">%s elem</string>
-    <string name="items_count">%s elem</string>
     <string name="key">Kulcs</string>
     <string name="value">Érték</string>
     <string name="key_empty">Kulcs nem lehet üres!</string>
@@ -760,12 +750,6 @@
     <string name="fahrenheit_summary">Fahrenheit használata a hőmérséklet méréséhez.</string>
     <string name="force_english">Angol nyelvű megjelenítés kényszerítése</string>
     <string name="user_interface">Felhasználói felület</string>
-    <string name="banner_resizer">Banner átméretezés</string>
-    <string name="hide_banner">Banner elrejtése</string>
-    <string name="force_cards">Kártyák kényszerítése</string>
-    <string name="force_cards_summary">Használjon kártyákat az elemekhez, ha lehetséges.</string>
-    <string name="section_icons">Szakasz ikonok</string>
-    <string name="section_icons_summary">Ikonok megjelenítése minden szakaszhoz a navigációs fiókban.</string>
     <string name="instant">Azonnali</string>
     <string name="five_sec">5 másodperc</string>
     <string name="ten_sec">10 másodperc</string>

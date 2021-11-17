@@ -16,18 +16,12 @@
     <string name="cancel">取消</string>
     <string name="ok">確定</string>
     <string name="unknown">未知</string>
-    <string name="donate">捐贈</string>
-    <string name="donate_summary">此功能僅在安裝了捐贈應用程序時可用！不要擔心。因為這個程序是開源的，你可以很容易地自己建立，並刪除這個檢查。但我希望你支持開發人員。感謝您使用Kernel Adiutor！一旦你買了捐贈應用程序，你必須重新啟動Kernel Adiutor以啟用所有功能。</string>
-    <string name="donate_nope">我不會愛上這種騙局！</string>
-    <string name="donate_yes">我喜歡這個應用程式，捐是應該的！</string>
     <string name="warning">警告</string>
     <string name="apply_on_boot">開機後自動套用</string>
     <string name="apply_on_boot_text">設定值將於 %d 秒後套用...</string>
     <string name="apply_on_boot_complete">設定值套用 成功！</string>
     <string name="apply_on_boot_canceled">設定值套用 已取消。</string>
     <string name="not_in_range">不在有效的範圍內</string>
-    <string name="options">選項</string>
-    <string name="more">更多</string>
     <!-- Permissions Denied -->
     <string name="permission_denied_write_storage">系統權限拒絕對裝置進行寫入</string>
     <!-- Editor -->
@@ -595,7 +589,6 @@
     <string name="maximum_compression_ratio">最大壓縮比</string>
     <string name="maximum_compression_ratio_summary">最大的壓縮比，百分比，可接受的壓縮頁面。沒有壓縮的至少這一個例句的任何頁面將被拒絕。</string>
     <!-- Entropy -->
-    <string name="available">可用</string>
     <string name="poolsize">Poolsize</string>
     <string name="read">讀取</string>
     <string name="write">寫入</string>
@@ -646,7 +639,6 @@
     <!-- Custom Controls -->
     <string name="welcome">歡迎</string>
     <string name="custom_controls_summary">在本節中，你可以創建或導入 （尚） 的應用程式中不存在的自訂控制項。</string>
-    <string name="example">例子</string>
     <string name="custom_controls_example_summary">需要的例子？href =“Https://github.com/Grarak/KernelAdiutor/wiki/Custom-Controls”＆gt; ＆lt; ＆gt; 這裡。</string>
     <string name="create">新增</string>
     <string name="import_item">匯入</string>
@@ -701,8 +693,6 @@
     <!-- Build prop Editor -->
     <string name="add">增加</string>
     <string name="backup_item">%1$s 已經被備份到 %2$s</string>
-    <string name="item_count">%s 項目</string>
-    <string name="items_count">%s 項目</string>
     <string name="key">密碼</string>
     <string name="value">值</string>
     <string name="key_empty">密碼不能為空白！</string>
@@ -757,12 +747,6 @@
     <string name="fahrenheit_summary">使用華氏溫度測量。</string>
     <string name="force_english">強制使用英文</string>
     <string name="user_interface">用戶界面</string>
-    <string name="banner_resizer">橫幅resizer</string>
-    <string name="hide_banner">隱藏橫幅</string>
-    <string name="force_cards">強制卡</string>
-    <string name="force_cards_summary">如果可能，請使用卡片。</string>
-    <string name="section_icons">部分圖標</string>
-    <string name="section_icons_summary">在導航抽屜中顯示每個部分的圖標。</string>
     <string name="instant">立即</string>
     <string name="five_sec">5 秒</string>
     <string name="ten_sec">10 秒</string>

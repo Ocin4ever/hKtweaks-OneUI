@@ -21,8 +21,6 @@
     <string name="apply_on_boot_complete">Verkställning av inställningar slutförd.</string>
     <string name="apply_on_boot_canceled">Verkställning av inställningar avbruten.</string>
     <string name="not_in_range">Utom räckhåll</string>
-    <string name="options">Alternativ</string>
-    <string name="more">Mer</string>
     <!-- Permissions Denied -->
     <string name="permission_denied_write_storage">Åtkomst nekad för skrivning till minnet!</string>
     <!-- Editor -->
@@ -244,7 +242,6 @@
     <string name="very_aggressive">Mycket Aggressiv</string>
     <!-- Virtual Memory -->
     <!-- Entropy -->
-    <string name="available">Tillgängligt</string>
     <string name="poolsize">Poolstorlek</string>
     <string name="read">Läsning</string>
     <string name="write">Skrivning</string>

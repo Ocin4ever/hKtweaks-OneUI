@@ -16,14 +16,9 @@
     <string name="cancel">Cancelar </string>
     <string name="ok">CONFIRMAR</string>
     <string name="unknown">Desconhecido</string>
-    <string name="donate">Doar</string>
-    <string name="donate_nope">Eu não vou cair neste esquema!</string>
-    <string name="donate_yes">Eu gosto desta app. Devo doar!</string>
     <string name="warning">Aviso</string>
     <string name="apply_on_boot">Aplicar no arranque </string>
     <string name="not_in_range">Fora de alcance</string>
-    <string name="options">Opções</string>
-    <string name="more">Mais</string>
     <!-- Permissions Denied -->
     <!-- Editor -->
     <string name="save">Guardar</string>
@@ -460,7 +455,6 @@
     <string name="maximum_compression_ratio">Taxa de compressão máxima</string>
     <string name="maximum_compression_ratio_summary">Taxa de compressão máxima, como percentagem, para uma página de comprimida aceitável. Qualquer página que não comprima pelo menos nesta proporção será rejeitada.</string>
     <!-- Entropy -->
-    <string name="available">Disponível</string>
     <string name="poolsize">Poolsize</string>
     <string name="read">Ler</string>
     <string name="write">Escrever</string>
@@ -501,7 +495,6 @@
     <!-- Custom Controls -->
     <string name="welcome">Bem-vindo</string>
     <string name="custom_controls_summary">Nesta secção pode criar ou importar controlos personalizados, que ainda não existem na app.</string>
-    <string name="example">Exemplos</string>
     <string name="create">Criar</string>
     <string name="import_item">Importar</string>
     <string name="control_switch">Mudar</string>
@@ -542,8 +535,6 @@
     <string name="flash">Flash</string>
     <!-- Build prop Editor -->
     <string name="add">Adicionar</string>
-    <string name="item_count">%s item</string>
-    <string name="items_count">%s itens</string>
     <string name="key">Chave</string>
     <string name="value">Valor</string>
     <string name="key_empty">Chave não pode estar vazia!</string>
@@ -584,7 +575,6 @@
     <!-- Settings -->
     <string name="open_settings">Abrir configurações</string>
     <string name="fahrenheit_title">Fahrenheit</string>
-    <string name="section_icons">Ícones de secção</string>
     <string name="instant">Instantâneo</string>
     <string name="five_sec">5 Segundos</string>
     <string name="ten_sec">10 segundos</string>

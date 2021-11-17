@@ -15,14 +15,9 @@
     <string name="cancel">Prekliči</string>
     <string name="ok">Vredu</string>
     <string name="unknown">Neznano</string>
-    <string name="donate">Donacija</string>
-    <string name="donate_nope">Ne bom nasedel tej prevari!</string>
-    <string name="donate_yes">Aplikacija mi je všeč. Moram donirati!</string>
     <string name="warning">Opozorilo</string>
     <string name="apply_on_boot">Obnovi ob zagonu</string>
     <string name="not_in_range">Ni v dosegu</string>
-    <string name="options">Možnosti</string>
-    <string name="more">Več</string>
     <!-- Permissions Denied -->
     <!-- Editor -->
     <string name="save">Shrani</string>
@@ -438,7 +433,6 @@
     <string name="very_aggressive">Zelo agresivno</string>
     <!-- Virtual Memory -->
     <!-- Entropy -->
-    <string name="available">Na voljo</string>
     <string name="poolsize">Velikost</string>
     <string name="read">Beri</string>
     <string name="write">Piši</string>

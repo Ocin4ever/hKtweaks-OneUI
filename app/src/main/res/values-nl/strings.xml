@@ -16,18 +16,12 @@
     <string name="cancel">Annuleer</string>
     <string name="ok">Oké</string>
     <string name="unknown">Onbekend</string>
-    <string name="donate">Doneer</string>
-    <string name="donate_summary">Deze functie is alleen beschikbaar wanneer de donatie-app geïnstalleerd is! Maar maak je geen zorgen hoor. Omdat deze app opensource is kunt u hem gemakkelijk zelf bouwen en deze controle verwijderen. Maar ik hoop dat u ontwikkelaars toch ondersteund. Bedankt voor het gebruik van Kernel Adiutor! Zodra u de donatie app hebt gekocht moet u Kernel Adiutor opnieuw opstarten zodat alle functies beschikbaar worden.</string>
-    <string name="donate_nope">Ik zal niet vallen voor deze scam!</string>
-    <string name="donate_yes">Ik hou van deze app. Ik wil doneren!</string>
     <string name="warning">Waarschuwing</string>
     <string name="apply_on_boot">Toepassen bij opstarten</string>
     <string name="apply_on_boot_text">Instellingen toepassen in %d seconden.</string>
     <string name="apply_on_boot_complete">Toepassen instellingen voltooid.</string>
     <string name="apply_on_boot_canceled">Toepassen instellingen geannuleerd.</string>
     <string name="not_in_range">Niet binnen bereik</string>
-    <string name="options">Opties</string>
-    <string name="more">Meer</string>
     <!-- Permissions Denied -->
     <string name="permission_denied_write_storage">Toestemming geweigerd voor het schrijven naar opslagruimte!</string>
     <!-- Editor -->

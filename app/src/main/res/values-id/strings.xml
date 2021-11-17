@@ -16,18 +16,12 @@
     <string name="cancel">Batal</string>
     <string name="ok">Oke</string>
     <string name="unknown">Tidak diketahui</string>
-    <string name="donate">Donasi</string>
-    <string name="donate_summary">Fitur ini hanya tersedia jika aplikasi donasi terpasang! Namun jangan khawatir. Karena aplikasi ini open source Anda dapat dengan mudah membuat sendiri dan menghapus pemeriksaan ini. Tapi saya harap Anda mendukung pengembang pula. Terima kasih karena menggunakan Kernel Adiutor! Setelah Anda membeli aplikasi donasi Anda harus me-restart Kernel Adiutor untuk mengaktifkan semua fitur.</string>
-    <string name="donate_nope">Saya tidak akan terjerumus ke penipuan ini!</string>
-    <string name="donate_yes">Aku suka aplikasi ini. Harus melakukan donasi!</string>
     <string name="warning">Peringatan</string>
     <string name="apply_on_boot">Terapkan saat booting</string>
     <string name="apply_on_boot_text">Menerapkan pengaturan dalam %d detik.</string>
     <string name="apply_on_boot_complete">Pengaturan telah diterapkan.</string>
     <string name="apply_on_boot_canceled">Penerapan pengaturan dibatalkan.</string>
     <string name="not_in_range">Tidak dalam jangkauan</string>
-    <string name="options">Pilihan</string>
-    <string name="more">Lebih lagi</string>
     <!-- Permissions Denied -->
     <string name="permission_denied_write_storage">Izin ditolak untuk menulis ke penyimpanan!</string>
     <!-- Editor -->
@@ -584,7 +578,6 @@
     <string name="maximum_compression_ratio">Rasio kompresi maksimal</string>
     <string name="maximum_compression_ratio_summary">Kompresi ratio maksimal, dengan persentasi, untuk persetujuan bagian yang terkompresi. Bagian mana yang tidak terkompresi oleh setidaknya rasio ini akan ditolak.</string>
     <!-- Entropy -->
-    <string name="available">Tersedia</string>
     <string name="poolsize">Poolsize</string>
     <string name="read">Read</string>
     <string name="write">Tulis</string>
@@ -635,7 +628,6 @@
     <!-- Custom Controls -->
     <string name="welcome">Selamat Datang</string>
     <string name="custom_controls_summary">Di bagian ini kamu dapat membuat atau mengimpor kontrol kustom, yang belum / tidak ada di aplikasi.</string>
-    <string name="example">Contoh</string>
     <string name="custom_controls_example_summary">Perlu Contoh? Klik &lt;a href=\"https://github.com/Grarak/KernelAdiutor/wiki/Custom-Controls\"&gt;here&lt;a&gt;.</string>
     <string name="create">Buat</string>
     <string name="import_item">Impor</string>
@@ -690,8 +682,6 @@
     <!-- Build prop Editor -->
     <string name="add">Tambah</string>
     <string name="backup_item">%1$s telah di cadangkan ke %2$s</string>
-    <string name="item_count">%s unit</string>
-    <string name="items_count">%s beberapa unit</string>
     <string name="key">Tombol</string>
     <string name="value">Nilai</string>
     <string name="key_empty">Kunci tidak dapat kosong!</string>
@@ -746,12 +736,6 @@
     <string name="fahrenheit_summary">Gunakan fahrenheit untuk mengukur suhu.</string>
     <string name="force_english">Tetap tampilkan bahasa Inggris</string>
     <string name="user_interface">Antarmuka pengguna</string>
-    <string name="banner_resizer">Ukur ulang banner</string>
-    <string name="hide_banner">Sembunyikan banner</string>
-    <string name="force_cards">Memaksa kartu</string>
-    <string name="force_cards_summary">Menggunakan kartu untuk item jika mungkin.</string>
-    <string name="section_icons">Bagian ikon</string>
-    <string name="section_icons_summary">Menampilkan ikon untuk setiap bagian dalam laci navigasi.</string>
     <string name="instant">Instan</string>
     <string name="five_sec">5 detik</string>
     <string name="ten_sec">10 detik</string>

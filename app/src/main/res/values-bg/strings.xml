@@ -16,17 +16,12 @@
     <string name="cancel">Отказ</string>
     <string name="ok">Окей</string>
     <string name="unknown">Неизвестно</string>
-    <string name="donate">Дарете</string>
-    <string name="donate_nope">Няма да се хвана на тая измама!</string>
-    <string name="donate_yes">Обичам това приложение. Трябва да даря!</string>
     <string name="warning">Предупреждение</string>
     <string name="apply_on_boot">Прилагане при стартиране</string>
     <string name="apply_on_boot_text">Прилагане на настройките в %d секунди.</string>
     <string name="apply_on_boot_complete">Прилагане на настройки завършено.</string>
     <string name="apply_on_boot_canceled">Прилагане на настройките отменено.</string>
     <string name="not_in_range">Не е в диапазона</string>
-    <string name="options">Опции</string>
-    <string name="more">Още</string>
     <!-- Permissions Denied -->
     <!-- Editor -->
     <string name="save">Запамети</string>
@@ -241,7 +236,6 @@
     <!-- Data Sharing -->
     <!-- Custom Controls -->
     <string name="welcome">Добре дошли</string>
-    <string name="example">Примери</string>
     <string name="create">Създаване</string>
     <string name="import_item">Импортиране</string>
     <string name="control_switch">Превключване</string>
@@ -290,8 +284,6 @@
     <!-- Settings -->
     <string name="fahrenheit_title">Фаренхайт</string>
     <string name="user_interface">Потребителски интерфейс</string>
-    <string name="banner_resizer">Оразмерител на банер</string>
-    <string name="hide_banner">Скриване на банер</string>
     <string name="five_sec">5 секунди</string>
     <string name="ten_sec">10 секунди</string>
     <string name="twenty_sec">20 секунди</string>

@@ -17,18 +17,12 @@
     <string name="cancel">Anuluj</string>
     <string name="ok">Ok</string>
     <string name="unknown">Nieznany</string>
-    <string name="donate">Wspomóż</string>
-    <string name="donate_summary">Ta funkcja jest dostępna tylko wtedy, kiedy aplikacja-darowizna jest zainstalowana! Nie bój się jednak - ponieważ jest to aplikacja open source, możesz łatwo skompilować ją sam i znieść ten limit. Niemniej, mam nadzieję, że tak czy siak nas, tj. deweloperów, wesprzesz. Dzięki za korzystanie z Kernel Adiutora! Po zakupieniu aplikacji-darowizny musisz zrestartować program, by wszystkie dodatkowe funkcje się uaktywniły.</string>
-    <string name="donate_nope">Nie nabiorę się na to!</string>
-    <string name="donate_yes">Uwielbiam tą aplikację. Muszę Cię wesprzeć!</string>
     <string name="warning">Uwaga</string>
     <string name="apply_on_boot">Zastosuj przy starcie</string>
     <string name="apply_on_boot_text">Ustawienia zostaną zastosowane za %d sekund.</string>
     <string name="apply_on_boot_complete">Ustawienia zostały zastosowane.</string>
     <string name="apply_on_boot_canceled">Stosowanie ustawień zostało anulowane.</string>
     <string name="not_in_range">Poza zakresem</string>
-    <string name="options">Ustawienia</string>
-    <string name="more">Więcej</string>
     <!-- Permissions Denied -->
     <string name="permission_denied_write_storage">Nie nadano uprawnień do zapisywania w pamięci!</string>
     <!-- Editor -->
@@ -592,7 +586,6 @@
     <string name="maximum_compression_ratio">Maksymalny współczynnik kompresji</string>
     <string name="maximum_compression_ratio_summary">Maksymalny współczynnik kompresji, wartość procentowa, określająca akceptowalny współczynnik kompresji strony. Każda strona która nie kompresuje się do co najmniej tego poziomu zostanie odrzucona.</string>
     <!-- Entropy -->
-    <string name="available">Dostępna entropia</string>
     <string name="poolsize">Max rozmiar entropii</string>
     <string name="read">Odczyt</string>
     <string name="write">Zapis</string>
@@ -643,7 +636,6 @@
     <!-- Custom Controls -->
     <string name="welcome">Witamy</string>
     <string name="custom_controls_summary">W tej sekcji możesz utworzyć lub zaimportować niestandardowe reguły, które obecnie nie istnieją w tej aplikacji (jeszcze).</string>
-    <string name="example">Przykłady</string>
     <string name="custom_controls_example_summary">Potrzebny przykład? Kliknij &lt; href = \"https://github.com/Grarak/KernelAdiutor/wiki/Custom-Controls\" &gt; tutaj &lt; &gt;.</string>
     <string name="create">Utwórz</string>
     <string name="import_item">Importuj</string>
@@ -698,8 +690,6 @@
     <!-- Build prop Editor -->
     <string name="add">Dodaj</string>
     <string name="backup_item">kopia zapasowa %1$s jest przechowywana w %2$s</string>
-    <string name="item_count">%s element</string>
-    <string name="items_count">%s elementów</string>
     <string name="key">Klucz</string>
     <string name="value">Wartość</string>
     <string name="key_empty">Klucz nie może być pusty!</string>
@@ -754,12 +744,6 @@
     <string name="fahrenheit_summary">Użyj stopni fahrenheita do mierzenia temperatury.</string>
     <string name="force_english">Wymuś wyświetlanie języka angielskiego</string>
     <string name="user_interface">Interfejs użytkownika</string>
-    <string name="banner_resizer">Rozmiar banera</string>
-    <string name="hide_banner">Ukryj banner</string>
-    <string name="force_cards">Wymuś korzystanie z kart</string>
-    <string name="force_cards_summary">Używa karty dla elementów, jeśli jest to możliwe.</string>
-    <string name="section_icons">Ikony sekcji</string>
-    <string name="section_icons_summary">Pokaż ikony wszystkich sekcji na pasku nawigacji</string>
     <string name="instant">Natychmiastowo</string>
     <string name="five_sec">5 sekund</string>
     <string name="ten_sec">10 sekund</string>

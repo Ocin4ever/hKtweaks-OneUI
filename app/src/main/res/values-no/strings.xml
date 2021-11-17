@@ -16,9 +16,6 @@
     <string name="cancel">Avbryt</string>
     <string name="ok">Ok</string>
     <string name="unknown">Ukjent</string>
-    <string name="donate">Donér</string>
-    <string name="donate_nope">Jeg skal ikke falle for dette svindelen!</string>
-    <string name="donate_yes">Jeg elsker denne applikasjonen. Må donere!</string>
     <string name="warning">Advarsel</string>
     <string name="apply_on_boot">Benytt ved oppstart</string>
     <!-- Permissions Denied -->

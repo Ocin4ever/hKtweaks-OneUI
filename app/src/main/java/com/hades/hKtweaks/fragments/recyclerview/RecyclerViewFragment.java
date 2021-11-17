@@ -205,6 +205,7 @@ public abstract class RecyclerViewFragment extends BaseFragment {
     protected void showToolbarActionButton(ToolbarLayout.OnMenuItemClickListener listener, @IdRes int... id) {
         if (getActivity() instanceof BaseActivity) {
             ToolbarLayout toolbarLayout = ((BaseActivity) getActivity()).getToolBarLayout();
+            if (toolbarLayout.getToolbarMenu() == null) initToolbarMenu();
             for (int i : id)
                 toolbarLayout.setToolbarMenuItemVisibility(toolbarLayout.getToolbarMenu().findItem(i), true);
             toolbarLayout.setOnToolbarMenuItemClickListener(listener);

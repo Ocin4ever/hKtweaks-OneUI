@@ -16,18 +16,12 @@
     <string name="cancel">Zrušit</string>
     <string name="ok">OK</string>
     <string name="unknown">Neznámé</string>
-    <string name="donate">Darovat</string>
-    <string name="donate_summary">Tato funkce je dostupná pouze pokud je nainstalována aplikace darování. Nezoufejte! Tato aplikace je open source, takže si ji můžete sami sestavit a toto omezení odstranit. Přesto však doufáme, že vývojáře podpoříte. Děkujeme, že používáte Kernel Adiutor. Jakmile si aplikaci dárce zakoupíte, je třeba Kernel Adiutor restartovat pro zpřístupnění všech funkcí.</string>
-    <string name="donate_nope">Takovému podvodu nepodlehnu!</string>
-    <string name="donate_yes">Mám rád tuto aplikaci. Musim přispět!</string>
     <string name="warning">Varování</string>
     <string name="apply_on_boot">Použít při spuštění</string>
     <string name="apply_on_boot_text">Nastavení bude použito během %d sekund.</string>
     <string name="apply_on_boot_complete">Použití nastavení dokončeno.</string>
     <string name="apply_on_boot_canceled">Použití nastavení zrušeno.</string>
     <string name="not_in_range">Není v rozsahu</string>
-    <string name="options">Možnosti</string>
-    <string name="more">Více</string>
     <!-- Permissions Denied -->
     <string name="permission_denied_write_storage">Oprávnění zamítnuto pro zápis do úložiště!</string>
     <!-- Editor -->
@@ -598,7 +592,6 @@
     <string name="maximum_compression_ratio">Maximální kompresní poměr</string>
     <string name="maximum_compression_ratio_summary">Maximální kompresní poměr v procentech přijatelný pro stlačení stránek. Jakákoliv stránka, která není komprimovaná alespoň do tohoto poměru, bude odmítnuta.</string>
     <!-- Entropy -->
-    <string name="available">Dostupná</string>
     <string name="poolsize">PoolSize</string>
     <string name="read">Čtení</string>
     <string name="write">Zápis</string>
@@ -649,7 +642,6 @@
     <!-- Custom Controls -->
     <string name="welcome">Vítejte</string>
     <string name="custom_controls_summary">V této sekci můžete vytvářet nebo importovat vlastní ovládací prvky, které (ještě) v této aplikaci neexistují.</string>
-    <string name="example">Ukázky</string>
     <string name="custom_controls_example_summary">Potřebujete ukázku? Klikněte na &lt;a href=\"https://github.com/Grarak/KernelAdiutor/wiki/Custom-Controls\"&gt;zde&lt;a&gt;.</string>
     <string name="create">Vytvořit</string>
     <string name="import_item">Importovat</string>
@@ -704,8 +696,6 @@
     <!-- Build prop Editor -->
     <string name="add">Přidat</string>
     <string name="backup_item">%1$s byla zálohována do %2$s</string>
-    <string name="item_count">%s položka</string>
-    <string name="items_count">%s položek</string>
     <string name="key">Klíč</string>
     <string name="value">Hodnota</string>
     <string name="key_empty">Klíč nemůže být prázdný!</string>
@@ -760,12 +750,6 @@
     <string name="fahrenheit_summary">Používat stupně Fahrenheita pro měření teploty.</string>
     <string name="force_english">Vynutit použití angličtiny</string>
     <string name="user_interface">Uživatelské prostředí</string>
-    <string name="banner_resizer">Změna velikosti banneru</string>
-    <string name="hide_banner">Skrýt banner</string>
-    <string name="force_cards">Vynutit karty</string>
-    <string name="force_cards_summary">Zobrazovat položky jako karty, je-li to možné.</string>
-    <string name="section_icons">Ikony sekcí</string>
-    <string name="section_icons_summary">Zobrazit ikonu pro každou sekci navigační lišty.</string>
     <string name="instant">Bez prodlevy</string>
     <string name="five_sec">5 sekund</string>
     <string name="ten_sec">10 sekund</string>

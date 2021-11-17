@@ -16,18 +16,12 @@
     <string name="cancel">İptal</string>
     <string name="ok">Tamam</string>
     <string name="unknown">Bilinmeyen</string>
-    <string name="donate">Bağış yap</string>
-    <string name="donate_summary">Bu özellik sadece bağış uygulaması yüklüyken kullanılabilir. Ama üzülme. Çünkü bu uygulama açık kaynak kodlu, kendin kolayca uygulamayı oluşturabilirsin ve bu denetimi kaldırabilirsin. Ama yinede bize destek olmanı isteriz. Kernel Adiutor kullandığın için teşekkürler! Bağış uygulamasını satın aldıysanız uygulamayı yeniden başlatmalısınız.</string>
-    <string name="donate_nope">Bu aldatmacaya düşmeyeceğim!</string>
-    <string name="donate_yes">Uygulamayı çok sevdim. Bağış yapmalıyım!</string>
     <string name="warning">Uyarı</string>
     <string name="apply_on_boot">Açılışta uygula</string>
     <string name="apply_on_boot_text">%d saniyede ayarları uyguluyor.</string>
     <string name="apply_on_boot_complete">Ayarları uygulama tamamlandı.</string>
     <string name="apply_on_boot_canceled">Ayarları uygulama iptal edildi.</string>
     <string name="not_in_range">Aralıkta değil</string>
-    <string name="options">Seçenekler</string>
-    <string name="more">Diğer</string>
     <!-- Permissions Denied -->
     <string name="permission_denied_write_storage">Depolama birimine erişim reddedildi!</string>
     <!-- Editor -->
@@ -598,7 +592,6 @@
     <string name="maximum_compression_ratio">Maksimum sıkıştırma oranı</string>
     <string name="maximum_compression_ratio_summary">Kabul edilebilir bir sıkıştırılmış sayfa için, yüzde olarak maksimum sıkıştırma oranı. En azından bu orana göre sıkışmayan herhangi bir sayfa reddedilecektir.</string>
     <!-- Entropy -->
-    <string name="available">Kullanılabilir</string>
     <string name="poolsize">Havuz boyutu</string>
     <string name="read">Okuma</string>
     <string name="write">Yazma</string>
@@ -650,7 +643,6 @@
     <!-- Custom Controls -->
     <string name="welcome">Hoş geldiniz</string>
     <string name="custom_controls_summary">Bu bölümde, uygulamada (henüz) olmayan özel denetimleri oluşturabilir veya içe aktarabilirsiniz.</string>
-    <string name="example">Örnek</string>
     <string name="custom_controls_example_summary">Örneğe mi ihtiyacınız var? Buraya &lt;a href=\"https://github.com/Grarak/KernelAdiutor/wiki/Custom-Controls\"&gt;tıklayın&lt;a&gt;.</string>
     <string name="create">Oluştur</string>
     <string name="import_item">İçe aktar</string>
@@ -705,8 +697,6 @@
     <!-- Build prop Editor -->
     <string name="add">Ekle</string>
     <string name="backup_item">%1$s %2$s içine yedeklendi</string>
-    <string name="item_count">%s öğe</string>
-    <string name="items_count">%s öğe</string>
     <string name="key">Anahtar</string>
     <string name="value">Değer</string>
     <string name="key_empty">Anahtar boş olamaz!</string>
@@ -761,12 +751,6 @@
     <string name="fahrenheit_summary">Sıcaklığı ölçmek için fahrenhayt kullan.</string>
     <string name="force_english">İngilizce dilini göstermeye zorla</string>
     <string name="user_interface">Kullanıcı arayüzü</string>
-    <string name="banner_resizer">Banner boyutlandırıcı</string>
-    <string name="hide_banner">Banner\'ı gizle</string>
-    <string name="force_cards">Kartları zorla</string>
-    <string name="force_cards_summary">Öğeler için mümkünse kartları kullan.</string>
-    <string name="section_icons">Bölüm Simgeleri</string>
-    <string name="section_icons_summary">Gezinme çekmecesinde her bölüm için simgeler göster.</string>
     <string name="instant">Hızlı</string>
     <string name="five_sec">5 saniye</string>
     <string name="ten_sec">10 saniye</string>

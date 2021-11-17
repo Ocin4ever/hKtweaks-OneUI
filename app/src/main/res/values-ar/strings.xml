@@ -15,23 +15,12 @@
     <string name="cancel">إلغاء الأمر</string>
     <string name="ok">موافق</string>
     <string name="unknown">مجهول</string>
-    <string name="donate">تبرع</string>
-    <string name="donate_summary">هذه الميزة متاحة فقط اذا قمت بتثبيت تطبيق التبرع
-لا تقلق لان هذا التطبيق مفتوح المصدر ويمكنك بنائه بسهولة
-وازالة هذا الخيار منه
-لكن اتمنى ان تدعم المطورين
-شكرا لاستخدامك معدل النواة
-عندما تقوم بتثبيت تطبيق التبرع يتوجب اعادة تشغيل معدل النواة لتفعيل جميع المميزات.</string>
-    <string name="donate_nope">لا أريد السقوط في هذا الفخ!</string>
-    <string name="donate_yes">احب هذا التطبيق. عليك التبرع!</string>
     <string name="warning">تحذير</string>
     <string name="apply_on_boot">تطبيق عند التشغيل</string>
     <string name="apply_on_boot_text">تطبيق الاعدادات في %d ثواني.</string>
     <string name="apply_on_boot_complete">اكتمل تطبيق الاعدادات.</string>
     <string name="apply_on_boot_canceled">تم الغاء تطبيق الاعدادات.</string>
     <string name="not_in_range">ليس داخل النطاق</string>
-    <string name="options">الخيارات</string>
-    <string name="more">المزيد</string>
     <!-- Permissions Denied -->
     <string name="permission_denied_write_storage">رفض الاذن للكتابة الى الذاكرة!</string>
     <!-- Editor -->

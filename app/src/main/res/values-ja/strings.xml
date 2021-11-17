@@ -16,18 +16,12 @@
     <string name="cancel">キャンセル</string>
     <string name="ok">OK</string>
     <string name="unknown">不明</string>
-    <string name="donate">寄付する</string>
-    <string name="donate_summary">この機能は寄付アプリがインストール済みの際のみ有効です！このアプリはオープンソースのため、自分自身でビルドしてこのチェックを削除することもできるので心配しないでください。ただ、削除せずに開発者を助けてくれることを望みます。Kernel Adiutor を使ってくださりありがとうございます！寄付アプリを購入した後、全機能を有効化するには Kernel Adiutor を再起動してください。</string>
-    <string name="donate_nope">私はお金を払いたくありません!</string>
-    <string name="donate_yes">このアプリが気に入りました。必ず寄付します!</string>
     <string name="warning">警告</string>
     <string name="apply_on_boot">起動時に適用</string>
     <string name="apply_on_boot_text">%d 秒後に設定を適用します。</string>
     <string name="apply_on_boot_complete">設定の適用が完了しました。</string>
     <string name="apply_on_boot_canceled">設定の適用をキャンセルしました。</string>
     <string name="not_in_range">有効範囲外</string>
-    <string name="options">オプション</string>
-    <string name="more">その他</string>
     <!-- Permissions Denied -->
     <string name="permission_denied_write_storage">ストレージへの書込権限が拒否されました!</string>
     <!-- Editor -->
@@ -578,7 +572,6 @@
     <string name="maximum_compression_ratio">最大圧縮比</string>
     <string name="maximum_compression_ratio_summary">許容圧縮されたページとして使用可能な最大圧縮率(%で表記)。このレシオが下回った場合のみ圧縮が始まります。</string>
     <!-- Entropy -->
-    <string name="available">利用可能</string>
     <string name="poolsize">プールサイズ</string>
     <string name="read">読み込み</string>
     <string name="write">書き込み</string>
@@ -628,7 +621,6 @@
     <!-- Custom Controls -->
     <string name="welcome">ようこそ</string>
     <string name="custom_controls_summary">このセクションではアプリでは(未だ)提供されていないカスタムコントロールを作成・インポートすることが可能です。</string>
-    <string name="example">サンプル</string>
     <string name="custom_controls_example_summary">サンプルが必要ですか？ &lt;a href=\"https://github.com/Grarak/KernelAdiutor/wiki/Custom-Controls\"&gt;ここをクリック&lt;a&gt;</string>
     <string name="create">作成</string>
     <string name="import_item">インポート</string>
@@ -683,8 +675,6 @@
     <!-- Build prop Editor -->
     <string name="add">追加</string>
     <string name="backup_item">%1$s は %2$s にバックアップ済</string>
-    <string name="item_count">%s アイテム</string>
-    <string name="items_count">%s アイテム</string>
     <string name="key">キー</string>
     <string name="value">値</string>
     <string name="key_empty">キーが空です！</string>
@@ -739,12 +729,6 @@
     <string name="fahrenheit_summary">温度測定に華氏を使用します。</string>
     <string name="force_english">英語を強制使用</string>
     <string name="user_interface">ユーザーインターフェース</string>
-    <string name="banner_resizer">バナーのリサイズ</string>
-    <string name="hide_banner">バナーを非表示</string>
-    <string name="force_cards">カードを強制使用</string>
-    <string name="force_cards_summary">可能な限り、項目にカードを使用します。</string>
-    <string name="section_icons">セクションのアイコン</string>
-    <string name="section_icons_summary">ナビゲーションドロワーの各セクションにアイコンを表示します。</string>
     <string name="instant">即時</string>
     <string name="five_sec">5秒</string>
     <string name="ten_sec">10秒</string>

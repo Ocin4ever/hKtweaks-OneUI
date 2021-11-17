@@ -16,17 +16,12 @@
     <string name="cancel">Одустани</string>
     <string name="ok">У реду</string>
     <string name="unknown">Непознато</string>
-    <string name="donate">Донирај</string>
-    <string name="donate_nope">Нећу пасти на ову превару!</string>
-    <string name="donate_yes">Ја волим ову апликацију. Морам донирати!</string>
     <string name="warning">Упозорење</string>
     <string name="apply_on_boot">Примени при подизању система</string>
     <string name="apply_on_boot_text">Примењујем поставке за %d секунди.</string>
     <string name="apply_on_boot_complete">Примена поставки је завршена.</string>
     <string name="apply_on_boot_canceled">Примена поставки је отказана.</string>
     <string name="not_in_range">Није у опсегу</string>
-    <string name="options">Опције</string>
-    <string name="more">Још</string>
     <!-- Permissions Denied -->
     <string name="permission_denied_write_storage">Дозвола за писање у складиште је одбијена!</string>
     <!-- Editor -->
@@ -257,7 +252,6 @@
     <string name="very_aggressive">Веома агресивно</string>
     <!-- Virtual Memory -->
     <!-- Entropy -->
-    <string name="available">На располагању</string>
     <string name="read">Читање</string>
     <string name="write">Упис</string>
     <!-- Misc -->

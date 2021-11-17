@@ -16,18 +16,12 @@
     <string name="cancel">לבטל</string>
     <string name="ok">אוקיי</string>
     <string name="unknown">לא ידוע</string>
-    <string name="donate">תרומה</string>
-    <string name="donate_summary">תכונה זו זמינה רק כאשר מותקנת האפליקציה תרומה!. אבל אל תדאג, בגלל שיישום זה הוא קוד פתוח תוכל לבנות גרסה בעצמך ולהסיר בקלות את האפשרות זו. אבל אני מקווה שאתה תתמוך במפתחים בכל מקרה. תודה על השימוש ב־Kernel Adiutor! לאחר קנית היישום תרומה אתה רק צריך להפעיל מחדש את Kernel Adiutor על מנת לאפשר את כל התכונות.</string>
-    <string name="donate_nope">אתה לא תעבוד עלי!</string>
-    <string name="donate_yes">אני מת על היישום הזה. אני חייב לתרום!</string>
     <string name="warning">אזהרה</string>
     <string name="apply_on_boot">החל באתחול</string>
     <string name="apply_on_boot_text">מחיל את ההגדרות תוך %d שניות.</string>
     <string name="apply_on_boot_complete">החלת ההגדרות הושלמה.</string>
     <string name="apply_on_boot_canceled">החלת הגדרות בוטלה.</string>
     <string name="not_in_range">מחוץ לטווח</string>
-    <string name="options">אפשרויות</string>
-    <string name="more">עוד</string>
     <!-- Permissions Denied -->
     <string name="permission_denied_write_storage">ההרשאה לכתיבה באחסון נדחתה!</string>
     <!-- Editor -->

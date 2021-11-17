@@ -16,18 +16,12 @@
     <string name="cancel">रद्द करें</string>
     <string name="ok">ठीक</string>
     <string name="unknown">अज्ञात</string>
-    <string name="donate">दान करें</string>
-    <string name="donate_summary">यह फीचर सिर्फ डोनेशन एप पर उपलब्ध है! परेशान ना हों। क्योकि यह एप ओपन सोर्स हे आप आसानी से खुद बना सकते हे तथा इस चेक को हटा सकते है। वैसे लेकिन मैं आशा करता हु की आप डेवलोपर्स को सपोर्ट करें। kernel adiutor का उपयोग करने के लिए धन्यवाद! एक बार आप डोनेशन एप खरीदे तो सभी फीचर्स को इनेबल करने के लिए एप को दोबारा स्टार्ट करे।</string>
-    <string name="donate_nope">मैं इस घोटाले के लिए नही गिरूँगा!</string>
-    <string name="donate_yes">इस एप को प्यार करते है। डोनेट जरूर करें!</string>
     <string name="warning">चेतावनी</string>
     <string name="apply_on_boot">बूट पर चालू करें</string>
     <string name="apply_on_boot_text">आपकी सेटिंग्स %d सेकण्ड्स में लागू हो रही है</string>
     <string name="apply_on_boot_complete">सेटिंग्स अप्लाई पूरा हुआ।</string>
     <string name="apply_on_boot_canceled">सेटिंग्स अप्लाई रद्द।</string>
     <string name="not_in_range">रेंज में नही</string>
-    <string name="options">विकल्प</string>
-    <string name="more">और अधिक</string>
     <!-- Permissions Denied -->
     <string name="permission_denied_write_storage">स्टोरेज राइट के लिए अनुमति अस्वीकार!</string>
     <!-- Editor -->
@@ -469,7 +463,6 @@
     <string name="very_aggressive">बहुत आक्रामक</string>
     <!-- Virtual Memory -->
     <!-- Entropy -->
-    <string name="available">उपलब्ध</string>
     <string name="poolsize">Poolsize</string>
     <string name="read">पठित</string>
     <string name="write">लिखना</string>

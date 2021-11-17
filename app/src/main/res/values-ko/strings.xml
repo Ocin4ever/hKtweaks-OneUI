@@ -16,18 +16,12 @@
     <string name="cancel">취소</string>
     <string name="ok">확인</string>
     <string name="unknown">알 수 없음</string>
-    <string name="donate">기부하기</string>
-    <string name="donate_summary">이 기능은 기부앱이 설치 되있어야 사용할 수 있습니다! 그래도 걱정하지 마세요. 이 앱은 오픈소스이기 때문에 이 확인기능을 손쉽게 제거하고 만드실 수 있습니다. 하지만 저는 그래도 여러분들이 개발자를 도와주시기를 희망합니다. 만약 기부앱을 구매하셨다면 재시작 후 Kernel Adiutor의 모든 기능을 사용하실 수 있습니다. Kernel Adiutor를 사용해 주셔서 감사합니다!</string>
-    <string name="donate_nope">저는 이 사기에 속지 않습니다!</string>
-    <string name="donate_yes">이 앱이 맘에 듭니다. 기부하겠습니다!</string>
     <string name="warning">경고</string>
     <string name="apply_on_boot">부팅 시 적용</string>
     <string name="apply_on_boot_text">%d초 후에 설정이 적용됩니다.</string>
     <string name="apply_on_boot_complete">설정 적용을 완료했습니다.</string>
     <string name="apply_on_boot_canceled">설정 적용이 취소되었습니다.</string>
     <string name="not_in_range">범위 밖에 있음</string>
-    <string name="options">설정</string>
-    <string name="more">더 보기</string>
     <!-- Permissions Denied -->
     <string name="permission_denied_write_storage">저장소 접근 권한이 거부되었습니다!</string>
     <!-- Editor -->
@@ -548,7 +542,6 @@
     <string name="very_aggressive">매우 적극적이게</string>
     <!-- Virtual Memory -->
     <!-- Entropy -->
-    <string name="available">사용 가능</string>
     <string name="read">읽기</string>
     <string name="write">쓰기</string>
     <!-- Misc -->
@@ -586,7 +579,6 @@
     <!-- Custom Controls -->
     <string name="welcome">환영합니다</string>
     <string name="custom_controls_summary">이 섹션에서는 아직 앱에 없는 맞춤 컨트롤을 만들거나 가져올 수 있습니다.</string>
-    <string name="example">예시</string>
     <string name="custom_controls_example_summary">예제가 필요한가요? &lt;a href=\"https://github.com/Grarak/KernelAdiutor/wiki/Custom-Controls\"&gt;here&lt;a&gt;. 를 누르세요.</string>
     <string name="create">생성</string>
     <string name="import_item">불러오기</string>

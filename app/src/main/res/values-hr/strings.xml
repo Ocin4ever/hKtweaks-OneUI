@@ -16,18 +16,12 @@
     <string name="cancel">Odustani</string>
     <string name="ok">U redu</string>
     <string name="unknown">Nepoznato</string>
-    <string name="donate">Donirajte</string>
-    <string name="donate_summary">Ova je značajka dostupna samo ako je instalirana donacijska aplikacija! Ali, ne trebate se brinuti. Ova je aplikacija aplikacija otvorenog koda i lako je možete sami izgraditi i ukloniti ovu provjeru. Ali nadam se da u svakom slučaju podržavate razvojne programere. Hvala vam što se koristite Kernel Adiutorom! Kada kupite donacijsku aplikaciju morate ponovno pokrenuti Kernel Adiutor kako biste omogućili sve značajke.</string>
-    <string name="donate_nope">Neću pasti na ovu prevaru!</string>
-    <string name="donate_yes">Volim ovu aplikaciju. Moram donirati!</string>
     <string name="warning">Upozorenje</string>
     <string name="apply_on_boot">Primijeni pri pokretanju sustava</string>
     <string name="apply_on_boot_text">Primjenjivanje postavki za %d s.</string>
     <string name="apply_on_boot_complete">Primjenjivanje postavki je završeno.</string>
     <string name="apply_on_boot_canceled">Primjenjivanje postavki je otkazano.</string>
     <string name="not_in_range">Nije u rasponu</string>
-    <string name="options">Opcije</string>
-    <string name="more">Više</string>
     <!-- Permissions Denied -->
     <string name="permission_denied_write_storage">Odbijeno je dopuštenje za pisanje po pohrani!</string>
     <!-- Editor -->
@@ -410,7 +404,6 @@
     <string name="very_aggressive">Vrlo agresivno</string>
     <!-- Virtual Memory -->
     <!-- Entropy -->
-    <string name="available">Dostupno</string>
     <string name="read">Čitanje</string>
     <string name="write">Pisanje</string>
     <!-- Misc -->
@@ -430,7 +423,6 @@
     <!-- Custom Controls -->
     <string name="welcome">Dobro došli</string>
     <string name="custom_controls_summary">U ovom odjeljku možete stvoriti ili uvesti prilagođene kontrole koje (još) ne postoje u aplikaciji.</string>
-    <string name="example">Primjeri</string>
     <string name="custom_controls_example_summary">Trebate primjer? Dodirnite &lt;a href=\"https://github.com/Grarak/KernelAdiutor/wiki/Custom-Controls\"&gt;ovdje&lt;a&gt;.</string>
     <string name="create">Stvori</string>
     <string name="import_item">Uvezi</string>

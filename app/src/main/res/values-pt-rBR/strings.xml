@@ -16,18 +16,12 @@
     <string name="cancel">Cancelar</string>
     <string name="ok">OK</string>
     <string name="unknown">Desconhecida</string>
-    <string name="donate">Faça uma doação</string>
-    <string name="donate_summary">Esse recurso está disponível somente quando o app de doação está instalado! Mas não se preocupe. Porque este app é de código aberto, você pode facilmente compilá-lo e remover esta verificação. Mas eu realmente espero que você apoie os desenvolvedores. Obrigado por usar o Kernel Adiutor! Uma vez que você comprou o app de doação, será necessário reiniciar o Kernel Adiutor para habilitar todos os recursos.</string>
-    <string name="donate_nope">Eu não vou cair nesta fraude!</string>
-    <string name="donate_yes">Eu adoro este app. Devo doar!</string>
     <string name="warning">Aviso</string>
     <string name="apply_on_boot">Aplicar na inicialização</string>
     <string name="apply_on_boot_text">Aplicando configurações em %d segundos.</string>
     <string name="apply_on_boot_complete">Aplicação de configurações concluída.</string>
     <string name="apply_on_boot_canceled">Aplicação de configurações cancelada.</string>
     <string name="not_in_range">Fora do alcance</string>
-    <string name="options">Opções</string>
-    <string name="more">Mais</string>
     <!-- Permissions Denied -->
     <string name="permission_denied_write_storage">Permissão negada ao escrever no armazenamento!</string>
     <!-- Editor -->
@@ -586,7 +580,6 @@
     <string name="maximum_compression_ratio">Taxa de compressão máxima</string>
     <string name="maximum_compression_ratio_summary">Taxa de compressão máxima, como porcentagem, para uma página comprimida aceitável. Qualquer página que não comprimir pelo ao menos essa proporção será rejeitada.</string>
     <!-- Entropy -->
-    <string name="available">Disponível</string>
     <string name="poolsize">PoolSize</string>
     <string name="read">Leitura</string>
     <string name="write">Gravação</string>
@@ -637,7 +630,6 @@
     <!-- Custom Controls -->
     <string name="welcome">Bem-vindo</string>
     <string name="custom_controls_summary">Nesta seção você pode criar ou importar controles personalizados, que não existem (ainda) no app.</string>
-    <string name="example">Exemplos</string>
     <string name="custom_controls_example_summary">Precisa de um exemplo? Clique em &lt;a href=\"https://github.com/Grarak/KernelAdiutor/wiki/Custom-Controls\"&gt;here&lt;a&gt;.</string>
     <string name="create">Criar</string>
     <string name="import_item">Importar</string>
@@ -692,8 +684,6 @@
     <!-- Build prop Editor -->
     <string name="add">Adicionar</string>
     <string name="backup_item">%1$s foi salvo em %2$s</string>
-    <string name="item_count">%s item</string>
-    <string name="items_count">%s itens</string>
     <string name="key">Chave</string>
     <string name="value">Valor</string>
     <string name="key_empty">A chave não pode estar vazia!</string>
@@ -748,12 +738,6 @@
     <string name="fahrenheit_summary">Use fahrenheit para medir a temperatura.</string>
     <string name="force_english">Forçar exibição do idioma inglês</string>
     <string name="user_interface">Interface de usuário</string>
-    <string name="banner_resizer">Redimensionador de Banner</string>
-    <string name="hide_banner">Ocultar banner</string>
-    <string name="force_cards">Forçar cards</string>
-    <string name="force_cards_summary">Use cards para itens, se possível.</string>
-    <string name="section_icons">Ícones de Seção</string>
-    <string name="section_icons_summary">Exibe ícones para cada seção na gaveta de navegação.</string>
     <string name="instant">Imediato</string>
     <string name="five_sec">5 segundos</string>
     <string name="ten_sec">10 segundos</string>

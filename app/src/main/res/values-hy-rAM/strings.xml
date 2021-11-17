@@ -16,10 +16,7 @@
     <string name="cancel">Չեղարկել</string>
     <string name="ok">Լավ</string>
     <string name="unknown">Անհայտ</string>
-    <string name="donate">Զոհաբերել</string>
     <string name="warning">Զգուշացում</string>
-    <string name="options">Կայանքներ</string>
-    <string name="more">Ավելին</string>
     <!-- Permissions Denied -->
     <string name="permission_denied_write_storage">Կրիչի վրա գրման իրավասության մերժում:</string>
     <!-- Editor -->
@@ -170,7 +167,6 @@
     <!-- Virtual Memory -->
     <string name="zram">Z-RAM</string>
     <!-- Entropy -->
-    <string name="available">Հասանելի է</string>
     <string name="read">Կարդալ</string>
     <string name="write">Գրել</string>
     <!-- Misc -->
@@ -192,7 +188,6 @@
     <!-- Data Sharing -->
     <!-- Custom Controls -->
     <string name="welcome">Բարի գալուստ</string>
-    <string name="example">Օրինակներ</string>
     <string name="create">Ստեղծել</string>
     <string name="import_item">Ներմուծել</string>
     <string name="title">Վերնագիր</string>

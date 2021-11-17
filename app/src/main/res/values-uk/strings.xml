@@ -16,18 +16,12 @@
     <string name="cancel">Скасувати</string>
     <string name="ok">Ок</string>
     <string name="unknown">Невідомо</string>
-    <string name="donate">Підтримати</string>
-    <string name="donate_summary">Ця функція доступна тільки коли встановлено додаток-пожертвування! Тим не менш, не хвилюйтеся. Так як у цього додатка відкритий вихідний код, ви без праці можете зібрати його самостійно і прибрати цю перевірку. Але я сподіваюся, що ви в будь-якому випадку підтримаєте розробників. Спасибі за використання ядра Adiutor! Після покупки програми-пожертвування, вам потрібно перезапустити Kernel Auditor для того, щоб включити всі функції.</string>
-    <string name="donate_nope">Я не попадусь на цю аферу!</string>
-    <string name="donate_yes">Я люблю цю аплікацію. Повинен пожертвувати!</string>
     <string name="warning">Попередження</string>
     <string name="apply_on_boot">Застосувати під час завантаження</string>
     <string name="apply_on_boot_text">Застосування налаштувань за %d секунд.</string>
     <string name="apply_on_boot_complete">Застосування налаштувань завершено.</string>
     <string name="apply_on_boot_canceled">Застосування налаштувань скасовано.</string>
     <string name="not_in_range">Не в діапазоні</string>
-    <string name="options">Налаштування</string>
-    <string name="more">Більше</string>
     <!-- Permissions Denied -->
     <string name="permission_denied_write_storage">Відмовлено в дозволі на запис в пам\'ять пристрою!</string>
     <!-- Editor -->
@@ -576,7 +570,6 @@
     <string name="disksize">Размір диску</string>
     <string name="maximum_compression_ratio">Максимальний коефіцієнт стиснення</string>
     <!-- Entropy -->
-    <string name="available">Доступно</string>
     <string name="poolsize">Розмір пулу</string>
     <string name="read">Читання</string>
     <string name="write">Запис</string>
@@ -607,7 +600,6 @@
     <!-- Custom Controls -->
     <string name="welcome">Ласкаво просимо</string>
     <string name="custom_controls_summary">У цьому розділі можна створити або імпортувати користувацькі елементи керування, які не існують в додатку(поки що).</string>
-    <string name="example">Приклади</string>
     <string name="create">Створити</string>
     <string name="import_item">Імпорт</string>
     <string name="control_switch">Перемикач</string>
@@ -645,8 +637,6 @@
     <string name="flash">Прошити</string>
     <!-- Build prop Editor -->
     <string name="add">Додати</string>
-    <string name="item_count">%s елемент</string>
-    <string name="items_count">%s елементів</string>
     <string name="key">Ключ</string>
     <string name="value">Значення</string>
     <!-- Profile -->
@@ -697,12 +687,6 @@
     <string name="fahrenheit_summary">Використовувати вимір температури за Фаренгейтом.</string>
     <string name="force_english">Примусово використовувати англійську мову</string>
     <string name="user_interface">Користувацький інтерфейс</string>
-    <string name="banner_resizer">Зміна розміру банера</string>
-    <string name="hide_banner">Скрити банер</string>
-    <string name="force_cards">Картки примусово</string>
-    <string name="force_cards_summary">Використовувати картки для об\'єктів, якщо можливо.</string>
-    <string name="section_icons">Значки розділів</string>
-    <string name="section_icons_summary">Показувати значки для кожного розділу в панелі навігації.</string>
     <string name="instant">Миттєво</string>
     <string name="five_sec">5 секунд</string>
     <string name="ten_sec">10 секунд</string>

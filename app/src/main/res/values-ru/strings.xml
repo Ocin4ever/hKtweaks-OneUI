@@ -16,18 +16,12 @@
     <string name="cancel">Отмена</string>
     <string name="ok">OK</string>
     <string name="unknown">Неизвестно</string>
-    <string name="donate">Пожертвовать</string>
-    <string name="donate_summary">Эта функция доступна только когда установлено приложение-пожертвование! Тем не менее, не волнуйтесь. Так как у этого приложения открытый исходный код, вы без труда можете собрать его самостоятельно и убрать эту проверку. Но я надеюсь, что вы в любом случае поддержите разработчиков. Спасибо за использование Kernel Adiutor! После покупки приложения-пожертвования, вам нужно перезапустить Kernel Auditor для того, чтобы включить все функции.</string>
-    <string name="donate_nope">Я не попадусь на эту аферу!</string>
-    <string name="donate_yes">Я люблю это приложение. Должен пожертвовать!</string>
     <string name="warning">Внимание</string>
     <string name="apply_on_boot">Применять при загрузке</string>
     <string name="apply_on_boot_text">Применение настроек через %d секунд.</string>
     <string name="apply_on_boot_complete">Применение настроек завершено.</string>
     <string name="apply_on_boot_canceled">Применение настроек отменено.</string>
     <string name="not_in_range">Не в диапазоне</string>
-    <string name="options">Опции</string>
-    <string name="more">Больше</string>
     <!-- Permissions Denied -->
     <string name="permission_denied_write_storage">Отказано в разрешении на запись в память устройства!</string>
     <!-- Editor -->
@@ -598,7 +592,6 @@
     <string name="maximum_compression_ratio">Максимальный коэффициент сжатия</string>
     <string name="maximum_compression_ratio_summary">Максимальная степень сжатия, в процентах, для сжимаемых страниц. Любая страница, которая не сжимается до этого соотношения, будет отклонена.</string>
     <!-- Entropy -->
-    <string name="available">Доступно</string>
     <string name="poolsize">Размер пула</string>
     <string name="read">Чтение</string>
     <string name="write">Запись</string>
@@ -649,7 +642,6 @@
     <!-- Custom Controls -->
     <string name="welcome">Добро пожаловать</string>
     <string name="custom_controls_summary">В этом разделе можно создать или импортировать пользовательские элементы управления, которых нет в приложении (пока).</string>
-    <string name="example">Примеры</string>
     <string name="custom_controls_example_summary">Нужен пример? Нажмите &lt;a href=\"https://github.com/Grarak/KernelAdiutor/wiki/Custom-Controls\"&gt;здесь&lt;a&gt;.</string>
     <string name="create">Создать</string>
     <string name="import_item">Импорт</string>
@@ -704,8 +696,6 @@
     <!-- Build prop Editor -->
     <string name="add">Добавить</string>
     <string name="backup_item">%1$s был резервно копирован в %2$s</string>
-    <string name="item_count">%s элемент</string>
-    <string name="items_count">Элементы: %s</string>
     <string name="key">Ключ</string>
     <string name="value">Значение</string>
     <string name="key_empty">Поле не может быть пустым!</string>
@@ -760,12 +750,6 @@
     <string name="fahrenheit_summary">Использовать измерение температуры по Фаренгейту.</string>
     <string name="force_english">Принудительно использовать английский язык</string>
     <string name="user_interface">Пользовательский интерфейс</string>
-    <string name="banner_resizer">Изменение размера баннера</string>
-    <string name="hide_banner">Скрыть баннер</string>
-    <string name="force_cards">Карточки принудительно</string>
-    <string name="force_cards_summary">Использовать карточки для объектов, если возможно.</string>
-    <string name="section_icons">Значки разделов</string>
-    <string name="section_icons_summary">Показывать значки для каждого раздела в панели навигации.</string>
     <string name="instant">Мгновенно</string>
     <string name="five_sec">5 секунд</string>
     <string name="ten_sec">10 секунд</string>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.hades.hKtweaks">
+
+    <application android:theme="@style/OneUI3Theme">
+        <activity android:name=".activities.AboutActivity"
+            android:theme="@style/OneUI3AboutTheme" />
+        <activity android:name=".activities.SplashActivity"
+            android:theme="@style/OneUI3SplashTheme" />
+    </application>
+
+</manifest>

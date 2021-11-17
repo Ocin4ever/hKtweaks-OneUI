@@ -11,8 +11,6 @@
     <string name="ok">OK</string>
     <string name="unknown">Ukendt</string>
     <string name="not_in_range">Uden for område</string>
-    <string name="options">Indstillinger</string>
-    <string name="more">Mere</string>
     <!-- Permissions Denied -->
     <!-- Editor -->
     <string name="save">Gem</string>

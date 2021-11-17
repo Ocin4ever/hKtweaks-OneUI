@@ -19,18 +19,12 @@
     <string name="cancel">Cancelar</string>
     <string name="ok">Ok</string>
     <string name="unknown">Desconocido</string>
-    <string name="donate">Donar</string>
-    <string name="donate_summary">Esta función sólo está disponible cuando se instala la app de donación! No te preocupes, esta aplicación es de código abierto fácilmente puede construirlo usted mismo y quitar esta comprobación. Pero espero que usted apoya a los desarrolladores de todos modos. Gracias por usar Kernel Adiutor! Una vez que compraste la aplicación donación que tienes que reiniciar Adiutor Kernel para habilitar todas las funciones.</string>
-    <string name="donate_nope">No hay donacion!</string>
-    <string name="donate_yes">Gracias por su donativo!</string>
     <string name="warning">Advertencia</string>
     <string name="apply_on_boot">Aplicar al Inicio</string>
     <string name="apply_on_boot_text">Los cambios se aplicaran en %d segundos.</string>
     <string name="apply_on_boot_complete">Aplicación de configuraciones completada.</string>
     <string name="apply_on_boot_canceled">Aplicación de configuraciones cancelada.</string>
     <string name="not_in_range">Fuera de rango</string>
-    <string name="options">Opciones</string>
-    <string name="more">Más</string>
     <!-- Permissions Denied -->
     <string name="permission_denied_write_storage">¡Permiso denegado para escribir en almacenamiento!</string>
     <!-- Editor -->
@@ -800,7 +794,6 @@
     <string name="zram_comp_algorithm">Compresión ZRAM</string>
     <string name="zram_comp_algorithm_summary">Desactive primero ZRAM para poder ajustar la compresión.</string>
     <!-- Entropy -->
-    <string name="available">Disponible</string>
     <string name="poolsize">Tamaño del Pool</string>
     <string name="read">Lectura</string>
     <string name="write">Escritura</string>
@@ -864,7 +857,6 @@
     <!-- Custom Controls -->
     <string name="welcome">Bienvenido(a)</string>
     <string name="custom_controls_summary">En esta sección usted puede crear o importar controles personalizados, que no existen en la app (todavía).</string>
-    <string name="example">Ejemplos</string>
     <string name="custom_controls_example_summary">¿Necesita ejemplos? Click &lt;a href=\"https://github.com/Grarak/KernelAdiutor/wiki/Custom-Controls\"&gt;aqui&lt;a&gt;.</string>
     <string name="create">Crear</string>
     <string name="import_item">Importar</string>
@@ -919,8 +911,6 @@
     <!-- Build prop Editor -->
     <string name="add">Añadir</string>
     <string name="backup_item">%1$s ha sido respaldada a %2$s</string>
-    <string name="item_count">Elemento %s</string>
-    <string name="items_count">Elementos %s</string>
     <string name="key">Clave</string>
     <string name="value">Valor</string>
     <string name="key_empty">El campo no puede estar vacío!</string>
@@ -979,12 +969,6 @@
     <string name="fahrenheit_summary">Usar fahrenheit para medir la temperatura.</string>
     <string name="force_english">Forzar idioma inglés</string>
     <string name="user_interface">Interfaz de usuario</string>
-    <string name="banner_resizer">Redimensionador de banner</string>
-    <string name="hide_banner">Ocultar encabezado</string>
-    <string name="force_cards">Forzar tarjetas</string>
-    <string name="force_cards_summary">Usar tarjetas para los elementos si es posible.</string>
-    <string name="section_icons">Iconos de la sección</string>
-    <string name="section_icons_summary">Mostrar los iconos de cada sección en cajón de navegación.</string>
     <string name="instant">Instantáneo</string>
     <string name="five_sec">5 segundos</string>
     <string name="ten_sec">10 segundos</string>

@@ -16,18 +16,12 @@
     <string name="cancel">Anulare</string>
     <string name="ok">OK</string>
     <string name="unknown">Necunoscut</string>
-    <string name="donate">Donați</string>
-    <string name="donate_summary">Această caracteristică este disponibilă numai în aplicaţia de donatie! Nu vă faceţi griji, deoarece această aplicaţie este open source şi cu uşurinţă o puteţi compila de unul singur şi scoate această verificare. Dar sper că veţi sprijini dezvoltatorii oricum. Vă mulţumim pentru utilizarea Kernel Adiutor! Odată ce aţi cumpărat aplicaţia de donaţie trebuie să reporniţi Kernel Adiutor pentru a activa toate caracteristicile.</string>
-    <string name="donate_nope">Eu nu voi cădea la aceasta înşelatorie!</string>
-    <string name="donate_yes">Îmi place aplicaţia. Vreau să donez!</string>
     <string name="warning">Avertisment</string>
     <string name="apply_on_boot">Aplicare la pornire</string>
     <string name="apply_on_boot_text">Aplicarea setarilor in %d secunde.</string>
     <string name="apply_on_boot_complete">Aplicarea setarilor s-a sfirşit.</string>
     <string name="apply_on_boot_canceled">Aplicarea setarilor s-a anulat.</string>
     <string name="not_in_range">Nu este in zona se acoperire</string>
-    <string name="options">Opțiuni </string>
-    <string name="more">Mai multe</string>
     <!-- Permissions Denied -->
     <string name="permission_denied_write_storage">Permisiune refuzată pentru scrierea in stocare!</string>
     <!-- Editor -->
@@ -404,7 +398,6 @@
     <string name="zswap">ZSWAP</string>
     <string name="maximum_compression_ratio">Rată de compresie maximă</string>
     <!-- Entropy -->
-    <string name="available">Disponibil</string>
     <string name="read">Citire</string>
     <!-- Misc -->
     <string name="lcd_panel">Panou LCD</string>
@@ -417,7 +410,6 @@
     <!-- Data Sharing -->
     <!-- Custom Controls -->
     <string name="welcome">Bun venit</string>
-    <string name="example">Exemple</string>
     <string name="create">Creare</string>
     <string name="import_item">Import</string>
     <string name="control_switch">Comutare</string>
