@@ -3,8 +3,9 @@
 This is a OneUI-Themed version of Corsicanu's [hKtweaks](https://github.com/corsicanu/hKtweaks).
 
 ## Downloads
-[OneUI 3 version](https://github.com/Yanndroid/hKtweaks-OneUI/raw/master/app/release-oneui3/release/hKtweaks.apk)
-[OneUI 4 version](https://github.com/Yanndroid/hKtweaks-OneUI/raw/master/app/release-oneui4/release/hKtweaks.apk)
+- [OneUI 3 version](https://github.com/Yanndroid/hKtweaks-OneUI/raw/master/app/release-oneui3/release/hKtweaks.apk)
+- [OneUI 4 version](https://github.com/Yanndroid/hKtweaks-OneUI/raw/master/app/release-oneui4/release/hKtweaks.apk)
+
 Future updates will be available in the app.
 
 ## Credits
