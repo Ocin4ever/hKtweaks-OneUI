@@ -95,8 +95,7 @@ public class CreateFragment extends RecyclerViewFragment {
                     editTextView.setHint(getString(R.string.required));
                 }
                 if (setting.getUnit() == Items.Setting.Unit.INTEGER) {
-                    editTextView.setInputType(InputType.TYPE_CLASS_NUMBER
-                            | InputType.TYPE_NUMBER_FLAG_SIGNED);
+                    editTextView.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_SIGNED);
                 }
                 editTextView.setText(setting.getDefault());
                 editTextView.setTextWatcher(new TextWatcher() {
@@ -157,6 +156,7 @@ public class CreateFragment extends RecyclerViewFragment {
                 intent.putExtra(CustomControlsActivity.RESULT_INTENT, arguments);
                 getActivity().setResult(0, intent);
                 getActivity().finish();
+                return true;
             }, R.id.menu_done);
         } else {
             hideToolbarActionButton();

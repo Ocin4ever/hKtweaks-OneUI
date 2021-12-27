@@ -22,16 +22,13 @@ package com.hades.hKtweaks.fragments.tools;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Environment;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 
-import androidx.appcompat.view.menu.MenuBuilder;
-
 import com.hades.hKtweaks.R;
+import com.hades.hKtweaks.activities.EditorActivity;
 import com.hades.hKtweaks.activities.FilePickerActivity;
 import com.hades.hKtweaks.fragments.recyclerview.RecyclerViewFragment;
 import com.hades.hKtweaks.utils.AppSettings;
@@ -39,6 +36,7 @@ import com.hades.hKtweaks.utils.Utils;
 import com.hades.hKtweaks.utils.ViewUtils;
 import com.hades.hKtweaks.utils.root.RootFile;
 import com.hades.hKtweaks.utils.root.RootUtils;
+import com.hades.hKtweaks.utils.tools.Initd;
 import com.hades.hKtweaks.utils.tools.Recovery;
 import com.hades.hKtweaks.views.dialog.Dialog;
 import com.hades.hKtweaks.views.recyclerview.CardView;
@@ -48,6 +46,10 @@ import com.hades.hKtweaks.views.recyclerview.RecyclerViewItem;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
+import de.dlyt.yanndroid.oneui.menu.Menu;
+import de.dlyt.yanndroid.oneui.menu.MenuItem;
+import de.dlyt.yanndroid.oneui.menu.PopupMenu;
 
 /**
  * Created by willi on 12.07.16.
@@ -69,7 +71,10 @@ public class RecoveryFragment extends RecyclerViewFragment {
     @Override
     protected void init() {
         super.init();
-        showToolbarActionButton(item -> add(), R.id.menu_add);
+        showToolbarActionButton(item -> {
+            add();
+            return true;
+        }, R.id.menu_add);
 
         if (mRebootDialog != null) {
             mRebootDialog.show();
@@ -132,19 +137,25 @@ public class RecoveryFragment extends RecyclerViewFragment {
 
         CardView cardView = new CardView(getActivity());
         cardView.setOnMenuListener((cardView1, popupMenu) -> {
-            @SuppressLint("RestrictedApi") Menu menu = new MenuBuilder(getContext());
-            menu.add(Menu.NONE, 0, Menu.NONE, getString(R.string.delete));
 
-            ArrayList<MenuItem> menuItems = new ArrayList<>();
-            for (int i = 0; i < menu.size(); i++) menuItems.add(menu.getItem(i));
-            popupMenu.inflate(menuItems);
+            Menu menu = new Menu();
+            menu.addMenuItem(new MenuItem(0, getString(R.string.delete), null));
 
-            popupMenu.setOnMenuItemClickListener(item -> {
-                if (item.getItemId() == 0) {
-                    mCommands.remove(recovery);
-                    removeItem(cardView1);
+            popupMenu.inflate(menu);
+            popupMenu.setPopupMenuListener(new PopupMenu.PopupMenuListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem menuItem) {
+                    if (menuItem.getItemId() == 0) {
+                        mCommands.remove(recovery);
+                        removeItem(cardView1);
+                    }
+                    return true;
                 }
-                popupMenu.dismiss();
+
+                @Override
+                public void onMenuItemUpdate(MenuItem menuItem) {
+
+                }
             });
         });
 

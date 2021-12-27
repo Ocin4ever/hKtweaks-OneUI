@@ -135,7 +135,10 @@ public class ProfileActivity extends BaseActivity {
         toolbarLayout.setTitle(getString(R.string.profile));
         toolbarLayout.setNavigationButtonOnClickListener(v -> onBackPressed());
         toolbarLayout.inflateToolbarMenu(R.menu.save_menu);
-        toolbarLayout.setOnToolbarMenuItemClickListener(item -> returnIntent(Control.getProfileCommands()));
+        toolbarLayout.setOnToolbarMenuItemClickListener(item -> {
+            returnIntent(Control.getProfileCommands());
+            return true;
+        });
 
         final ViewPager viewPager = findViewById(R.id.viewpager);
 

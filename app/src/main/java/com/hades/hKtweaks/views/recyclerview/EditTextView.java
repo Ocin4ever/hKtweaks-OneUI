@@ -22,6 +22,7 @@ package com.hades.hKtweaks.views.recyclerview;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.TextView;
 
 import androidx.appcompat.widget.AppCompatEditText;
@@ -52,6 +53,7 @@ public class EditTextView extends RecyclerViewItem {
         mTextView = view.findViewById(R.id.title);
         mEditTextView = view.findViewById(R.id.edittext);
 
+        mEditTextView.setImeOptions(EditorInfo.IME_ACTION_DONE);
         mEditTextView.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -120,12 +122,12 @@ public class EditTextView extends RecyclerViewItem {
             if (mHintText != null) {
                 mEditTextView.setHint(mHintText);
             }
-            if (mInputType != 0) {
-                mEditTextView.setInputType(mInputType);
-            }
             if (mText != null) {
                 mEditTextView.setText(mText);
                 mEditTextView.setSelection(mText.length());
+            }
+            if (mInputType != 0) {
+                mEditTextView.setInputType(mInputType);
             }
         }
     }

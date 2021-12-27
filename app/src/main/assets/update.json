@@ -1,18 +1,7 @@
 {
   "releaseNotes": [
     "Changelog - Yanndroid:",
-    "- entirely themed with OneUI",
-    "- some optimizations for api 30+",
-    "- cleanup of unnecessary classes and resources",
-    "- design features (from OneUI)",
-    "- bug fixes",
-    "",
-    "Changelog - Corsicanu:",
-    "- device: full rearrange, added manufacturing date, alternate ASV detection, battery health, uptime",
-    "- cpufreq: added S21 cpu support (exynos2100/sd888)",
-    "- battery: fixed S21 battery health detection + possibly for other new devices running 5.* kernel",
-    "- build: updated gradle, plugins, build tools, targetsdk and minsdk (android <8.0 can use v2.1.0 and below)",
-    "- manifest: add back USE_FINGERPRINT for < 28 api",
-    "- others: minor optimizations, fix isolated layout issues because of dpi, check gpu_lib string everytime we open the app"
+    "- dependencies update",
+    "- improvements & bug fixes"
   ]
 }

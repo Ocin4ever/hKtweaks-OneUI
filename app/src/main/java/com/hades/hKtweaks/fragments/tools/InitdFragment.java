@@ -22,10 +22,6 @@ package com.hades.hKtweaks.fragments.tools;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.view.Menu;
-import android.view.MenuItem;
-
-import androidx.appcompat.view.menu.MenuBuilder;
 
 import com.hades.hKtweaks.R;
 import com.hades.hKtweaks.activities.EditorActivity;
@@ -44,6 +40,10 @@ import com.hades.hKtweaks.views.recyclerview.SwitcherFView;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.dlyt.yanndroid.oneui.menu.Menu;
+import de.dlyt.yanndroid.oneui.menu.MenuItem;
+import de.dlyt.yanndroid.oneui.menu.PopupMenu;
+
 /**
  * Created by willi on 16.07.16.
  */
@@ -61,7 +61,10 @@ public class InitdFragment extends RecyclerViewFragment {
     @Override
     protected void init() {
         super.init();
-        showToolbarActionButton(item -> showCreateDialog(), R.id.menu_add);
+        showToolbarActionButton(item -> {
+            showCreateDialog();
+            return true;
+        }, R.id.menu_add);
 
         if (mExecuteDialog != null) {
             mExecuteDialog.show();
@@ -103,36 +106,41 @@ public class InitdFragment extends RecyclerViewFragment {
             CardView cardView = new CardView(getActivity());
             cardView.setOnMenuListener((cardView1, popupMenu) -> {
 
-                @SuppressLint("RestrictedApi") Menu menu = new MenuBuilder(getContext());
-                menu.add(Menu.NONE, 0, Menu.NONE, getString(R.string.edit));
-                menu.add(Menu.NONE, 1, Menu.NONE, getString(R.string.delete));
+                Menu menu = new Menu();
+                menu.addMenuItem(new MenuItem(0, getString(R.string.edit), null));
+                menu.addMenuItem(new MenuItem(1, getString(R.string.delete), null));
 
-                ArrayList<MenuItem> menuItems = new ArrayList<>();
-                for (int i = 0; i < menu.size(); i++) menuItems.add(menu.getItem(i));
-                popupMenu.inflate(menuItems);
-
-                popupMenu.setOnMenuItemClickListener(item -> {
-                    switch (item.getItemId()) {
-                        case 0:
-                            mEditInitd = initd;
-                            Intent intent = new Intent(getActivity(), EditorActivity.class);
-                            intent.putExtra(EditorActivity.TITLE_INTENT, initd);
-                            intent.putExtra(EditorActivity.TEXT_INTENT, Initd.read(initd));
-                            startActivityForResult(intent, 0);
-                            break;
-                        case 1:
-                            mDeleteDialog = ViewUtils.dialogBuilder(getString(R.string.sure_question),
-                                    (dialogInterface, i) -> {
-                                    },
-                                    (dialogInterface, i) -> {
-                                        Initd.delete(initd);
-                                        reload();
-                                    },
-                                    dialogInterface -> mDeleteDialog = null, getActivity());
-                            mDeleteDialog.show();
-                            break;
+                popupMenu.inflate(menu);
+                popupMenu.setPopupMenuListener(new PopupMenu.PopupMenuListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem menuItem) {
+                        switch (menuItem.getItemId()) {
+                            case 0:
+                                mEditInitd = initd;
+                                Intent intent = new Intent(getActivity(), EditorActivity.class);
+                                intent.putExtra(EditorActivity.TITLE_INTENT, initd);
+                                intent.putExtra(EditorActivity.TEXT_INTENT, Initd.read(initd));
+                                startActivityForResult(intent, 0);
+                                break;
+                            case 1:
+                                mDeleteDialog = ViewUtils.dialogBuilder(getString(R.string.sure_question),
+                                        (dialogInterface, i) -> {
+                                        },
+                                        (dialogInterface, i) -> {
+                                            Initd.delete(initd);
+                                            reload();
+                                        },
+                                        dialogInterface -> mDeleteDialog = null, getActivity());
+                                mDeleteDialog.show();
+                                break;
+                        }
+                        return true;
                     }
-                    popupMenu.dismiss();
+
+                    @Override
+                    public void onMenuItemUpdate(MenuItem menuItem) {
+
+                    }
                 });
             });
 

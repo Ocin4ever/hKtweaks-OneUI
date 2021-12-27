@@ -111,7 +111,7 @@ public class FilePickerActivity extends BaseActivity {
         private String mPath;
         private String mExtension;
         private Drawable mDirImage;
-        private Drawable mFileImage;
+        private Drawable[] mFileImages;
         private Dialog mPickDialog;
 
         public static FilePickerFragment newInstance(String path, String extension) {
@@ -132,14 +132,19 @@ public class FilePickerActivity extends BaseActivity {
             if (mExtension == null) {
                 mExtension = getArguments().getString(EXTENSION_INTENT);
             }
-            int accentColor = ViewUtils.getThemeAccentColor(getContext());
             if (mDirImage == null) {
-                mDirImage = DrawableCompat.wrap(ContextCompat.getDrawable(getActivity(), R.drawable.ic_samsung_folder));
-                DrawableCompat.setTint(mDirImage, accentColor);
+                mDirImage = DrawableCompat.wrap(ContextCompat.getDrawable(getActivity(), R.drawable.ic_samsung_file_type_folder));
             }
-            if (mFileImage == null) {
-                mFileImage = DrawableCompat.wrap(
-                        ContextCompat.getDrawable(getActivity(), R.drawable.ic_samsung_document));
+            if (mFileImages == null) {
+                mFileImages = new Drawable[]{
+                        DrawableCompat.wrap(ContextCompat.getDrawable(getActivity(), R.drawable.ic_samsung_file_type_apk)),
+                        DrawableCompat.wrap(ContextCompat.getDrawable(getActivity(), R.drawable.ic_samsung_file_type_audio)),
+                        DrawableCompat.wrap(ContextCompat.getDrawable(getActivity(), R.drawable.ic_samsung_file_type_etc)),
+                        DrawableCompat.wrap(ContextCompat.getDrawable(getActivity(), R.drawable.ic_samsung_file_type_image)),
+                        DrawableCompat.wrap(ContextCompat.getDrawable(getActivity(), R.drawable.ic_samsung_file_type_txt)),
+                        DrawableCompat.wrap(ContextCompat.getDrawable(getActivity(), R.drawable.ic_samsung_file_type_video)),
+                        DrawableCompat.wrap(ContextCompat.getDrawable(getActivity(), R.drawable.ic_samsung_file_type_zip))
+                };
             }
             if (mPickDialog != null) {
                 mPickDialog.show();
@@ -197,7 +202,7 @@ public class FilePickerActivity extends BaseActivity {
             final RootFile returnDir = path.getParentFile();
             if (returnDir.isDirectory()) {
                 DescriptionView descriptionViewParent = new DescriptionView();
-                descriptionViewParent.setSummary("..");
+                descriptionViewParent.setTitle("..");
                 descriptionViewParent.setDrawable(mDirImage);
                 descriptionViewParent.setOnItemClickListener(item -> {
                     mPath = returnDir.toString();
@@ -209,7 +214,9 @@ public class FilePickerActivity extends BaseActivity {
 
             for (final RootFile dir : dirs) {
                 DescriptionView descriptionView = new DescriptionView();
-                descriptionView.setSummary(dir.getName());
+                descriptionView.setTitle(dir.getName());
+                int itemCount = dir.list().size();
+                descriptionView.setSummary(itemCount == 1 ? getString(R.string.one_item) : getString(R.string.item_count, itemCount));
                 descriptionView.setDrawable(mDirImage);
                 descriptionView.setOnItemClickListener(item -> {
                     mPath = dir.toString();
@@ -220,8 +227,8 @@ public class FilePickerActivity extends BaseActivity {
             }
             for (final RootFile file : files) {
                 DescriptionView descriptionView = new DescriptionView();
-                descriptionView.setSummary(file.getName());
-                descriptionView.setDrawable(mFileImage);
+                descriptionView.setTitle(file.getName());
+                descriptionView.setDrawable(getFileDrawable(file));
                 descriptionView.setOnItemClickListener(item -> {
                     if (mExtension != null && !mExtension.isEmpty() && file.getName() != null
                             && !file.getName().endsWith(mExtension)) {
@@ -261,6 +268,45 @@ public class FilePickerActivity extends BaseActivity {
                 }
             }
         }
+
+        private Drawable getFileDrawable(RootFile file) {
+            String fileName = file.getName();
+
+            if (fileName.lastIndexOf(".") == -1) return mFileImages[2];
+            switch (fileName.substring(fileName.lastIndexOf("."), fileName.length())) {
+                case ".apk":
+                    return mFileImages[0];
+                case ".mp3":
+                case ".wav":
+                case ".flac":
+                case ".m3u":
+                    return mFileImages[1];
+                case ".png":
+                case ".jpg":
+                case ".jpeg":
+                case ".gif":
+                    return mFileImages[3];
+                case ".txt":
+                case ".json":
+                case ".html":
+                case ".pdf":
+                    return mFileImages[4];
+                case ".mp4":
+                case ".mov":
+                case ".wmv":
+                case ".avi":
+                case ".mkv":
+                    return mFileImages[5];
+                case ".zip":
+                case ".rar":
+                case ".7z":
+                    return mFileImages[6];
+
+                default:
+                    return mFileImages[2];
+            }
+        }
+
     }
 
 }

@@ -28,8 +28,6 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -37,7 +35,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.view.menu.MenuBuilder;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.hades.hKtweaks.R;
@@ -70,6 +67,10 @@ import com.hades.hKtweaks.views.recyclerview.SwitcherFView;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+
+import de.dlyt.yanndroid.oneui.menu.Menu;
+import de.dlyt.yanndroid.oneui.menu.MenuItem;
+import de.dlyt.yanndroid.oneui.menu.PopupMenu;
 
 /**
  * Created by willi on 10.07.16.
@@ -143,6 +144,7 @@ public class ProfileFragment extends RecyclerViewFragment {
                     })
                     .setOnDismissListener(dialogInterface -> mOptionsDialog = null);
             mOptionsDialog.show();
+            return true;
         }, R.id.menu_add);
 
         if (mCommands != null) {
@@ -212,73 +214,78 @@ public class ProfileFragment extends RecyclerViewFragment {
             final CardView cardView = new CardView(getActivity());
             cardView.setOnMenuListener((cardView1, popupMenu) -> {
 
-                @SuppressLint("RestrictedApi") Menu menu = new MenuBuilder(getContext());
-                menu.add(Menu.NONE, 0, Menu.NONE, getString(R.string.append));
-                menu.add(Menu.NONE, 1, Menu.NONE, getString(R.string.edit));
-                menu.add(Menu.NONE, 2, Menu.NONE, getString(R.string.details));
-                final MenuItem onBoot = menu.add(Menu.NONE, 3, Menu.NONE, getString(R.string.on_boot) + ": " + mProfiles.getAllProfiles().get(position).isOnBootEnabled());
-                onBoot.setCheckable(true).setChecked(mProfiles.getAllProfiles().get(position).isOnBootEnabled());
-                menu.add(Menu.NONE, 4, Menu.NONE, getString(R.string.export));
-                menu.add(Menu.NONE, 5, Menu.NONE, getString(R.string.delete));
 
-                ArrayList<MenuItem> menuItems = new ArrayList<>();
-                for (int j = 0; j < menu.size(); j++) menuItems.add(menu.getItem(j));
-                popupMenu.inflate(menuItems);
+                Menu menu = new Menu();
+                menu.addMenuItem(new MenuItem(0, getString(R.string.append), null));
+                menu.addMenuItem(new MenuItem(1, getString(R.string.edit), null));
+                menu.addMenuItem(new MenuItem(2, getString(R.string.details), null));
 
-                popupMenu.setOnMenuItemClickListener(item -> {
-                    List<Profiles.ProfileItem> items1 = mProfiles.getAllProfiles();
-                    switch (item.getItemId()) {
-                        case 0:
-                            Intent intent = createProfileActivityIntent();
-                            intent.putExtra(ProfileActivity.POSITION_INTENT, position);
-                            startActivityForResult(intent, 2);
-                            break;
-                        case 1:
-                            Intent intent2 = new Intent(getActivity(), ProfileEditActivity.class);
-                            intent2.putExtra(ProfileEditActivity.POSITION_INTENT, position);
-                            startActivityForResult(intent2, 3);
-                            break;
-                        case 2:
-                            if (items1.get(position).getName() != null) {
-                                List<Profiles.ProfileItem.CommandItem> commands = items1.get(position).getCommands();
-                                if (commands.size() > 0) {
-                                    setForegroundText(items1.get(position).getName().toUpperCase());
-                                    mDetailsFragment.setText(commands);
-                                    showForeground();
-                                } else {
-                                    Utils.toast(R.string.profile_empty, getActivity());
+                MenuItem onBoot = new MenuItem(3, getString(R.string.on_boot), null);
+                onBoot.setCheckable(true);
+                onBoot.setChecked(mProfiles.getAllProfiles().get(position).isOnBootEnabled());
+                menu.addMenuItem(onBoot);
+
+                menu.addMenuItem(new MenuItem(4, getString(R.string.export), null));
+                menu.addMenuItem(new MenuItem(5, getString(R.string.delete), null));
+
+                popupMenu.inflate(menu);
+                popupMenu.setPopupMenuListener(new PopupMenu.PopupMenuListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem menuItem) {
+                        List<Profiles.ProfileItem> items1 = mProfiles.getAllProfiles();
+                        switch (menuItem.getItemId()) {
+                            case 0:
+                                Intent intent = createProfileActivityIntent();
+                                intent.putExtra(ProfileActivity.POSITION_INTENT, position);
+                                startActivityForResult(intent, 2);
+                                break;
+                            case 1:
+                                Intent intent2 = new Intent(getActivity(), ProfileEditActivity.class);
+                                intent2.putExtra(ProfileEditActivity.POSITION_INTENT, position);
+                                startActivityForResult(intent2, 3);
+                                break;
+                            case 2:
+                                if (items1.get(position).getName() != null) {
+                                    List<Profiles.ProfileItem.CommandItem> commands = items1.get(position).getCommands();
+                                    if (commands.size() > 0) {
+                                        setForegroundText(items1.get(position).getName().toUpperCase());
+                                        mDetailsFragment.setText(commands);
+                                        showForeground();
+                                    } else {
+                                        Utils.toast(R.string.profile_empty, getActivity());
+                                    }
                                 }
-                            }
-                            break;
-                        case 3:
-                            onBoot.setChecked(!onBoot.isChecked());
-                            items1.get(position).enableOnBoot(onBoot.isChecked());
-
-                            //todo: new popupmenu
-                            onBoot.setTitle(getString(R.string.on_boot) + ": " + onBoot.isChecked());
-                            Toast.makeText(getContext(), getString(R.string.on_boot) + ": " + onBoot.isChecked(), Toast.LENGTH_SHORT).show();
-
-                            mProfiles.commit();
-                            break;
-                        case 4:
-                            mExportProfile = items1.get(position);
-                            requestPermission(0, Manifest.permission.WRITE_EXTERNAL_STORAGE);
-                            break;
-                        case 5:
-                            mDeleteDialog = ViewUtils.dialogBuilder(getString(R.string.sure_question),
-                                    (dialogInterface, i16) -> {
-                                    },
-                                    (dialogInterface, i15) -> {
-                                        mProfiles.delete(position);
-                                        mProfiles.commit();
-                                        reload();
-                                    },
-                                    dialogInterface -> mDeleteDialog = null, getActivity());
-                            mDeleteDialog.show();
-                            break;
+                                break;
+                            case 3:
+                                items1.get(position).enableOnBoot(menuItem.isChecked());
+                                mProfiles.commit();
+                                return false;
+                            case 4:
+                                mExportProfile = items1.get(position);
+                                requestPermission(0, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                                break;
+                            case 5:
+                                mDeleteDialog = ViewUtils.dialogBuilder(getString(R.string.sure_question),
+                                        (dialogInterface, i16) -> {
+                                        },
+                                        (dialogInterface, i15) -> {
+                                            mProfiles.delete(position);
+                                            mProfiles.commit();
+                                            reload();
+                                        },
+                                        dialogInterface -> mDeleteDialog = null, getActivity());
+                                mDeleteDialog.show();
+                                break;
+                        }
+                        return true;
                     }
-                    popupMenu.dismiss();
+
+                    @Override
+                    public void onMenuItemUpdate(de.dlyt.yanndroid.oneui.menu.MenuItem menuItem) {
+
+                    }
                 });
+
             });
 
             final DescriptionView descriptionView = new DescriptionView();

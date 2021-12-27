@@ -31,6 +31,7 @@ import androidx.appcompat.widget.AppCompatEditText;
 import com.hades.hKtweaks.R;
 
 import de.dlyt.yanndroid.oneui.layout.ToolbarLayout;
+import de.dlyt.yanndroid.oneui.menu.MenuItem;
 
 /**
  * Created by willi on 01.07.16.
@@ -61,6 +62,7 @@ public class EditorActivity extends BaseActivity {
             intent.putExtra(TEXT_INTENT, mEditText.getText());
             setResult(0, intent);
             finish();
+            return true;
         });
 
         CharSequence text = getIntent().getCharSequenceExtra(TEXT_INTENT);

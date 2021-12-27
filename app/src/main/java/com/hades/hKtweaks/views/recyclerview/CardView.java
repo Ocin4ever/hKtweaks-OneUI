@@ -39,7 +39,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import de.dlyt.yanndroid.oneui.view.PopupMenu;
+import de.dlyt.yanndroid.oneui.menu.PopupMenu;
 
 /**
  * Created by willi on 18.04.16.

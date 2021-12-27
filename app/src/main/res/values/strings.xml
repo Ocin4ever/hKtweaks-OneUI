@@ -44,6 +44,8 @@
     <!-- File Picker -->
     <string name="select_question">Select %s?</string>
     <string name="wrong_extension">Please select a file with %s extension.</string>
+    <string name="item_count">%d items</string>
+    <string name="one_item">1 item</string>
 
     <!-- Units -->
     <string name="mhz">MHz</string>

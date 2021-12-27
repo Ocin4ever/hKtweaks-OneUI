@@ -20,15 +20,9 @@
 package com.hades.hKtweaks.fragments.tools.customcontrols;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Environment;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.widget.Toast;
-
-import androidx.appcompat.view.menu.MenuBuilder;
 
 import com.hades.hKtweaks.R;
 import com.hades.hKtweaks.activities.FilePickerActivity;
@@ -55,6 +49,10 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import de.dlyt.yanndroid.oneui.menu.Menu;
+import de.dlyt.yanndroid.oneui.menu.MenuItem;
+import de.dlyt.yanndroid.oneui.menu.PopupMenu;
 
 /**
  * Created by willi on 30.06.16.
@@ -107,6 +105,7 @@ public class CustomControlsFragment extends RecyclerViewFragment {
                 } catch (NullPointerException ignored) {
                 }
             }
+            return true;
         }, R.id.menu_add);
 
         try {
@@ -222,47 +221,50 @@ public class CustomControlsFragment extends RecyclerViewFragment {
         CardView cardView = new CardView(getActivity());
         cardView.setOnMenuListener((cardView1, popupMenu) -> {
 
-            @SuppressLint("RestrictedApi") Menu menu = new MenuBuilder(getContext());
-            menu.add(Menu.NONE, 0, Menu.NONE, getString(R.string.edit));
-            final MenuItem onBoot = menu.add(Menu.NONE, 1, Menu.NONE, getString(R.string.on_boot) + ": " + controlItem.isOnBootEnabled());
-            onBoot.setCheckable(true).setChecked(controlItem.isOnBootEnabled());
-            menu.add(Menu.NONE, 2, Menu.NONE, getString(R.string.export));
-            menu.add(Menu.NONE, 3, Menu.NONE, getString(R.string.delete));
+            Menu menu = new Menu();
+            menu.addMenuItem(new MenuItem(0, getString(R.string.edit), null));
 
-            ArrayList<MenuItem> menuItems = new ArrayList<>();
-            for (int i = 0; i < menu.size(); i++) menuItems.add(menu.getItem(i));
-            popupMenu.inflate(menuItems);
+            MenuItem onBoot = new MenuItem(1, getString(R.string.on_boot), null);
+            onBoot.setCheckable(true);
+            onBoot.setChecked(controlItem.isOnBootEnabled());
+            menu.addMenuItem(onBoot);
 
-            popupMenu.setOnMenuItemClickListener(item -> {
-                switch (item.getItemId()) {
-                    case 0:
-                        edit(controlItem);
-                        break;
-                    case 1:
-                        onBoot.setChecked(!onBoot.isChecked());
-                        controlItem.enableOnBoot(onBoot.isChecked());
+            menu.addMenuItem(new MenuItem(2, getString(R.string.export), null));
+            menu.addMenuItem(new MenuItem(3, getString(R.string.delete), null));
 
-                        //todo: new popupmenu
-                        onBoot.setTitle(getString(R.string.on_boot) + ": " + onBoot.isChecked());
-                        Toast.makeText(getContext(), getString(R.string.on_boot) + ": " + onBoot.isChecked(), Toast.LENGTH_SHORT).show();
-
-                        mControlsProvider.commit();
-                        break;
-                    case 2:
-                        mExportItem = controlItem;
-                        requestPermission(0, Manifest.permission.WRITE_EXTERNAL_STORAGE);
-                        break;
-                    case 3:
-                        mDeleteDialog = ViewUtils.dialogBuilder(getString(R.string.sure_question),
-                                (dialog, which) -> {
-                                },
-                                (dialog, which) -> delete(controlItem.getUniqueId()),
-                                dialog -> mDeleteDialog = null, getActivity())
-                                .setTitle(getString(R.string.delete));
-                        mDeleteDialog.show();
-                        break;
+            popupMenu.inflate(menu);
+            popupMenu.setPopupMenuListener(new PopupMenu.PopupMenuListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem menuItem) {
+                    switch (menuItem.getItemId()) {
+                        case 0:
+                            edit(controlItem);
+                            break;
+                        case 1:
+                            controlItem.enableOnBoot(menuItem.isChecked());
+                            mControlsProvider.commit();
+                            return false;
+                        case 2:
+                            mExportItem = controlItem;
+                            requestPermission(0, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                            break;
+                        case 3:
+                            mDeleteDialog = ViewUtils.dialogBuilder(getString(R.string.sure_question),
+                                    (dialog, which) -> {
+                                    },
+                                    (dialog, which) -> delete(controlItem.getUniqueId()),
+                                    dialog -> mDeleteDialog = null, getActivity())
+                                    .setTitle(getString(R.string.delete));
+                            mDeleteDialog.show();
+                            break;
+                    }
+                    return true;
                 }
-                popupMenu.dismiss();
+
+                @Override
+                public void onMenuItemUpdate(de.dlyt.yanndroid.oneui.menu.MenuItem menuItem) {
+
+                }
             });
         });
         return cardView;

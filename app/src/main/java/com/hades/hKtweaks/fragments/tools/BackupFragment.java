@@ -75,7 +75,7 @@ public class BackupFragment extends RecyclerViewFragment {
         showToolbarActionButton(item -> {
             if (mPermissionDenied) {
                 Utils.toast(R.string.permission_denied_write_storage, getActivity());
-                return;
+                return true;
             }
 
             mOptionsDialog = new Dialog(getActivity()).setItems(getResources().getStringArray(
@@ -96,6 +96,7 @@ public class BackupFragment extends RecyclerViewFragment {
                     })
                     .setOnDismissListener(dialogInterface -> mOptionsDialog = null);
             mOptionsDialog.show();
+            return true;
         }, R.id.menu_add);
 
         if (mOptionsDialog != null) {

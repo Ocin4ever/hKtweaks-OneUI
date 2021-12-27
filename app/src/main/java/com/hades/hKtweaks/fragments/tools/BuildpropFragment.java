@@ -137,6 +137,7 @@ public class BuildpropFragment extends RecyclerViewFragment {
                     mAddDialog.show();
                     break;
             }
+            return true;
         }, R.id.menu_search, R.id.menu_add);
 
         if (mAddDialog != null) {

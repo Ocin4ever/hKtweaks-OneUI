@@ -56,6 +56,7 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import de.dlyt.yanndroid.oneui.layout.ToolbarLayout;
+import de.dlyt.yanndroid.oneui.menu.Menu;
 import de.dlyt.yanndroid.oneui.sesl.recyclerview.StaggeredGridLayoutManager;
 import de.dlyt.yanndroid.oneui.view.RecyclerView;
 
@@ -205,9 +206,9 @@ public abstract class RecyclerViewFragment extends BaseFragment {
     protected void showToolbarActionButton(ToolbarLayout.OnMenuItemClickListener listener, @IdRes int... id) {
         if (getActivity() instanceof BaseActivity) {
             ToolbarLayout toolbarLayout = ((BaseActivity) getActivity()).getToolBarLayout();
-            if (toolbarLayout.getToolbarMenu() == null) initToolbarMenu();
-            for (int i : id)
-                toolbarLayout.setToolbarMenuItemVisibility(toolbarLayout.getToolbarMenu().findItem(i), true);
+            Menu toolbarMenu = toolbarLayout.getToolbarMenu();
+            if (toolbarMenu == null) initToolbarMenu();
+            for (int i : id) toolbarMenu.findItem(i).setVisible(true);
             toolbarLayout.setOnToolbarMenuItemClickListener(listener);
         } else Log.e("not instanceof BaseActivity");
     }
@@ -215,11 +216,11 @@ public abstract class RecyclerViewFragment extends BaseFragment {
     protected void hideToolbarActionButton() {
         if (getActivity() instanceof BaseActivity) {
             ToolbarLayout toolbarLayout = ((BaseActivity) getActivity()).getToolBarLayout();
-            toolbarLayout.setToolbarMenuItemVisibility(toolbarLayout.getToolbarMenu().findItem(R.id.menu_search), false);
-            toolbarLayout.setToolbarMenuItemVisibility(toolbarLayout.getToolbarMenu().findItem(R.id.menu_add), false);
-            toolbarLayout.setToolbarMenuItemVisibility(toolbarLayout.getToolbarMenu().findItem(R.id.menu_done), false);
-            toolbarLayout.setOnToolbarMenuItemClickListener(item -> {
-            });
+            Menu toolbarMenu = toolbarLayout.getToolbarMenu();
+            toolbarMenu.findItem(R.id.menu_search).setVisible(false);
+            toolbarMenu.findItem(R.id.menu_add).setVisible(false);
+            toolbarMenu.findItem(R.id.menu_done).setVisible(false);
+            toolbarLayout.setOnToolbarMenuItemClickListener(item -> true);
         } else Log.e("not instanceof BaseActivity");
     }
 
