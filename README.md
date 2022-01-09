@@ -2,6 +2,10 @@
 
 This is a OneUI-Themed version of Corsicanu's [hKtweaks](https://github.com/corsicanu/hKtweaks).
 
+<img loading="lazy" src="readme-res/1.png" width="150"/> <img loading="lazy" src="readme-res/2.png" width="150"/> <img loading="lazy" src="readme-res/3.png" width="150"/>
+
+<img loading="lazy" src="readme-res/4.jpg" width="150"/> <img loading="lazy" src="readme-res/5.jpg" width="150"/> 
+
 ## Downloads
 - [OneUI 3 version](https://github.com/Yanndroid/hKtweaks-OneUI/raw/master/app/release-oneui3/release/hKtweaks.apk)
 - [OneUI 4 version](https://github.com/Yanndroid/hKtweaks-OneUI/raw/master/app/release-oneui4/release/hKtweaks.apk)
