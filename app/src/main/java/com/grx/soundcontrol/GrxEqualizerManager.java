@@ -1,6 +1,8 @@
 package com.grx.soundcontrol;
 
-import android.app.AlertDialog;
+import static android.view.View.INVISIBLE;
+import static android.view.View.VISIBLE;
+
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.TypedArray;
@@ -12,7 +14,6 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.appcompat.widget.AppCompatTextView;
-import androidx.appcompat.widget.SwitchCompat;
 
 import com.hades.hKtweaks.R;
 import com.hades.hKtweaks.utils.AppSettings;
@@ -23,8 +24,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import static android.view.View.INVISIBLE;
-import static android.view.View.VISIBLE;
+import de.dlyt.yanndroid.oneui.dialog.AlertDialog;
+import de.dlyt.yanndroid.oneui.view.Switch;
 
 public class GrxEqualizerManager extends RecyclerViewItem
         implements GrxEqualizerBandController.EqBandValueChange {
@@ -33,7 +34,7 @@ public class GrxEqualizerManager extends RecyclerViewItem
     private boolean mMainSwitchEnabled = false;
     private int mAccentColor;
     private LinearLayout mSwitchContainer;
-    private SwitchCompat mEqSwitch;
+    private Switch mEqSwitch;
     private AppCompatTextView mEqSwitchSummary;
     private LinearLayout mBandsContainer, mProfilesContainer;
     private ImageView mButtonSaveEqProfile;
@@ -106,16 +107,6 @@ public class GrxEqualizerManager extends RecyclerViewItem
         b.recycle();
     }
 
-    private void fireStateToSeekBars() {
-        for (int i = 0; i < NUMBANDS; i++) {
-            View view = mBandsContainer.findViewWithTag(String.valueOf(i));
-            if (view != null) {
-                ((GrxEqualizerBandController) view).mVerticalSeekBar.grxSetEnabled(mSwitchEnabled & mMainSwitchEnabled); //bbb
-
-            }
-        }
-    }
-
     private void updateEqSwitch() {
         boolean alpha = mSwitchEnabled & mMainSwitchEnabled;
         mEqSwitch.setChecked(mSwitchEnabled);
@@ -164,7 +155,7 @@ public class GrxEqualizerManager extends RecyclerViewItem
         builder.setSingleChoiceItems(getProfileNamesArray(), mSelectedEqProfile, (dialogInterface, i) -> {
             mSelectedEqProfile = i;
             if (mSelectedEqProfile < mNumOfMoroProfiles)
-                ((AlertDialog) dialogInterface).getButton(DialogInterface.BUTTON_NEUTRAL).setVisibility(INVISIBLE);
+                ((AlertDialog) dialogInterface).getButton(DialogInterface.BUTTON_NEUTRAL).setVisibility(View.GONE);
             else
                 ((AlertDialog) dialogInterface).getButton(DialogInterface.BUTTON_NEUTRAL).setVisibility(VISIBLE);
         });
@@ -186,7 +177,7 @@ public class GrxEqualizerManager extends RecyclerViewItem
         AlertDialog alertDialog = builder.create();
         alertDialog.setOnShowListener(dialogInterface -> {
             if (mSelectedEqProfile < mNumOfMoroProfiles)
-                ((AlertDialog) dialogInterface).getButton(DialogInterface.BUTTON_NEUTRAL).setVisibility(INVISIBLE);
+                ((AlertDialog) dialogInterface).getButton(DialogInterface.BUTTON_NEUTRAL).setVisibility(View.GONE);
             else
                 ((AlertDialog) dialogInterface).getButton(DialogInterface.BUTTON_NEUTRAL).setVisibility(VISIBLE);
         });

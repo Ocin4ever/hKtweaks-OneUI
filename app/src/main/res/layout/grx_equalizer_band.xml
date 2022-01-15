@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:gravity="center"
     android:orientation="vertical"
     android:paddingStart="5dp"
-
     android:paddingEnd="5dp">
 
     <androidx.appcompat.widget.AppCompatTextView
@@ -18,28 +16,12 @@
         android:textColor="?android:attr/textColorPrimary"
         android:textSize="10sp" />
 
-    <com.grx.soundcontrol.VerticalSeekBarWrapper
+    <com.grx.soundcontrol.VerticalSeekBar
+        android:id="@+id/eqseekbar"
         android:layout_width="wrap_content"
         android:layout_height="190dp"
-        android:layout_gravity="center">
-
-        <com.grx.soundcontrol.VerticalSeekBar
-            android:id="@+id/eqseekbar"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:max="24"
-            android:progress="12"
-            android:splitTrack="false"
-            app:dividerLength="8dp"
-            app:dividerStep="3"
-            app:dividerThickness="1dip"
-            app:min="0"
-            app:progressThickness="2dp"
-            app:seekBarRotation="CW270"
-            app:showBackgroundTrack="true"
-            app:zeroOffset="12"
-            app:zeroOffsetCircleRadius="3dp" />
-    </com.grx.soundcontrol.VerticalSeekBarWrapper>
+        android:max="24"
+        android:progress="12" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/band"

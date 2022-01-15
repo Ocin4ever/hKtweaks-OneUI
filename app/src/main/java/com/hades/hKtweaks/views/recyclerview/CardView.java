@@ -250,12 +250,7 @@ public class CardView extends RecyclerViewItem {
                     return;
                 }
                 mLoading.add(item);
-                View view;
-                try {
-                    view = LayoutInflater.from(mActivity).inflate(item.getLayoutRes(), null, false);
-                } catch (Exception ignored) {
-                    throw new IllegalArgumentException("Couldn't inflate " + item.getClass().getSimpleName());
-                }
+                View view = LayoutInflater.from(mActivity).inflate(item.getLayoutRes(), null, false);
                 mViews.put(item, view);
                 item.setOnViewChangeListener(getOnViewChangedListener());
                 item.onCreateView(view);

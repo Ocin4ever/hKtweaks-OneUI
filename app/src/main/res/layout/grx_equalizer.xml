@@ -131,32 +131,28 @@
                 android:orientation="vertical"
                 android:tag="0" />
 
-            <com.grx.soundcontrol.GrxEqualizerBandController xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
+            <com.grx.soundcontrol.GrxEqualizerBandController
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:orientation="vertical"
                 android:tag="1" />
 
-            <com.grx.soundcontrol.GrxEqualizerBandController xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
+            <com.grx.soundcontrol.GrxEqualizerBandController
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:orientation="vertical"
                 android:tag="2" />
 
-            <com.grx.soundcontrol.GrxEqualizerBandController xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
+            <com.grx.soundcontrol.GrxEqualizerBandController
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:orientation="vertical"
                 android:tag="3" />
 
-            <com.grx.soundcontrol.GrxEqualizerBandController xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
+            <com.grx.soundcontrol.GrxEqualizerBandController
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"

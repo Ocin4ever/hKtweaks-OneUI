@@ -3,13 +3,14 @@ package com.grx.soundcontrol;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.LinearLayout;
-import android.widget.SeekBar;
 import android.widget.TextView;
 
 import androidx.appcompat.widget.AppCompatTextView;
 
 import com.hades.hKtweaks.R;
 import com.hades.hKtweaks.utils.kernel.sound.MoroSound;
+
+import de.dlyt.yanndroid.oneui.view.SeekBar;
 
 
 public class GrxEqualizerBandController extends LinearLayout implements SeekBar.OnSeekBarChangeListener {
@@ -38,7 +39,6 @@ public class GrxEqualizerBandController extends LinearLayout implements SeekBar.
     }
 
     private void initView() {
-        String tag = (String) getTag();
         mBandId = Integer.valueOf((String) getTag());
 
         inflate(getContext(), R.layout.grx_equalizer_band, this);
@@ -52,13 +52,14 @@ public class GrxEqualizerBandController extends LinearLayout implements SeekBar.
         mVerticalSeekBar.setOnSeekBarChangeListener(this);
         mValueTextView = findViewById(R.id.value);
 
-        TextView bandview = (AppCompatTextView) findViewById(R.id.band);
+        TextView bandview = findViewById(R.id.band);
         String[] bands = getResources().getStringArray(R.array.equalizerbands);
         bandview.setText(String.valueOf(bands[mBandId]));
         updateSeekBar();
     }
 
     public void updateSeekBar() {
+        mVerticalSeekBar.setTickMark(getContext().getDrawable(R.drawable.eq_tick_mark));
         mVerticalSeekBar.grxSetCurrentKernelValue(mBandId);
         mVerticalSeekBar.grxSetInitialized(true);
         mValueTextView.setText(mVerticalSeekBar.grxGetNormalizedProgress() + " dB");
