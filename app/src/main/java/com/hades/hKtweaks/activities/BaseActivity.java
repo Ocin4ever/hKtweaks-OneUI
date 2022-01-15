@@ -21,6 +21,7 @@ package com.hades.hKtweaks.activities;
 
 import android.content.Context;
 import android.content.ContextWrapper;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Build;
@@ -31,8 +32,10 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
+import com.hades.hKtweaks.BuildConfig;
 import com.hades.hKtweaks.R;
 import com.hades.hKtweaks.utils.AppSettings;
+import com.hades.hKtweaks.utils.tools.Buildprop;
 
 import java.util.Locale;
 
@@ -44,6 +47,10 @@ import de.dlyt.yanndroid.oneui.utils.ThemeUtil;
  * Created by willi on 14.04.16.
  */
 public abstract class BaseActivity extends AppCompatActivity {
+    private static String SP_NAME = BuildConfig.APPLICATION_ID + "_preferences";
+    private SharedPreferences sp;
+    public boolean mUseAltTheme;
+    public boolean mUseOUI4Theme;
 
     public static ContextWrapper wrap(Context context, Locale newLocale) {
         Resources res = context.getResources();
@@ -72,6 +79,14 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
+        sp = getSharedPreferences(SP_NAME, Context.MODE_PRIVATE);
+        boolean deviceIsOUI4 = Buildprop.getProps().containsValue("ro.build.version.sep") && Integer.parseInt(Buildprop.getProps().get("ro.build.version.sep")) >= 130000;
+        mUseOUI4Theme = sp.getBoolean("use_oui4_theme", deviceIsOUI4);
+
+        int normalTheme = mUseOUI4Theme ? R.style.OneUI4Theme : R.style.OneUI3Theme;
+        int altTheme = mUseOUI4Theme ? R.style.OneUI4AboutTheme : R.style.OneUI3AboutTheme;
+
+        setTheme(mUseAltTheme ? altTheme : normalTheme);
         new ThemeUtil(this);
         super.onCreate(savedInstanceState);
     }

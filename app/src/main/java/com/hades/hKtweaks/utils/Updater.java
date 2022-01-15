@@ -20,7 +20,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.hades.hKtweaks.BuildConfig;
 import com.hades.hKtweaks.R;
 
 import java.io.File;
@@ -81,7 +80,7 @@ public class Updater {
                         hashMap.put(child.getKey(), child.getValue().toString());
                     }
 
-                    updateChecker.updateAvailable(Integer.parseInt(hashMap.get(context.getString(R.string.firebase_versionCode))) > context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionCode, hashMap.get(BuildConfig.firebase_apk), hashMap.get(context.getString(R.string.firebase_versionName)));
+                    updateChecker.updateAvailable(Integer.parseInt(hashMap.get(context.getString(R.string.firebase_versionCode))) > context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionCode, hashMap.get(context.getString(R.string.firebase_apk)), hashMap.get(context.getString(R.string.firebase_versionName)));
 
                     if (hashMap.get(context.getString(R.string.firebase_github)) != null) {
                         updateChecker.githubAvailable(hashMap.get(context.getString(R.string.firebase_github)));

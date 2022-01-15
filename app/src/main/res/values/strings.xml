@@ -1170,6 +1170,7 @@
     <string name="light_theme">Light</string>
     <string name="dark_theme">Dark</string>
     <string name="system_default">System default</string>
+    <string name="use_oui4_theme">Use OneUI 4 theme</string>
     <string name="theme_color_summary">Change the app color.</string>
 
     <string name="primary_color">Primary color</string>
@@ -1224,6 +1225,7 @@
     <string name="firebase_versionCode" translatable="false">versionCode</string>
     <string name="firebase_github" translatable="false">github</string>
     <string name="firebase_versionName" translatable="false">versionName</string>
+    <string name="firebase_apk" translatable="false">apk</string>
     <string name="github" translatable="false">Github</string>
 
     <!-- APP Updater -->

@@ -173,9 +173,10 @@ public class BuildpropFragment extends RecyclerViewFragment {
 
         if (mProps == null) return;
         String[] titles = mProps.keySet().toArray(new String[mProps.size()]);
+        String[] values = mProps.values().toArray(new String[mProps.size()]);
         for (int i = 0; i < mProps.size(); i++) {
             final String title = titles[i];
-            final String value = mProps.values().toArray(new String[mProps.size()])[i];
+            final String value = values[i];
             if (mSearchText != null && !title.contains(mSearchText) && !value.contains(mSearchText)) {
                 continue;
             }

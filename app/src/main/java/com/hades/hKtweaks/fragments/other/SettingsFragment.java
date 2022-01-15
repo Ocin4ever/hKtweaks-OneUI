@@ -44,6 +44,7 @@ import androidx.fragment.app.Fragment;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.hades.hKtweaks.R;
+import com.hades.hKtweaks.activities.BaseActivity;
 import com.hades.hKtweaks.activities.NavigationActivity;
 import com.hades.hKtweaks.activities.SplashActivity;
 import com.hades.hKtweaks.services.boot.ApplyOnBootService;
@@ -77,6 +78,7 @@ public class SettingsFragment extends PreferenceFragment implements
 
     private static final String KEY_RESET_DATA = "reset_data";
     private static final String KEY_FORCE_ENGLISH = "forceenglish";
+    private static final String KEY_OUI4_THEME = "use_oui4_theme";
     private static final String KEY_APPLY_ON_BOOT_TEST = "applyonboottest";
     private static final String KEY_DEBUGGING_CATEGORY = "debugging_category";
     private static final String KEY_LOGCAT = "logcat";
@@ -120,6 +122,8 @@ public class SettingsFragment extends PreferenceFragment implements
     @Override
     public void onCreatePreferences(Bundle bundle, String s) {
         addPreferencesFromResource(R.xml.settings);
+
+        findPreference(KEY_OUI4_THEME).setOnPreferenceChangeListener(this);
 
         SwitchPreference forceEnglish = (SwitchPreference) findPreference(KEY_FORCE_ENGLISH);
         if (Resources.getSystem().getConfiguration().locale.getLanguage().startsWith("en")) {
@@ -214,6 +218,10 @@ public class SettingsFragment extends PreferenceFragment implements
     public boolean onPreferenceChange(Preference preference, Object o) {
         String key = preference.getKey();
         switch (key) {
+            case KEY_OUI4_THEME:
+                if ((boolean) o != ((BaseActivity) getActivity()).mUseOUI4Theme)
+                    getActivity().recreate();
+                return true;
             case KEY_FORCE_ENGLISH:
                 getActivity().finish();
                 Intent intent = new Intent(getActivity(), SplashActivity.class);

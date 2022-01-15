@@ -10,8 +10,8 @@ android {
         applicationId 'com.hades.hKtweaks'
         minSdkVersion 26
         targetSdkVersion 30
-        versionCode 221
-        versionName "2.2.1 - OneUI"
+        versionCode 222
+        versionName "2.2.2 - OneUI"
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -28,30 +28,6 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-
-    flavorDimensions "version"
-    productFlavors {
-        "release-oneui3" {
-            dimension "version"
-            buildConfigField "String", "firebase_apk", '"apk"'
-            versionName = android.defaultConfig.versionName + " 3"
-        }
-        "release-oneui4" {
-            dimension "version"
-            buildConfigField "String", "firebase_apk", '"apk4"'
-            versionName = android.defaultConfig.versionName + " 4"
-        }
-    }
-    sourceSets {
-        "release-oneui3" {
-            manifest.srcFile "src/main/AndroidManifest3.xml"
-        }
-        "release-oneui4" {
-            manifest.srcFile "src/main/AndroidManifest4.xml"
-        }
-    }
-
-    android.applicationVariants.all { final variant -> variant.outputs.all { outputFileName = "hKtweaks.apk" } }
 }
 
 repositories {
@@ -59,7 +35,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'io.github.yanndroid:oneui:2.2.0'
+    implementation 'io.github.yanndroid:oneui:2.2.1'
     implementation 'org.cyanogenmod:platform.sdk:6.0'
     implementation 'com.github.bumptech.glide:glide:4.12.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'

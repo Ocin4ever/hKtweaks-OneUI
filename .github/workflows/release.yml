@@ -24,21 +24,12 @@ jobs:
          release_name: ${{ steps.values.outputs.name }}
          tag_name: ${{ steps.values.outputs.tag }}
          body: changelog
-     - name: Add OneUI 3 apk
+     - name: Add apk
        uses: actions/upload-release-asset@v1
        env:
          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
        with:
          upload_url: ${{ steps.create_release.outputs.upload_url }} 
-         asset_path: ./app/release-oneui3/release/hKtweaks.apk
-         asset_name: ${{ steps.values.outputs.apk }}_3.apk
-         asset_content_type: application/vnd.android.package-archive
-     - name: Add OneUI 4 apk
-       uses: actions/upload-release-asset@v1
-       env:
-         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-       with:
-         upload_url: ${{ steps.create_release.outputs.upload_url }} 
-         asset_path: ./app/release-oneui4/release/hKtweaks.apk
-         asset_name: ${{ steps.values.outputs.apk }}_4.apk
+         asset_path: ./app/release/app-release.apk
+         asset_name: ${{ steps.values.outputs.apk }}.apk
          asset_content_type: application/vnd.android.package-archive

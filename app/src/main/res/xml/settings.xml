@@ -14,6 +14,9 @@
         <SwitchPreference
             android:key="dark_mode_auto"
             android:title="@string/system_default" />
+        <SwitchPreference
+            android:key="use_oui4_theme"
+            android:title="@string/use_oui4_theme" />
         <ColorPickerPreference
             android:key="theme_color"
             android:summary="@string/theme_color_summary"

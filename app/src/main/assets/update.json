@@ -1,7 +1,8 @@
 {
   "releaseNotes": [
     "Changelog - Yanndroid:",
-    "- dependencies update",
-    "- improvements & bug fixes"
+    "- sound tab crash fix",
+    "- single apk for oneui 3/4 themed",
+    "- dependency update"
   ]
 }
