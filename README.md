@@ -1,4 +1,4 @@
-# hKtweaks - OneUI
+# <img align="left" loading="lazy" src="readme-res/icon.png" height="50"/> hKtweaks - OneUI
 
 This is a OneUI-Themed version of Corsicanu's [hKtweaks](https://github.com/corsicanu/hKtweaks).
 
